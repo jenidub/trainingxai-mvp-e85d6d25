@@ -41,7 +41,7 @@ const prebuiltGPTs = [
   {
     id: 'notebooklm-practice',
     name: 'NotebookLM Practice',
-    description: 'Practice using NotebookLM-style document analysis and Q&A',
+    description: 'Level up your skills in NotebookLM',
     icon: BookOpen,
     category: 'Practice',
     popular: true
