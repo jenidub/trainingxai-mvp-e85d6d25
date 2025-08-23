@@ -4,11 +4,13 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { 
-  Code, 
-  Brain, 
-  Palette, 
-  Calculator, 
-  MessageSquare,
+  Compass,
+  GraduationCap,
+  DollarSign,
+  Globe,
+  Music,
+  Film,
+  BookOpen,
   Plus,
   Sparkles,
   Bot,
@@ -24,41 +26,55 @@ interface SidebarProps {
 
 const prebuiltGPTs = [
   {
-    id: 'coding-companion',
-    name: 'Cody the Coding Companion',
-    description: 'Expert coding assistant for all programming languages',
-    icon: Code,
-    category: 'Development',
+    id: 'wizard-gary-payton',
+    name: 'Wizard (Gary Payton)',
+    description: 'Your global guide, answers everything, routes you to the right place',
+    icon: Compass,
+    category: 'General',
     popular: true
   },
   {
-    id: 'ai-trainer',
-    name: 'Alex the AI Trainer',
-    description: 'Learn AI concepts and machine learning fundamentals',
-    icon: Brain,
-    category: 'AI/ML',
+    id: 'spiral-study-buddy',
+    name: 'Spiral Study Buddy',
+    description: 'Adaptive, interactive, helps with school and soft skills',
+    icon: GraduationCap,
+    category: 'Education',
     popular: true
   },
   {
-    id: 'creative-assistant',
-    name: 'Maya the Creative Assistant',
-    description: 'Design, art, and creative project helper',
-    icon: Palette,
+    id: 'finance-agent',
+    name: 'Finance Agent',
+    description: 'Manage budgets, savings, and financial literacy',
+    icon: DollarSign,
+    category: 'Finance'
+  },
+  {
+    id: 'website-agent',
+    name: 'Website Agent',
+    description: 'Build and publish websites',
+    icon: Globe,
+    category: 'Development'
+  },
+  {
+    id: 'music-agent',
+    name: 'Music Agent',
+    description: 'Create beats, lyrics, soundtracks',
+    icon: Music,
     category: 'Creative'
   },
   {
-    id: 'math-mentor',
-    name: 'Milo the Math Mentor',
-    description: 'Mathematics problem solving and concepts',
-    icon: Calculator,
-    category: 'Education'
+    id: 'movie-agent',
+    name: 'Movie Agent',
+    description: 'Turn ideas into short films',
+    icon: Film,
+    category: 'Creative'
   },
   {
-    id: 'communication-coach',
-    name: 'Sophie the Communication Coach',
-    description: 'Writing, presentations, and communication skills',
-    icon: MessageSquare,
-    category: 'Business'
+    id: 'family-night-agent',
+    name: 'Family Night Agent',
+    description: 'Make storybooks with your family as characters',
+    icon: BookOpen,
+    category: 'Family'
   }
 ];
 
