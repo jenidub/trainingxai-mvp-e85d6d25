@@ -121,33 +121,33 @@ export const Sidebar = ({ onGPTSelect, selectedGPT }: SidebarProps) => {
             {prebuiltGPTs.map((gpt) => (
               <Card
                 key={gpt.id}
-                className={`p-4 cursor-pointer transition-smooth hover:shadow-card border-border/50 ${
+                className={`p-2 cursor-pointer transition-smooth hover:shadow-card border-border/50 ${
                   selectedGPT?.id === gpt.id 
                     ? 'border-primary bg-primary/5 shadow-primary' 
                     : 'hover:border-primary/30'
                 }`}
                 onClick={() => handleGPTClick(gpt)}
               >
-                <div className="flex items-start gap-3">
-                  <div className={`p-2 rounded-lg transition-smooth ${
+                <div className="flex items-start gap-2">
+                  <div className={`p-1.5 rounded-md transition-smooth ${
                     selectedGPT?.id === gpt.id 
                       ? 'bg-primary text-white' 
                       : 'bg-muted group-hover:bg-primary/10'
                   }`}>
-                    <gpt.icon className="h-4 w-4" />
+                    <gpt.icon className="h-3.5 w-3.5" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-medium text-sm truncate">{gpt.name}</h3>
+                    <div className="flex items-center gap-1.5 mb-0.5">
+                      <h3 className="font-medium text-xs truncate">{gpt.name}</h3>
                       {gpt.popular && (
-                        <Badge variant="secondary" className="text-xs py-0 px-1 h-4">
-                          <Zap className="h-2.5 w-2.5 mr-0.5" />
+                        <Badge variant="secondary" className="text-[10px] py-0 px-1 h-3.5">
+                          <Zap className="h-2 w-2 mr-0.5" />
                           Popular
                         </Badge>
                       )}
                     </div>
-                    <p className="text-xs text-muted-foreground line-clamp-2">{gpt.description}</p>
-                    <Badge variant="outline" className="text-xs mt-2">{gpt.category}</Badge>
+                    <p className="text-[10px] text-muted-foreground line-clamp-2 leading-tight">{gpt.description}</p>
+                    <Badge variant="outline" className="text-[10px] mt-1 py-0 px-1.5 h-4">{gpt.category}</Badge>
                   </div>
                 </div>
               </Card>
