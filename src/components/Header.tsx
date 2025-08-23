@@ -101,9 +101,9 @@ export const Header = () => {
       </header>
 
       {/* Workshops Menu Bar */}
-      <div className="bg-background border-b border-border">
+      <div className="bg-background border-b border-border/25">
         <div className="px-6 py-2">
-          <div className="flex items-center gap-6">
+          <div className="flex items-center justify-center gap-6">
             <div className="flex items-center gap-2 flex-shrink-0">
               <Award className="h-4 w-4 text-primary" />
               <h2 className="text-sm font-semibold text-foreground">Sign Up for Our Workshops</h2>
