@@ -28,7 +28,7 @@ const prebuiltGPTs = [
   {
     id: 'wizard-gary-payton',
     name: 'Wizard (Gary Payton)',
-    description: 'Your global guide, answers everything, routes you to the right place',
+    description: 'Your global guide for everything',
     icon: Compass,
     category: 'General',
     popular: true
@@ -36,7 +36,7 @@ const prebuiltGPTs = [
   {
     id: 'spiral-study-buddy',
     name: 'Spiral Study Buddy',
-    description: 'Adaptive, interactive, helps with school and soft skills',
+    description: 'Interactive help with school & soft skills',
     icon: GraduationCap,
     category: 'Education',
     popular: true
@@ -44,7 +44,7 @@ const prebuiltGPTs = [
   {
     id: 'finance-agent',
     name: 'Finance Agent',
-    description: 'Manage budgets, savings, and financial literacy',
+    description: 'Budget management & financial literacy',
     icon: DollarSign,
     category: 'Finance'
   },
@@ -58,7 +58,7 @@ const prebuiltGPTs = [
   {
     id: 'music-agent',
     name: 'Music Agent',
-    description: 'Create beats, lyrics, soundtracks',
+    description: 'Create beats, lyrics & soundtracks',
     icon: Music,
     category: 'Creative'
   },
@@ -72,7 +72,7 @@ const prebuiltGPTs = [
   {
     id: 'family-night-agent',
     name: 'Family Night Agent',
-    description: 'Make storybooks with your family as characters',
+    description: 'Create family storybooks',
     icon: BookOpen,
     category: 'Family'
   }
