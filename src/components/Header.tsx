@@ -47,93 +47,85 @@ export const Header = () => {
   ];
 
   return (
-    <div>
-      {/* Main Header */}
-      <header className="h-16 border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="flex items-center justify-between h-full px-6">
-          <div className="flex items-center gap-3">
-            <div className="gradient-primary p-2 rounded-lg">
-              <Sparkles className="h-6 w-6 text-white" />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-brand-accent bg-clip-text text-transparent">
-                TrainingX.ai
-              </h1>
-              <p className="text-xs text-muted-foreground -mt-1">AI Training Platform</p>
-            </div>
+    <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+      <div className="flex items-center justify-between h-16 px-6">
+        {/* Left side - Logo */}
+        <div className="flex items-center gap-3">
+          <div className="gradient-primary p-2 rounded-lg">
+            <Sparkles className="h-6 w-6 text-white" />
           </div>
-          
-          <div className="flex items-center gap-3">
-            {user ? (
-              <>
-                <UserProfile 
-                  trigger={
-                    <Button variant="ghost" size="sm" className="flex items-center gap-2">
-                      <Avatar className="h-6 w-6">
-                        <AvatarFallback className="text-xs">
-                          {getInitials(user.user_metadata?.display_name, user.email)}
-                        </AvatarFallback>
-                      </Avatar>
-                      <span className="text-sm">
-                        {user.user_metadata?.display_name || user.email}
-                      </span>
-                    </Button>
-                  }
-                />
-                <Button variant="outline" size="sm" onClick={handleSignOut}>
-                  <LogOut className="h-4 w-4 mr-2" />
-                  Sign Out
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button variant="outline" size="sm" onClick={handleSignIn}>
-                  <User className="h-4 w-4 mr-2" />
-                  Sign In
-                </Button>
-                <Button size="sm" className="gradient-primary text-white border-0 shadow-primary" onClick={handleSignIn}>
-                  Get Started
-                </Button>
-              </>
-            )}
+          <div>
+            <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-brand-accent bg-clip-text text-transparent">
+              TrainingX.ai
+            </h1>
+            <p className="text-xs text-muted-foreground -mt-1">AI Training Platform</p>
           </div>
         </div>
-      </header>
-
-      {/* Workshops Menu Bar */}
-      <div className="bg-background border-b border-border">
-        <div className="px-6 py-3">
-          <div className="flex items-center gap-2 mb-3">
+        
+        {/* Center - Workshops */}
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 mr-4">
             <Award className="h-4 w-4 text-primary" />
-            <h2 className="text-sm font-semibold text-foreground">Sign Up for Our Workshops</h2>
+            <span className="text-sm font-medium text-foreground hidden md:block">Workshops:</span>
           </div>
-          <div className="flex gap-4 overflow-x-auto">
+          <div className="flex gap-2">
             {workshops.map((workshop, index) => {
               const IconComponent = workshop.icon;
               return (
                 <Button
                   key={index}
                   variant="outline"
-                  className="flex-shrink-0 h-auto p-3 justify-start hover:border-primary/50 transition-smooth group"
+                  size="sm"
+                  className="flex items-center gap-2 hover:border-primary/50 transition-smooth group"
                 >
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth">
-                      <IconComponent className="h-4 w-4 text-primary" />
-                    </div>
-                    <div className="text-left">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-medium text-sm">{workshop.title}</h3>
-                        <Badge variant="outline" className="text-[10px] py-0 px-1.5 h-4">paid</Badge>
-                      </div>
-                      <p className="text-xs text-muted-foreground">{workshop.description}</p>
-                    </div>
+                  <div className="p-1 rounded bg-primary/10 group-hover:bg-primary/20 transition-smooth">
+                    <IconComponent className="h-3 w-3 text-primary" />
                   </div>
+                  <span className="font-medium text-xs hidden lg:block">{workshop.title}</span>
+                  <Badge variant="outline" className="text-[9px] py-0 px-1 h-3">paid</Badge>
                 </Button>
               );
             })}
           </div>
         </div>
+
+        {/* Right side - User actions */}
+        <div className="flex items-center gap-3">
+          {user ? (
+            <>
+              <UserProfile 
+                trigger={
+                  <Button variant="ghost" size="sm" className="flex items-center gap-2">
+                    <Avatar className="h-6 w-6">
+                      <AvatarFallback className="text-xs">
+                        {getInitials(user.user_metadata?.display_name, user.email)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="text-sm hidden md:block">
+                      {user.user_metadata?.display_name || user.email}
+                    </span>
+                  </Button>
+                }
+              />
+              <Button variant="outline" size="sm" onClick={handleSignOut}>
+                <LogOut className="h-4 w-4 md:mr-2" />
+                <span className="hidden md:block">Sign Out</span>
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button variant="outline" size="sm" onClick={handleSignIn}>
+                <User className="h-4 w-4 md:mr-2" />
+                <span className="hidden md:block">Sign In</span>
+              </Button>
+              <Button size="sm" className="gradient-primary text-white border-0 shadow-primary" onClick={handleSignIn}>
+                <span className="hidden md:block">Get Started</span>
+                <span className="md:hidden">Start</span>
+              </Button>
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    </header>
   );
 };
