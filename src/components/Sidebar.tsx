@@ -115,7 +115,7 @@ export const Sidebar = ({ onGPTSelect, selectedGPT }: SidebarProps) => {
               </div>
               <div className="flex-1">
                 <h3 className="font-medium text-sm">Build Your Own GPT</h3>
-                <p className="text-xs text-muted-foreground">Customize AI for your specific needs</p>
+                <p className="text-xs text-muted-foreground">Customize AI for your needs</p>
               </div>
               <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-smooth" />
             </div>
