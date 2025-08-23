@@ -271,7 +271,7 @@ export const Sidebar = ({ onGPTSelect, selectedGPT }: SidebarProps) => {
                     <h3 className="font-medium text-sm">Educator Certification</h3>
                     <Badge variant="outline" className="text-[10px] py-0 px-1.5 h-4">paid</Badge>
                   </div>
-                  <p className="text-xs text-muted-foreground">Empower yourself and others with AI.</p>
+                  <p className="text-xs text-muted-foreground">Empower yourself and others.</p>
                 </div>
               </div>
             </Card>
