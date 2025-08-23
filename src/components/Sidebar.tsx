@@ -39,20 +39,48 @@ interface SidebarProps {
 
 const prebuiltGPTs = [
   {
-    id: 'notebooklm-practice',
-    name: 'NotebookLM Practice',
-    description: 'Level up your skills in NotebookLM',
-    icon: BookOpen,
-    category: 'Practice',
-    popular: true
-  },
-  {
     id: 'wizard-gary-payton',
     name: 'Wizard (Gary Payton)',
     description: 'Your global guide for everything',
     icon: Compass,
     category: 'General',
     popular: false
+  },
+  {
+    id: 'family-night-agent',
+    name: 'Family Night Agent',
+    description: 'Create family storybooks',
+    icon: BookOpen,
+    category: 'Family'
+  },
+  {
+    id: 'finance-agent',
+    name: 'Finance Agent',
+    description: 'Budget management & financial literacy',
+    icon: DollarSign,
+    category: 'Finance'
+  },
+  {
+    id: 'movie-agent',
+    name: 'Movie Agent',
+    description: 'Turn ideas into short films',
+    icon: Film,
+    category: 'Creative'
+  },
+  {
+    id: 'music-agent',
+    name: 'Music Agent',
+    description: 'Create beats, lyrics & soundtracks',
+    icon: Music,
+    category: 'Creative'
+  },
+  {
+    id: 'notebooklm-practice',
+    name: 'NotebookLM Practice',
+    description: 'Level up your skills in NotebookLM',
+    icon: BookOpen,
+    category: 'Practice',
+    popular: true
   },
   {
     id: 'spiral-study-buddy',
@@ -63,39 +91,11 @@ const prebuiltGPTs = [
     popular: true
   },
   {
-    id: 'finance-agent',
-    name: 'Finance Agent',
-    description: 'Budget management & financial literacy',
-    icon: DollarSign,
-    category: 'Finance'
-  },
-  {
     id: 'website-agent',
     name: 'Website Agent',
     description: 'Build and publish websites',
     icon: Globe,
     category: 'Development'
-  },
-  {
-    id: 'music-agent',
-    name: 'Music Agent',
-    description: 'Create beats, lyrics & soundtracks',
-    icon: Music,
-    category: 'Creative'
-  },
-  {
-    id: 'movie-agent',
-    name: 'Movie Agent',
-    description: 'Turn ideas into short films',
-    icon: Film,
-    category: 'Creative'
-  },
-  {
-    id: 'family-night-agent',
-    name: 'Family Night Agent',
-    description: 'Create family storybooks',
-    icon: BookOpen,
-    category: 'Family'
   }
 ];
 
