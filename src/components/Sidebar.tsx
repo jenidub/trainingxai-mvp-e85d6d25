@@ -28,7 +28,8 @@ import {
   Target,
   TrendingUp,
   Users,
-  Award
+  Award,
+  Home
 } from 'lucide-react';
 import { CustomGPTManager } from './CustomGPTManager';
 
@@ -155,6 +156,25 @@ export const Sidebar = ({ onGPTSelect, selectedGPT, onInterfaceChange, activeInt
         {/* Main Navigation */}
         <div className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">AI Studio</h2>
+          
+          {/* Home Button */}
+          <Card 
+            className={`p-4 border-2 hover:border-primary/40 transition-smooth cursor-pointer group ${
+              activeInterface === 'chat' ? 'border-primary bg-primary/5' : 'border-primary/20'
+            }`}
+            onClick={() => onInterfaceChange('chat')}
+          >
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth">
+                <Home className="h-5 w-5 text-primary" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-medium text-sm">Home</h3>
+                <p className="text-xs text-muted-foreground">Main dashboard & quick start</p>
+              </div>
+              <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-smooth" />
+            </div>
+          </Card>
           
           {/* Prebuilt GPTs */}
           <Card 
