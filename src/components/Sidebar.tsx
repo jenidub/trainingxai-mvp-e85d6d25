@@ -253,7 +253,7 @@ export const Sidebar = ({ onGPTSelect, selectedGPT }: SidebarProps) => {
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-medium text-sm">Advanced Prompting: Monetize Skills</h3>
+                    <h3 className="font-medium text-sm">Advanced Prompting</h3>
                     <Badge variant="outline" className="text-[10px] py-0 px-1.5 h-4">paid</Badge>
                   </div>
                   <p className="text-xs text-muted-foreground">Learn to earn from your projects</p>
@@ -268,10 +268,10 @@ export const Sidebar = ({ onGPTSelect, selectedGPT }: SidebarProps) => {
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-medium text-sm">Trainer & Teacher Certification</h3>
+                    <h3 className="font-medium text-sm">Educator Certification</h3>
                     <Badge variant="outline" className="text-[10px] py-0 px-1.5 h-4">paid</Badge>
                   </div>
-                  <p className="text-xs text-muted-foreground">Empower others, license the platform</p>
+                  <p className="text-xs text-muted-foreground">Empower yourself and others with AI.</p>
                 </div>
               </div>
             </Card>
