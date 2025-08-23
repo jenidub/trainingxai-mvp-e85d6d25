@@ -200,7 +200,7 @@ export const Sidebar = ({ onGPTSelect, selectedGPT }: SidebarProps) => {
                 <ChevronDown className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-80 max-h-80 overflow-y-auto bg-popover border border-border">
+            <DropdownMenuContent side="top" className="w-80 max-h-80 overflow-y-auto bg-popover border border-border z-50">
               {prebuiltGPTs.map((gpt) => (
                 <DropdownMenuItem
                   key={gpt.id}
