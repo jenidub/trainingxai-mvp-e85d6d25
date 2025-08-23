@@ -56,7 +56,7 @@ const prebuiltGPTs = [
   },
   {
     id: 'spiral-study-buddy',
-    name: 'Spiral Study Buddy',
+    name: 'Spiral the Study Buddy',
     description: 'Interactive help with school & soft skills',
     icon: GraduationCap,
     category: 'Education',
