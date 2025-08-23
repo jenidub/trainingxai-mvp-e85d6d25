@@ -204,7 +204,7 @@ export const PrebuiltGPTsInterface = ({ onGPTSelect }: PrebuiltGPTsInterfaceProp
                   <div className="flex gap-1">
                     {gpt.popular && (
                       <Badge variant="default" className="gap-1 h-5">
-                        <Zap className="h-3 w-3" />
+                        <Zap className="h-2.5 w-2.5" />
                         Popular
                       </Badge>
                     )}
