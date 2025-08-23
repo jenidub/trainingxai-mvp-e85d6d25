@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Send, Bot, User, Sparkles, Code, FileText, Image } from 'lucide-react';
+import NotebookLMPractice from './NotebookLMPractice';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -175,6 +176,11 @@ export const ChatInterface = ({ selectedGPT }: ChatInterfaceProps) => {
     return responses[gptName as keyof typeof responses] || 
            `Thanks for your message! As ${gptName}, I'm here to help you with specialized guidance and expertise.`;
   };
+
+  // Handle practice modes
+  if (selectedGPT?.id === 'notebooklm-practice') {
+    return <NotebookLMPractice />;
+  }
 
   if (!selectedGPT) {
     return (

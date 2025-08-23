@@ -39,12 +39,20 @@ interface SidebarProps {
 
 const prebuiltGPTs = [
   {
+    id: 'notebooklm-practice',
+    name: 'NotebookLM Practice',
+    description: 'Practice using NotebookLM-style document analysis and Q&A',
+    icon: BookOpen,
+    category: 'Practice',
+    popular: true
+  },
+  {
     id: 'wizard-gary-payton',
     name: 'Wizard (Gary Payton)',
     description: 'Your global guide for everything',
     icon: Compass,
     category: 'General',
-    popular: true
+    popular: false
   },
   {
     id: 'spiral-study-buddy',
