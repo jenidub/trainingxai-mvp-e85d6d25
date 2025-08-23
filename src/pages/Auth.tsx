@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Eye } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
@@ -107,6 +107,10 @@ export default function Auth() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleDemoMode = () => {
+    navigate('/demo');
   };
 
   return (
@@ -224,6 +228,21 @@ export default function Auth() {
                 </form>
               </TabsContent>
             </Tabs>
+            
+            {/* Demo Mode Button */}
+            <div className="mt-6 pt-4 border-t border-border">
+              <Button 
+                variant="outline" 
+                className="w-full" 
+                onClick={handleDemoMode}
+              >
+                <Eye className="h-4 w-4 mr-2" />
+                Try Demo Mode
+              </Button>
+              <p className="text-xs text-muted-foreground text-center mt-2">
+                Explore the platform without creating an account
+              </p>
+            </div>
           </CardContent>
         </Card>
 
