@@ -3,6 +3,12 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { 
   Compass,
   GraduationCap,
@@ -16,7 +22,11 @@ import {
   Bot,
   Zap,
   ChevronRight,
-  Smartphone
+  ChevronDown,
+  Smartphone,
+  ArrowRight,
+  Target,
+  TrendingUp
 } from 'lucide-react';
 import { CustomGPTManager } from './CustomGPTManager';
 
@@ -131,28 +141,26 @@ export const Sidebar = ({ onGPTSelect, selectedGPT }: SidebarProps) => {
             <h2 className="text-lg font-semibold text-foreground">Prebuilt GPTs</h2>
           </div>
           
-          <div className="space-y-2 max-h-[calc(100vh-20rem)] overflow-y-auto">
-            {prebuiltGPTs.map((gpt) => (
-              <Card
-                key={gpt.id}
-                className={`p-2 cursor-pointer transition-smooth hover:shadow-card border-border/50 ${
-                  selectedGPT?.id === gpt.id 
-                    ? 'border-primary bg-primary/5 shadow-primary' 
-                    : 'hover:border-primary/30'
-                }`}
-                onClick={() => handleGPTClick(gpt)}
-              >
-                <div className="flex items-start gap-2">
-                  <div className={`p-1.5 rounded-md transition-smooth ${
-                    selectedGPT?.id === gpt.id 
-                      ? 'bg-primary text-white' 
-                      : 'bg-muted group-hover:bg-primary/10'
-                  }`}>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="w-full justify-between">
+                {selectedGPT?.type === 'prebuilt' ? selectedGPT.name : 'Select a GPT'}
+                <ChevronDown className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-80 max-h-80 overflow-y-auto bg-popover border border-border">
+              {prebuiltGPTs.map((gpt) => (
+                <DropdownMenuItem
+                  key={gpt.id}
+                  onClick={() => handleGPTClick(gpt)}
+                  className="p-3 cursor-pointer flex items-start gap-3 hover:bg-accent"
+                >
+                  <div className="p-1.5 rounded-md bg-muted">
                     <gpt.icon className="h-3.5 w-3.5" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1.5 mb-0.5">
-                      <h3 className="font-medium text-xs truncate">{gpt.name}</h3>
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="font-medium text-sm truncate">{gpt.name}</h3>
                       {gpt.popular && (
                         <Badge variant="secondary" className="text-[10px] py-0 px-1 h-3.5">
                           <Zap className="h-2 w-2 mr-0.5" />
@@ -160,12 +168,54 @@ export const Sidebar = ({ onGPTSelect, selectedGPT }: SidebarProps) => {
                         </Badge>
                       )}
                     </div>
-                    <p className="text-[10px] text-muted-foreground line-clamp-2 leading-tight">{gpt.description}</p>
-                    <Badge variant="outline" className="text-[10px] mt-1 py-0 px-1.5 h-4">{gpt.category}</Badge>
+                    <p className="text-xs text-muted-foreground line-clamp-2 leading-tight mb-1">{gpt.description}</p>
+                    <Badge variant="outline" className="text-[10px] py-0 px-1.5 h-4">{gpt.category}</Badge>
                   </div>
-                </div>
-              </Card>
-            ))}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+
+        <Separator />
+
+        {/* How It Works Section */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <Target className="h-5 w-5 text-primary" />
+            <h2 className="text-lg font-semibold text-foreground">How It Works</h2>
+          </div>
+          
+          <div className="space-y-3">
+            <div className="flex items-start gap-3">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <GraduationCap className="h-4 w-4 text-primary" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-medium text-sm text-foreground mb-1">Learn</h3>
+                <p className="text-xs text-muted-foreground">Talk to interactive agents, get constant drills and scenarios.</p>
+              </div>
+            </div>
+            
+            <div className="flex items-start gap-3">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <ArrowRight className="h-4 w-4 text-primary" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-medium text-sm text-foreground mb-1">Apply</h3>
+                <p className="text-xs text-muted-foreground">Test prompts directly in apps inside your Studio.</p>
+              </div>
+            </div>
+            
+            <div className="flex items-start gap-3">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <TrendingUp className="h-4 w-4 text-primary" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-medium text-sm text-foreground mb-1">Level Up</h3>
+                <p className="text-xs text-muted-foreground">Earn badges, certificates, portfolio projects, and a take-home agent.</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
