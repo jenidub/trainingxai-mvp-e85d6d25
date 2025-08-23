@@ -30,9 +30,7 @@ const Index = () => {
   }
 
   return (
-    <Layout>
-      <ChatInterface />
-    </Layout>
+    <Layout />
   );
 };
 

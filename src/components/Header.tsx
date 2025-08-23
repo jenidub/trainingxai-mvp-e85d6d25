@@ -2,10 +2,22 @@ import { Button } from '@/components/ui/button';
 import { Sparkles, User, LogOut } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { UserProfile } from './UserProfile';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 export const Header = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  
+  const getInitials = (name: string | null | undefined, email: string | undefined) => {
+    if (name) {
+      return name.split(' ').map(n => n[0]).join('').toUpperCase();
+    }
+    if (email) {
+      return email[0].toUpperCase();
+    }
+    return 'U';
+  };
 
   const handleSignIn = () => {
     navigate('/auth');
@@ -33,9 +45,20 @@ export const Header = () => {
         <div className="flex items-center gap-3">
           {user ? (
             <>
-              <span className="text-sm text-muted-foreground">
-                Welcome, {user.user_metadata?.display_name || user.email}
-              </span>
+              <UserProfile 
+                trigger={
+                  <Button variant="ghost" size="sm" className="flex items-center gap-2">
+                    <Avatar className="h-6 w-6">
+                      <AvatarFallback className="text-xs">
+                        {getInitials(user.user_metadata?.display_name, user.email)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="text-sm">
+                      {user.user_metadata?.display_name || user.email}
+                    </span>
+                  </Button>
+                }
+              />
               <Button variant="outline" size="sm" onClick={handleSignOut}>
                 <LogOut className="h-4 w-4 mr-2" />
                 Sign Out

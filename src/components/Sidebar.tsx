@@ -15,6 +15,12 @@ import {
   Zap,
   ChevronRight
 } from 'lucide-react';
+import { CustomGPTManager } from './CustomGPTManager';
+
+interface SidebarProps {
+  onGPTSelect: (gpt: { id: string; name: string; type: 'prebuilt' | 'custom' }) => void;
+  selectedGPT?: { id: string; name: string; type: 'prebuilt' | 'custom' } | null;
+}
 
 const prebuiltGPTs = [
   {
@@ -56,8 +62,11 @@ const prebuiltGPTs = [
   }
 ];
 
-export const Sidebar = () => {
-  const [selectedGPT, setSelectedGPT] = useState<string | null>(null);
+export const Sidebar = ({ onGPTSelect, selectedGPT }: SidebarProps) => {
+  const handleGPTClick = (gpt: any) => {
+    const gptData = { id: gpt.id, name: gpt.name, type: 'prebuilt' as const };
+    onGPTSelect(gptData);
+  };
 
   return (
     <aside className="w-80 h-[calc(100vh-4rem)] border-r border-border bg-card/30 backdrop-blur-sm">
@@ -66,10 +75,7 @@ export const Sidebar = () => {
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold text-foreground">Custom GPTs</h2>
-            <Button size="sm" variant="outline" className="h-8 transition-spring hover:shadow-primary">
-              <Plus className="h-4 w-4 mr-1" />
-              Create
-            </Button>
+            <CustomGPTManager onGPTSelect={onGPTSelect} />
           </div>
           
           <Card className="p-4 gradient-muted border-primary/20 hover:border-primary/40 transition-smooth cursor-pointer group">
@@ -100,15 +106,15 @@ export const Sidebar = () => {
               <Card
                 key={gpt.id}
                 className={`p-4 cursor-pointer transition-smooth hover:shadow-card border-border/50 ${
-                  selectedGPT === gpt.id 
+                  selectedGPT?.id === gpt.id 
                     ? 'border-primary bg-primary/5 shadow-primary' 
                     : 'hover:border-primary/30'
                 }`}
-                onClick={() => setSelectedGPT(gpt.id)}
+                onClick={() => handleGPTClick(gpt)}
               >
                 <div className="flex items-start gap-3">
                   <div className={`p-2 rounded-lg transition-smooth ${
-                    selectedGPT === gpt.id 
+                    selectedGPT?.id === gpt.id 
                       ? 'bg-primary text-white' 
                       : 'bg-muted group-hover:bg-primary/10'
                   }`}>
