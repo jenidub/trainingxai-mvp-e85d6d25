@@ -229,62 +229,6 @@ export const Sidebar = ({ onGPTSelect, selectedGPT }: SidebarProps) => {
           </DropdownMenu>
         </div>
 
-        <Separator />
-
-        {/* Sign Up for Our Workshops Section */}
-        <div className="space-y-3">
-          <div className="flex items-center gap-2">
-            <Award className="h-5 w-5 text-primary" />
-            <h2 className="text-lg font-semibold text-foreground">Sign Up for Our Workshops</h2>
-          </div>
-          
-          <div className="space-y-2">
-            <Card className="p-3 cursor-pointer hover:border-primary/30 transition-smooth group">
-              <div className="flex items-start gap-3">
-                <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth">
-                  <BookOpen className="h-4 w-4 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-medium text-sm">Prompting Basics</h3>
-                    <Badge variant="outline" className="text-[10px] py-0 px-1.5 h-4">paid</Badge>
-                  </div>
-                  <p className="text-xs text-muted-foreground">Your entry point, learn core skills</p>
-                </div>
-              </div>
-            </Card>
-            
-            <Card className="p-3 cursor-pointer hover:border-primary/30 transition-smooth group">
-              <div className="flex items-start gap-3">
-                <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth">
-                  <TrendingUp className="h-4 w-4 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-medium text-sm">Advanced Prompting</h3>
-                    <Badge variant="outline" className="text-[10px] py-0 px-1.5 h-4">paid</Badge>
-                  </div>
-                  <p className="text-xs text-muted-foreground">Learn to earn from your projects</p>
-                </div>
-              </div>
-            </Card>
-            
-            <Card className="p-3 cursor-pointer hover:border-primary/30 transition-smooth group">
-              <div className="flex items-start gap-3">
-                <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth">
-                  <Users className="h-4 w-4 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-medium text-sm">Educator Certification</h3>
-                    <Badge variant="outline" className="text-[10px] py-0 px-1.5 h-4">paid</Badge>
-                  </div>
-                  <p className="text-xs text-muted-foreground">Empower yourself and others.</p>
-                </div>
-              </div>
-            </Card>
-          </div>
-        </div>
       </div>
     </aside>
   );
