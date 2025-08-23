@@ -18,34 +18,61 @@ serve(async (req) => {
       throw new Error('GOOGLE_API_KEY is not set');
     }
 
-    const { message, documents, context } = await req.json();
+    const { message, level, context } = await req.json();
     
-    console.log('NotebookLM chat request:', { message, documents: documents?.length, contextLength: context?.length });
+    console.log('Prompting practice request:', { message, level, contextLength: context?.length });
 
     // Build context from previous messages
     let conversationContext = '';
     if (context && context.length > 0) {
       conversationContext = context.map((msg: any) => 
-        `${msg.role === 'user' ? 'User' : 'Assistant'}: ${msg.content}`
+        `${msg.role === 'user' ? 'User' : 'AI Instructor'}: ${msg.content}`
       ).join('\n');
     }
 
-    // Create NotebookLM-style system prompt
-    const systemPrompt = `You are a NotebookLM-style AI assistant designed to help users practice document analysis and research skills. 
+    // Create level-specific system prompts
+    const levelPrompts = {
+      1: `You are an AI instructor helping users master information generation prompts. 
 
-Key behaviors:
-- Analyze uploaded documents and provide insights
-- Cite sources when referencing information
-- Ask follow-up questions to deepen understanding
-- Provide summaries, comparisons, and thematic analysis
-- Encourage critical thinking about the content
+Focus on:
+- Teaching effective prompt structure for getting informative responses
+- Helping users understand how to be specific and clear
+- Showing techniques for getting comprehensive explanations
+- Demonstrating how to ask for examples, comparisons, and step-by-step guides
 
-Available documents: ${documents?.length ? documents.join(', ') : 'None uploaded yet'}
+Provide constructive feedback on their prompts and suggest improvements.`,
+
+      2: `You are an AI instructor helping users learn to write prompts for building websites and applications.
+
+Focus on:
+- Teaching prompts for web development tasks
+- Showing how to request specific code structures
+- Helping with prompts for responsive design
+- Demonstrating prompts for app functionality and features
+- Teaching how to ask for debugging and optimization help
+
+Provide practical examples and improvement suggestions.`,
+
+      3: `You are an AI instructor helping users master AI agent creation through advanced prompting.
+
+Focus on:
+- Teaching how to define agent personalities and roles
+- Showing prompts for specialized capabilities
+- Demonstrating system prompt construction
+- Helping with agent behavior specification
+- Teaching integration and workflow prompts
+
+Provide expert-level guidance and advanced techniques.`
+    };
+
+    const systemPrompt = levelPrompts[level as keyof typeof levelPrompts] || levelPrompts[1];
+
+    const fullPrompt = `${systemPrompt}
 
 Previous conversation:
 ${conversationContext}
 
-Respond in a helpful, educational manner that demonstrates best practices for document analysis and research.`;
+Respond as an encouraging AI instructor. Provide helpful feedback and guidance for improving prompting skills at this level.`;
 
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GOOGLE_API_KEY}`, {
       method: 'POST',
@@ -57,7 +84,7 @@ Respond in a helpful, educational manner that demonstrates best practices for do
           {
             parts: [
               {
-                text: `${systemPrompt}\n\nUser: ${message}`
+                text: `${fullPrompt}\n\nUser: ${message}`
               }
             ]
           }
@@ -82,12 +109,8 @@ Respond in a helpful, educational manner that demonstrates best practices for do
 
     const generatedResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || 'I apologize, but I could not generate a response.';
     
-    // Simulate source citations for practice
-    const sources = documents?.length > 0 ? documents.slice(0, 2) : [];
-
     return new Response(JSON.stringify({ 
-      response: generatedResponse,
-      sources: sources
+      response: generatedResponse
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
