@@ -108,6 +108,48 @@ export const Sidebar = ({ onGPTSelect, selectedGPT }: SidebarProps) => {
   return (
     <aside className="w-80 h-[calc(100vh-4rem)] border-r border-border bg-card/30 backdrop-blur-sm">
       <div className="p-6 space-y-6">
+        {/* How It Works Section */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <Target className="h-5 w-5 text-primary" />
+            <h2 className="text-lg font-semibold text-foreground">How It Works</h2>
+          </div>
+          
+          <div className="space-y-3">
+            <div className="flex items-start gap-3">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <GraduationCap className="h-4 w-4 text-primary" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-medium text-sm text-foreground mb-1">Learn</h3>
+                <p className="text-xs text-muted-foreground">Talk to interactive agents, get constant drills and scenarios.</p>
+              </div>
+            </div>
+            
+            <div className="flex items-start gap-3">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <ArrowRight className="h-4 w-4 text-primary" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-medium text-sm text-foreground mb-1">Apply</h3>
+                <p className="text-xs text-muted-foreground">Test prompts directly in apps inside your Studio.</p>
+              </div>
+            </div>
+            
+            <div className="flex items-start gap-3">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <TrendingUp className="h-4 w-4 text-primary" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-medium text-sm text-foreground mb-1">Level Up</h3>
+                <p className="text-xs text-muted-foreground">Earn badges, certificates, portfolio projects, and a take-home agent.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <Separator />
+
         {/* Custom GPT Section */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
@@ -185,48 +227,6 @@ export const Sidebar = ({ onGPTSelect, selectedGPT }: SidebarProps) => {
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
-        </div>
-
-        <Separator />
-
-        {/* How It Works Section */}
-        <div className="space-y-3">
-          <div className="flex items-center gap-2">
-            <Target className="h-5 w-5 text-primary" />
-            <h2 className="text-lg font-semibold text-foreground">How It Works</h2>
-          </div>
-          
-          <div className="space-y-3">
-            <div className="flex items-start gap-3">
-              <div className="p-2 rounded-lg bg-primary/10">
-                <GraduationCap className="h-4 w-4 text-primary" />
-              </div>
-              <div className="flex-1">
-                <h3 className="font-medium text-sm text-foreground mb-1">Learn</h3>
-                <p className="text-xs text-muted-foreground">Talk to interactive agents, get constant drills and scenarios.</p>
-              </div>
-            </div>
-            
-            <div className="flex items-start gap-3">
-              <div className="p-2 rounded-lg bg-primary/10">
-                <ArrowRight className="h-4 w-4 text-primary" />
-              </div>
-              <div className="flex-1">
-                <h3 className="font-medium text-sm text-foreground mb-1">Apply</h3>
-                <p className="text-xs text-muted-foreground">Test prompts directly in apps inside your Studio.</p>
-              </div>
-            </div>
-            
-            <div className="flex items-start gap-3">
-              <div className="p-2 rounded-lg bg-primary/10">
-                <TrendingUp className="h-4 w-4 text-primary" />
-              </div>
-              <div className="flex-1">
-                <h3 className="font-medium text-sm text-foreground mb-1">Level Up</h3>
-                <p className="text-xs text-muted-foreground">Earn badges, certificates, portfolio projects, and a take-home agent.</p>
-              </div>
-            </div>
-          </div>
         </div>
 
         <Separator />
