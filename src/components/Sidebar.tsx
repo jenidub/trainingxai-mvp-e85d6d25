@@ -106,7 +106,7 @@ export const Sidebar = ({ onGPTSelect, selectedGPT }: SidebarProps) => {
   };
 
   return (
-    <aside className="w-80 h-[calc(100vh-4rem)] border-r border-border bg-card/30 backdrop-blur-sm">
+    <aside className="w-80 h-[calc(100vh-8rem)] border-r border-border bg-card/30 backdrop-blur-sm overflow-y-auto">
       <div className="p-6 space-y-6">
         {/* How It Works Section */}
         <div className="space-y-3">

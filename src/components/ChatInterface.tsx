@@ -184,7 +184,7 @@ export const ChatInterface = ({ selectedGPT }: ChatInterfaceProps) => {
 
   if (!selectedGPT) {
     return (
-      <div className="flex flex-col h-[calc(100vh-4rem)]">
+      <div className="flex flex-col h-[calc(100vh-8rem)]">
         {/* Welcome Area */}
         <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-background via-muted/20 to-primary/5">
           <div className="text-center max-w-2xl px-6">
