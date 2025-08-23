@@ -33,11 +33,13 @@ export const Header = () => {
       title: "Prompting Basics",
       description: "Your entry point, learn core skills",
       icon: BookOpen,
+      url: "https://nuued-prompt-2-success-3ule8cx.gamma.site/"
     },
     {
       title: "Advanced Prompting", 
       description: "Learn to earn from your projects",
       icon: TrendingUp,
+      url: "https://nuued-prompt-2-success-3ule8cx.gamma.site/"
     },
     {
       title: "Educator Certification",
@@ -117,6 +119,7 @@ export const Header = () => {
                     variant="outline"
                     size="sm"
                     className="flex-shrink-0 h-10 px-3 justify-start hover:border-primary/50 transition-smooth group"
+                    onClick={() => workshop.url && window.open(workshop.url, '_blank')}
                   >
                     <div className="flex items-center gap-2">
                       <div className="p-1 rounded bg-primary/10 group-hover:bg-primary/20 transition-smooth">
