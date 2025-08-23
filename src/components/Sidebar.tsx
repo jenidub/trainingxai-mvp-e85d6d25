@@ -35,6 +35,8 @@ import { CustomGPTManager } from './CustomGPTManager';
 interface SidebarProps {
   onGPTSelect: (gpt: { id: string; name: string; type: 'prebuilt' | 'custom' }) => void;
   selectedGPT?: { id: string; name: string; type: 'prebuilt' | 'custom' } | null;
+  onInterfaceChange: (interfaceType: 'chat' | 'prebuilt' | 'custom' | 'training') => void;
+  activeInterface: 'chat' | 'prebuilt' | 'custom' | 'training';
 }
 
 const prebuiltGPTs = [
@@ -99,7 +101,7 @@ const prebuiltGPTs = [
   }
 ];
 
-export const Sidebar = ({ onGPTSelect, selectedGPT }: SidebarProps) => {
+export const Sidebar = ({ onGPTSelect, selectedGPT, onInterfaceChange, activeInterface }: SidebarProps) => {
   const handleGPTClick = (gpt: any) => {
     const gptData = { id: gpt.id, name: gpt.name, type: 'prebuilt' as const };
     onGPTSelect(gptData);
@@ -150,84 +152,111 @@ export const Sidebar = ({ onGPTSelect, selectedGPT }: SidebarProps) => {
 
         <Separator />
 
-        {/* Custom GPT Section */}
+        {/* Main Navigation */}
         <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-foreground">Custom GPTs</h2>
-            <CustomGPTManager onGPTSelect={onGPTSelect} />
-          </div>
+          <h2 className="text-lg font-semibold text-foreground">AI Studio</h2>
           
-          <Card className="p-4 gradient-muted border-primary/20 hover:border-primary/40 transition-smooth cursor-pointer group">
+          {/* Prebuilt GPTs */}
+          <Card 
+            className={`p-4 border-2 hover:border-primary/40 transition-smooth cursor-pointer group ${
+              activeInterface === 'prebuilt' ? 'border-primary bg-primary/5' : 'border-primary/20'
+            }`}
+            onClick={() => onInterfaceChange('prebuilt')}
+          >
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth">
+                <Bot className="h-5 w-5 text-primary" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-medium text-sm">Prebuilt GPTs</h3>
+                <p className="text-xs text-muted-foreground">Ready-to-use AI assistants</p>
+              </div>
+              <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-smooth" />
+            </div>
+          </Card>
+
+          {/* Custom GPTs */}
+          <Card 
+            className={`p-4 border-2 hover:border-primary/40 transition-smooth cursor-pointer group ${
+              activeInterface === 'custom' ? 'border-primary bg-primary/5' : 'border-primary/20'
+            }`}
+            onClick={() => onInterfaceChange('custom')}
+          >
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth">
                 <Sparkles className="h-5 w-5 text-primary" />
               </div>
               <div className="flex-1">
-                <h3 className="font-medium text-sm">Build Your Own GPT</h3>
-                <p className="text-xs text-muted-foreground">Customize AI for your needs</p>
+                <h3 className="font-medium text-sm">Custom GPTs</h3>
+                <p className="text-xs text-muted-foreground">Build your own AI agents</p>
               </div>
               <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-smooth" />
             </div>
           </Card>
-          
-          <Card className="p-4 gradient-muted border-primary/20 hover:border-primary/40 transition-smooth cursor-pointer group">
+
+          {/* Training Mode */}
+          <Card 
+            className={`p-4 border-2 hover:border-primary/40 transition-smooth cursor-pointer group ${
+              activeInterface === 'training' ? 'border-primary bg-primary/5' : 'border-primary/20'
+            }`}
+            onClick={() => onInterfaceChange('training')}
+          >
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth">
-                <Smartphone className="h-5 w-5 text-primary" />
+                <GraduationCap className="h-5 w-5 text-primary" />
               </div>
               <div className="flex-1">
-                <h3 className="font-medium text-sm">App Builder</h3>
-                <p className="text-xs text-muted-foreground">Create apps step by step</p>
+                <h3 className="font-medium text-sm">Training Mode</h3>
+                <p className="text-xs text-muted-foreground">Interactive learning & practice</p>
               </div>
               <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-smooth" />
             </div>
           </Card>
         </div>
 
-        <Separator />
-
-        {/* Prebuilt GPTs Section */}
-        <div className="space-y-3">
-          <div className="flex items-center gap-2">
-            <Bot className="h-5 w-5 text-primary" />
-            <h2 className="text-lg font-semibold text-foreground">Prebuilt GPTs</h2>
-          </div>
-          
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="w-full justify-between">
-                {selectedGPT?.type === 'prebuilt' ? selectedGPT.name : 'Select a GPT'}
-                <ChevronDown className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent side="top" className="w-80 max-h-80 overflow-y-auto bg-popover border border-border z-50">
-              {prebuiltGPTs.map((gpt) => (
-                <DropdownMenuItem
-                  key={gpt.id}
-                  onClick={() => handleGPTClick(gpt)}
-                  className="p-3 cursor-pointer flex items-start gap-3 hover:bg-accent"
-                >
-                  <div className="p-1.5 rounded-md bg-muted">
-                    <gpt.icon className="h-3.5 w-3.5" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-medium text-sm truncate">{gpt.name}</h3>
-                      {gpt.popular && (
-                        <Badge variant="secondary" className="text-[10px] py-0 px-1 h-3.5">
-                          <Zap className="h-2 w-2 mr-0.5" />
-                          Popular
-                        </Badge>
-                      )}
-                    </div>
-                    <p className="text-xs text-muted-foreground line-clamp-2 leading-tight mb-1">{gpt.description}</p>
-                    <Badge variant="outline" className="text-[10px] py-0 px-1.5 h-4">{gpt.category}</Badge>
-                  </div>
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+        {/* Quick GPT Selection - only show when in chat mode */}
+        {activeInterface === 'chat' && (
+          <>
+            <Separator />
+            <div className="space-y-3">
+              <h3 className="text-sm font-medium text-foreground">Quick Select</h3>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="w-full justify-between">
+                    {selectedGPT?.type === 'prebuilt' ? selectedGPT.name : 'Select a GPT'}
+                    <ChevronDown className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent side="top" className="w-80 max-h-80 overflow-y-auto bg-popover border border-border z-50">
+                  {prebuiltGPTs.map((gpt) => (
+                    <DropdownMenuItem
+                      key={gpt.id}
+                      onClick={() => handleGPTClick(gpt)}
+                      className="p-3 cursor-pointer flex items-start gap-3 hover:bg-accent"
+                    >
+                      <div className="p-1.5 rounded-md bg-muted">
+                        <gpt.icon className="h-3.5 w-3.5" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="font-medium text-sm truncate">{gpt.name}</h3>
+                          {gpt.popular && (
+                            <Badge variant="secondary" className="text-[10px] py-0 px-1 h-3.5">
+                              <Zap className="h-2 w-2 mr-0.5" />
+                              Popular
+                            </Badge>
+                          )}
+                        </div>
+                        <p className="text-xs text-muted-foreground line-clamp-2 leading-tight mb-1">{gpt.description}</p>
+                        <Badge variant="outline" className="text-[10px] py-0 px-1.5 h-4">{gpt.category}</Badge>
+                      </div>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </>
+        )}
 
       </div>
     </aside>
