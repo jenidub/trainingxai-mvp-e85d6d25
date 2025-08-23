@@ -247,7 +247,7 @@ export const ChatInterface = ({ selectedGPT }: ChatInterfaceProps) => {
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)]">
+    <div className="flex flex-col h-[calc(100vh-8rem)]">
       {/* Chat Header */}
       <div className="border-b border-border p-4 bg-card/50">
         <div className="flex items-center gap-3">
