@@ -103,34 +103,36 @@ export const Header = () => {
       {/* Workshops Menu Bar */}
       <div className="bg-background border-b border-border">
         <div className="px-6 py-3">
-          <div className="flex items-center gap-2 mb-3">
-            <Award className="h-4 w-4 text-primary" />
-            <h2 className="text-sm font-semibold text-foreground">Sign Up for Our Workshops</h2>
-          </div>
-          <div className="flex gap-4 overflow-x-auto">
-            {workshops.map((workshop, index) => {
-              const IconComponent = workshop.icon;
-              return (
-                <Button
-                  key={index}
-                  variant="outline"
-                  className="flex-shrink-0 h-auto p-3 justify-start hover:border-primary/50 transition-smooth group"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth">
-                      <IconComponent className="h-4 w-4 text-primary" />
-                    </div>
-                    <div className="text-left">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-medium text-sm">{workshop.title}</h3>
-                        <Badge variant="outline" className="text-[10px] py-0 px-1.5 h-4">paid</Badge>
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <Award className="h-4 w-4 text-primary" />
+              <h2 className="text-sm font-semibold text-foreground">Sign Up for Our Workshops</h2>
+            </div>
+            <div className="flex gap-4 overflow-x-auto">
+              {workshops.map((workshop, index) => {
+                const IconComponent = workshop.icon;
+                return (
+                  <Button
+                    key={index}
+                    variant="outline"
+                    className="flex-shrink-0 h-auto p-3 justify-start hover:border-primary/50 transition-smooth group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth">
+                        <IconComponent className="h-4 w-4 text-primary" />
                       </div>
-                      <p className="text-xs text-muted-foreground">{workshop.description}</p>
+                      <div className="text-left">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="font-medium text-sm">{workshop.title}</h3>
+                          <Badge variant="outline" className="text-[10px] py-0 px-1.5 h-4">paid</Badge>
+                        </div>
+                        <p className="text-xs text-muted-foreground">{workshop.description}</p>
+                      </div>
                     </div>
-                  </div>
-                </Button>
-              );
-            })}
+                  </Button>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
