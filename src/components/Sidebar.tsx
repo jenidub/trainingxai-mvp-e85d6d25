@@ -15,7 +15,8 @@ import {
   Sparkles,
   Bot,
   Zap,
-  ChevronRight
+  ChevronRight,
+  Smartphone
 } from 'lucide-react';
 import { CustomGPTManager } from './CustomGPTManager';
 
@@ -93,6 +94,19 @@ export const Sidebar = ({ onGPTSelect, selectedGPT }: SidebarProps) => {
             <h2 className="text-lg font-semibold text-foreground">Custom GPTs</h2>
             <CustomGPTManager onGPTSelect={onGPTSelect} />
           </div>
+          
+          <Card className="p-4 gradient-muted border-primary/20 hover:border-primary/40 transition-smooth cursor-pointer group">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth">
+                <Smartphone className="h-5 w-5 text-primary" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-medium text-sm">App Builder</h3>
+                <p className="text-xs text-muted-foreground">Create apps step by step</p>
+              </div>
+              <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-smooth" />
+            </div>
+          </Card>
           
           <Card className="p-4 gradient-muted border-primary/20 hover:border-primary/40 transition-smooth cursor-pointer group">
             <div className="flex items-center gap-3">
