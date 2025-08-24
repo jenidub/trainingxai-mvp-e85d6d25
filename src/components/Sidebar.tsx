@@ -238,7 +238,7 @@ export const Sidebar = ({ onGPTSelect, selectedGPT, onInterfaceChange, activeInt
             </div>
           </Card>
 
-          {/* Training Mode */}
+          {/* Training Zone */}
           <Card 
             className={`p-3 border-2 hover:border-primary/40 transition-smooth cursor-pointer group ${
               activeInterface === 'training' ? 'border-primary bg-primary/5' : 'border-primary/20'
@@ -250,7 +250,7 @@ export const Sidebar = ({ onGPTSelect, selectedGPT, onInterfaceChange, activeInt
                 <GraduationCap className="h-5 w-5 text-primary" />
               </div>
               <div className="flex-1">
-                <h3 className="font-medium text-sm">Training Mode</h3>
+                <h3 className="font-medium text-sm">Training Zone</h3>
                 <p className="text-xs text-muted-foreground">Interactive learning</p>
               </div>
               <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-smooth" />

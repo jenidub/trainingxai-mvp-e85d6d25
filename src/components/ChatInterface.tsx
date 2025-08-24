@@ -221,7 +221,7 @@ export const ChatInterface = ({ selectedGPT }: ChatInterfaceProps) => {
                 <div className="p-2 rounded-lg bg-brand-accent/10 group-hover:bg-brand-accent/20 transition-smooth w-fit mb-3">
                   <FileText className="h-5 w-5 text-brand-accent" />
                 </div>
-                <h3 className="font-semibold mb-2">Training Mode</h3>
+                <h3 className="font-semibold mb-2">Training Zone</h3>
                 <p className="text-sm text-muted-foreground">Interactive learning with real-time feedback</p>
               </Card>
             </div>

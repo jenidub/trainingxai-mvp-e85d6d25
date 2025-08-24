@@ -184,7 +184,7 @@ export const TrainingModeInterface = ({ onModuleSelect }: TrainingModeInterfaceP
       <div className="space-y-2">
         <div className="flex items-center gap-2">
           <GraduationCap className="h-6 w-6 text-primary" />
-          <h1 className="text-2xl font-bold">Training Mode</h1>
+          <h1 className="text-2xl font-bold">Training Zone</h1>
         </div>
         <p className="text-muted-foreground">
           Level up your AI skills through interactive training modules and hands-on practice.
