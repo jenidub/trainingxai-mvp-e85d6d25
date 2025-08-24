@@ -122,6 +122,7 @@ export const DashboardInterface = () => {
     if (user) {
       loadProfile();
       loadTrainingData();
+      loadProjects();
     }
   }, [user]);
 
@@ -193,6 +194,30 @@ export const DashboardInterface = () => {
     }
   };
 
+  const loadProjects = async () => {
+    if (!user) return;
+    
+    setLoadingProjects(true);
+    
+    try {
+      const { data, error } = await supabase
+        .from('projects')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+      
+      if (error) {
+        console.error('Error loading projects:', error);
+      } else {
+        setProjects(data || []);
+      }
+    } catch (error) {
+      console.error('Error loading projects:', error);
+    } finally {
+      setLoadingProjects(false);
+    }
+  };
+
   const getInitials = (name: string | null) => {
     if (!name) return 'U';
     return name.split(' ').map(word => word.charAt(0)).join('').toUpperCase();
@@ -210,13 +235,8 @@ export const DashboardInterface = () => {
 
   const [trainingData, setTrainingData] = useState<any[]>([]);
   const [loadingTraining, setLoadingTraining] = useState(true);
-
-  const mockPortfolioItems = [
-    { id: 1, name: 'Customer Service Bot', category: 'custom-gpts', date: '2024-01-15', type: 'Custom GPT' },
-    { id: 2, name: 'Portfolio Website', category: 'websites', date: '2024-01-10', type: 'Website' },
-    { id: 3, name: 'Marketing Campaign App', category: 'apps', date: '2024-01-08', type: 'App' },
-    { id: 4, name: 'Ambient Soundscape', category: 'music', date: '2024-01-05', type: 'Music Track' },
-  ];
+  const [projects, setProjects] = useState<any[]>([]);
+  const [loadingProjects, setLoadingProjects] = useState(true);
 
   const mockAnalytics = {
     totalTime: '47h 32m',
@@ -229,8 +249,8 @@ export const DashboardInterface = () => {
   };
 
   const filteredPortfolio = portfolioFilter === 'all' 
-    ? mockPortfolioItems 
-    : mockPortfolioItems.filter(item => item.category === portfolioFilter);
+    ? projects 
+    : projects.filter(project => project.category === portfolioFilter);
 
   return (
     <div className="flex-1 h-[calc(100vh-8rem)] overflow-y-auto">
@@ -462,7 +482,7 @@ export const DashboardInterface = () => {
                           {item.name}
                         </h3>
                         <p className="text-sm text-muted-foreground">
-                          Created {new Date(item.date).toLocaleDateString()}
+                          Created {new Date(item.created_at).toLocaleDateString()}
                         </p>
                       </div>
                     </div>
