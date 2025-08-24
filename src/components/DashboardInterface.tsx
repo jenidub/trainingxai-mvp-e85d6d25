@@ -33,12 +33,15 @@ import {
   Star,
   Activity,
   Palette,
-  Code
+  Code,
+  Download
 } from 'lucide-react';
 import { UserProfile } from './UserProfile';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip } from 'recharts';
+import { downloadTrainingReport, downloadPortfolioReport, downloadAnalyticsReport } from '@/utils/pdfGenerator';
+import { toast } from 'sonner';
 
 interface Profile {
   id: string;
@@ -443,28 +446,49 @@ export const DashboardInterface = () => {
           <TabsContent value="training" className="space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-bold text-foreground">Training Zone</h2>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="flex items-center gap-2">
-                    <Filter className="h-4 w-4" />
-                    {trainingCategories.find(cat => cat.id === trainingFilter)?.name}
-                    <ChevronDown className="h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  {trainingCategories.map((category) => (
-                    <DropdownMenuItem 
-                      key={category.id}
-                      onClick={() => setTrainingFilter(category.id)}
-                      className="flex items-center gap-2"
-                    >
-                      <category.icon className="h-4 w-4" />
-                      {category.name}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <div className="flex items-center gap-3">
+                <Button 
+                  variant="outline" 
+                  onClick={async () => {
+                    try {
+                      toast.promise(downloadTrainingReport(), {
+                        loading: 'Generating training report...',
+                        success: 'Training report downloaded successfully!',
+                        error: 'Failed to generate training report'
+                      });
+                    } catch (error) {
+                      console.error('Download error:', error);
+                    }
+                  }}
+                  className="flex items-center gap-2"
+                >
+                  <Download className="h-4 w-4" />
+                  Download Report
+                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="flex items-center gap-2">
+                      <Filter className="h-4 w-4" />
+                      {trainingCategories.find(cat => cat.id === trainingFilter)?.name}
+                      <ChevronDown className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    {trainingCategories.map((category) => (
+                      <DropdownMenuItem 
+                        key={category.id}
+                        onClick={() => setTrainingFilter(category.id)}
+                        className="flex items-center gap-2"
+                      >
+                        <category.icon className="h-4 w-4" />
+                        {category.name}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             </div>
+            <div id="training-zone-content">
             {loadingTraining ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[1, 2, 3, 4].map((i) => (
@@ -533,34 +557,57 @@ export const DashboardInterface = () => {
                 ))}
               </div>
             )}
+            </div>
           </TabsContent>
 
           {/* Portfolio View */}
           <TabsContent value="portfolio" className="space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-bold text-foreground">Your Portfolio</h2>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="flex items-center gap-2">
-                    <Filter className="h-4 w-4" />
-                    {portfolioCategories.find(cat => cat.id === portfolioFilter)?.name}
-                    <ChevronDown className="h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  {portfolioCategories.map((category) => (
-                    <DropdownMenuItem 
-                      key={category.id}
-                      onClick={() => setPortfolioFilter(category.id)}
-                      className="flex items-center gap-2"
-                    >
-                      <category.icon className="h-4 w-4" />
-                      {category.name}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <div className="flex items-center gap-3">
+                <Button 
+                  variant="outline" 
+                  onClick={async () => {
+                    try {
+                      toast.promise(downloadPortfolioReport(), {
+                        loading: 'Generating portfolio report...',
+                        success: 'Portfolio report downloaded successfully!',
+                        error: 'Failed to generate portfolio report'
+                      });
+                    } catch (error) {
+                      console.error('Download error:', error);
+                    }
+                  }}
+                  className="flex items-center gap-2"
+                >
+                  <Download className="h-4 w-4" />
+                  Download Report
+                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="flex items-center gap-2">
+                      <Filter className="h-4 w-4" />
+                      {portfolioCategories.find(cat => cat.id === portfolioFilter)?.name}
+                      <ChevronDown className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    {portfolioCategories.map((category) => (
+                      <DropdownMenuItem 
+                        key={category.id}
+                        onClick={() => setPortfolioFilter(category.id)}
+                        className="flex items-center gap-2"
+                      >
+                        <category.icon className="h-4 w-4" />
+                        {category.name}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             </div>
+            
+            <div id="portfolio-content">
             
             {filteredPortfolio.length === 0 ? (
               <div className="text-center py-12">
@@ -599,36 +646,59 @@ export const DashboardInterface = () => {
                 ))}
               </div>
             )}
+            </div>
           </TabsContent>
 
           {/* Analytics View */}
           <TabsContent value="analytics" className="space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-bold text-foreground">Analytics Overview</h2>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4" />
-                    {timeRange.charAt(0).toUpperCase() + timeRange.slice(1)}
-                    <ChevronDown className="h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem onClick={() => setTimeRange('today')}>
-                    Today
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setTimeRange('weekly')}>
-                    Weekly
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setTimeRange('monthly')}>
-                    Monthly
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setTimeRange('annual')}>
-                    Annual
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <div className="flex items-center gap-3">
+                <Button 
+                  variant="outline" 
+                  onClick={async () => {
+                    try {
+                      toast.promise(downloadAnalyticsReport(), {
+                        loading: 'Generating analytics report...',
+                        success: 'Analytics report downloaded successfully!',
+                        error: 'Failed to generate analytics report'
+                      });
+                    } catch (error) {
+                      console.error('Download error:', error);
+                    }
+                  }}
+                  className="flex items-center gap-2"
+                >
+                  <Download className="h-4 w-4" />
+                  Download Report
+                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="flex items-center gap-2">
+                      <Calendar className="h-4 w-4" />
+                      {timeRange.charAt(0).toUpperCase() + timeRange.slice(1)}
+                      <ChevronDown className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem onClick={() => setTimeRange('today')}>
+                      Today
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setTimeRange('weekly')}>
+                      Weekly
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setTimeRange('monthly')}>
+                      Monthly
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setTimeRange('annual')}>
+                      Annual
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             </div>
+
+            <div id="analytics-content">
 
             {loadingAnalytics ? (
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -776,6 +846,7 @@ export const DashboardInterface = () => {
                 </div>
               </>
             )}
+            </div>
           </TabsContent>
         </Tabs>
       </div>
