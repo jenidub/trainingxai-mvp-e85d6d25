@@ -54,6 +54,7 @@ export const DashboardInterface = () => {
   useEffect(() => {
     if (user) {
       loadProfile();
+      loadTrainingData();
     }
   }, [user]);
 
@@ -68,6 +69,60 @@ export const DashboardInterface = () => {
     
     if (data) {
       setProfile(data);
+    }
+  };
+
+  const loadTrainingData = async () => {
+    if (!user) return;
+    
+    setLoadingTraining(true);
+    
+    try {
+      // First get all training tracks
+      const { data: tracks, error: tracksError } = await supabase
+        .from('training_tracks')
+        .select('*')
+        .order('name');
+      
+      if (tracksError) {
+        console.error('Error loading training tracks:', tracksError);
+        setLoadingTraining(false);
+        return;
+      }
+      
+      // Then get user's progress for each track
+      const { data: userProgress, error: progressError } = await supabase
+        .from('user_training_progress')
+        .select(`
+          *,
+          training_tracks (
+            name,
+            description
+          )
+        `)
+        .eq('user_id', user.id);
+      
+      if (progressError) {
+        console.error('Error loading user progress:', progressError);
+      }
+      
+      // Combine the data - show all tracks with user's progress if available
+      const combinedData = tracks?.map(track => {
+        const userTrackProgress = userProgress?.find(up => up.track_id === track.id);
+        return {
+          track: track.name,
+          level: userTrackProgress?.level || 'Beginner',
+          progress: userTrackProgress?.progress || 0,
+          badges_earned: userTrackProgress?.badges_earned || 0,
+          certificates_earned: userTrackProgress?.certificates_earned || 0
+        };
+      }) || [];
+      
+      setTrainingData(combinedData);
+    } catch (error) {
+      console.error('Error loading training data:', error);
+    } finally {
+      setLoadingTraining(false);
     }
   };
 
@@ -86,12 +141,8 @@ export const DashboardInterface = () => {
     { id: 'music', name: 'Music Tracks', icon: Music },
   ];
 
-  const mockTrainingData = [
-    { track: 'Prompt Engineering', level: 'Intermediate', progress: 65 },
-    { track: 'AI Agent Building', level: 'Beginner', progress: 25 },
-    { track: 'Creative AI', level: 'Advanced', progress: 85 },
-    { track: 'Business AI', level: 'Beginner', progress: 15 },
-  ];
+  const [trainingData, setTrainingData] = useState<any[]>([]);
+  const [loadingTraining, setLoadingTraining] = useState(true);
 
   const mockPortfolioItems = [
     { id: 1, name: 'Customer Service Bot', category: 'custom-gpts', date: '2024-01-15', type: 'Custom GPT' },
@@ -185,40 +236,68 @@ export const DashboardInterface = () => {
 
           {/* Training Zone Progress */}
           <TabsContent value="training" className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {mockTrainingData.map((track, index) => (
-                <Card key={index} className="p-6 hover:shadow-lg transition-shadow">
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <h3 className="font-semibold text-foreground">{track.track}</h3>
-                      <Badge 
-                        variant={track.level === 'Advanced' ? 'default' : track.level === 'Intermediate' ? 'secondary' : 'outline'}
-                        className="text-xs"
-                      >
-                        {track.level}
-                      </Badge>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">Progress</span>
-                        <span className="font-medium">{track.progress}%</span>
-                      </div>
-                      <Progress value={track.progress} className="h-2" />
-                    </div>
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                      <div className="flex items-center gap-1">
-                        <Award className="h-4 w-4" />
-                        <span>3/5 Badges</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Trophy className="h-4 w-4" />
-                        <span>1/2 Certificates</span>
+            {loadingTraining ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {[1, 2, 3, 4].map((i) => (
+                  <Card key={i} className="p-6">
+                    <div className="space-y-4 animate-pulse">
+                      <div className="h-4 bg-muted rounded w-3/4"></div>
+                      <div className="h-2 bg-muted rounded"></div>
+                      <div className="flex gap-4">
+                        <div className="h-4 bg-muted rounded w-20"></div>
+                        <div className="h-4 bg-muted rounded w-20"></div>
                       </div>
                     </div>
+                  </Card>
+                ))}
+              </div>
+            ) : trainingData.length === 0 ? (
+              <Card className="p-8 text-center">
+                <div className="space-y-4">
+                  <Target className="h-12 w-12 text-muted-foreground mx-auto" />
+                  <div>
+                    <h3 className="text-lg font-semibold text-foreground">Start Your Training Journey</h3>
+                    <p className="text-muted-foreground">Choose from our training tracks to begin building your AI skills.</p>
                   </div>
-                </Card>
-              ))}
-            </div>
+                  <Button>Browse Training Tracks</Button>
+                </div>
+              </Card>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {trainingData.map((track, index) => (
+                  <Card key={index} className="p-6 hover:shadow-lg transition-shadow">
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <h3 className="font-semibold text-foreground">{track.track}</h3>
+                        <Badge 
+                          variant={track.level === 'Advanced' ? 'default' : track.level === 'Intermediate' ? 'secondary' : 'outline'}
+                          className="text-xs"
+                        >
+                          {track.level}
+                        </Badge>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex justify-between text-sm">
+                          <span className="text-muted-foreground">Progress</span>
+                          <span className="font-medium">{track.progress}%</span>
+                        </div>
+                        <Progress value={track.progress} className="h-2" />
+                      </div>
+                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-1">
+                          <Award className="h-4 w-4" />
+                          <span>{track.badges_earned || 0}/5 Badges</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Trophy className="h-4 w-4" />
+                          <span>{track.certificates_earned || 0}/2 Certificates</span>
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            )}
           </TabsContent>
 
           {/* Portfolio View */}

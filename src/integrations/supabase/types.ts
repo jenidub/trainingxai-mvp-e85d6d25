@@ -172,6 +172,74 @@ export type Database = {
         }
         Relationships: []
       }
+      training_tracks: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_training_progress: {
+        Row: {
+          badges_earned: number
+          certificates_earned: number
+          created_at: string
+          id: string
+          level: string
+          progress: number
+          track_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          badges_earned?: number
+          certificates_earned?: number
+          created_at?: string
+          id?: string
+          level?: string
+          progress?: number
+          track_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          badges_earned?: number
+          certificates_earned?: number
+          created_at?: string
+          id?: string
+          level?: string
+          progress?: number
+          track_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_training_progress_track_id_fkey"
+            columns: ["track_id"]
+            isOneToOne: false
+            referencedRelation: "training_tracks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
