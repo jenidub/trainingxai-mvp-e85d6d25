@@ -119,11 +119,11 @@ export const DashboardInterface = () => {
       <div className="p-8 space-y-8">
         {/* Header Section */}
         <div className="bg-gradient-to-r from-primary/5 to-primary/10 rounded-2xl p-8 border border-primary/10">
-          <div className="flex items-center justify-between">
-            <div className="space-y-4">
-              <h1 className="text-4xl font-bold text-foreground">
-                Your Studio. Your Progress. Your Future.
-              </h1>
+          <div className="space-y-6">
+            <h1 className="text-4xl font-bold text-foreground w-full text-center">
+              Your Studio. Your Progress. Your Future.
+            </h1>
+            <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <UserProfile 
                   trigger={
@@ -150,17 +150,17 @@ export const DashboardInterface = () => {
                     </div>
                   }
                 />
+                <div className="space-y-2 ml-4">
+                  <div className="flex items-center gap-2 text-primary">
+                    <Trophy className="h-5 w-5" />
+                    <span className="font-medium">Studio Member</span>
+                  </div>
+                  <Badge variant="secondary" className="bg-primary/10 text-primary">
+                    <Star className="h-3 w-3 mr-1" />
+                    Level 2 Creator
+                  </Badge>
+                </div>
               </div>
-            </div>
-            <div className="text-right space-y-2">
-              <div className="flex items-center gap-2 text-primary">
-                <Trophy className="h-5 w-5" />
-                <span className="font-medium">Studio Member</span>
-              </div>
-              <Badge variant="secondary" className="bg-primary/10 text-primary">
-                <Star className="h-3 w-3 mr-1" />
-                Level 2 Creator
-              </Badge>
             </div>
           </div>
         </div>
