@@ -47,7 +47,7 @@ export const Layout = ({ children }: LayoutProps) => {
       case 'dashboard':
         return <DashboardInterface />;
       default:
-        return <ChatInterface selectedGPT={selectedGPT} />;
+        return <ChatInterface selectedGPT={selectedGPT} onInterfaceChange={handleInterfaceChange} />;
     }
   };
 

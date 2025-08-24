@@ -32,9 +32,10 @@ interface ChatInterfaceProps {
     name: string;
     type: 'prebuilt' | 'custom';
   } | null;
+  onInterfaceChange?: (interfaceType: 'prebuilt' | 'custom' | 'training') => void;
 }
 
-export const ChatInterface = ({ selectedGPT }: ChatInterfaceProps) => {
+export const ChatInterface = ({ selectedGPT, onInterfaceChange }: ChatInterfaceProps) => {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [currentSession, setCurrentSession] = useState<ChatSession | null>(null);
@@ -201,7 +202,10 @@ export const ChatInterface = ({ selectedGPT }: ChatInterfaceProps) => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-              <Card className="p-4 hover:shadow-card transition-smooth cursor-pointer group">
+              <Card 
+                className="p-4 hover:shadow-card transition-smooth cursor-pointer group"
+                onClick={() => onInterfaceChange?.('prebuilt')}
+              >
                 <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth w-fit mb-3">
                   <Bot className="h-5 w-5 text-primary" />
                 </div>
@@ -209,7 +213,10 @@ export const ChatInterface = ({ selectedGPT }: ChatInterfaceProps) => {
                 <p className="text-sm text-muted-foreground">Expert AI assistants for coding, learning, and creativity</p>
               </Card>
 
-              <Card className="p-4 hover:shadow-card transition-smooth cursor-pointer group">
+              <Card 
+                className="p-4 hover:shadow-card transition-smooth cursor-pointer group"
+                onClick={() => onInterfaceChange?.('custom')}
+              >
                 <div className="p-2 rounded-lg bg-brand-secondary/10 group-hover:bg-brand-secondary/20 transition-smooth w-fit mb-3">
                   <Code className="h-5 w-5 text-brand-secondary" />
                 </div>
@@ -217,7 +224,10 @@ export const ChatInterface = ({ selectedGPT }: ChatInterfaceProps) => {
                 <p className="text-sm text-muted-foreground">Build specialized AI agents for your unique needs</p>
               </Card>
 
-              <Card className="p-4 hover:shadow-card transition-smooth cursor-pointer group">
+              <Card 
+                className="p-4 hover:shadow-card transition-smooth cursor-pointer group"
+                onClick={() => onInterfaceChange?.('training')}
+              >
                 <div className="p-2 rounded-lg bg-brand-accent/10 group-hover:bg-brand-accent/20 transition-smooth w-fit mb-3">
                   <FileText className="h-5 w-5 text-brand-accent" />
                 </div>
