@@ -117,9 +117,11 @@ const trainingModules: TrainingModule[] = [
 
 interface TrainingModeInterfaceProps {
   onModuleSelect?: (moduleId: string) => void;
+  isDemo?: boolean;
+  onUpgrade?: () => void;
 }
 
-export const TrainingModeInterface = ({ onModuleSelect }: TrainingModeInterfaceProps) => {
+export const TrainingModeInterface = ({ onModuleSelect, isDemo = false, onUpgrade }: TrainingModeInterfaceProps) => {
   const [selectedModule, setSelectedModule] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState('All');
 
@@ -130,6 +132,11 @@ export const TrainingModeInterface = ({ onModuleSelect }: TrainingModeInterfaceP
   );
 
   const handleModuleClick = (moduleId: string) => {
+    if (isDemo && onUpgrade) {
+      onUpgrade();
+      return;
+    }
+    
     const module = trainingModules.find(m => m.id === moduleId);
     if (module && !module.isLocked) {
       if (moduleId === 'notebooklm-mastery') {
@@ -307,10 +314,12 @@ export const TrainingModeInterface = ({ onModuleSelect }: TrainingModeInterfaceP
                   <Button 
                     className="w-full" 
                     size="sm"
-                    disabled={module.isLocked}
+                    disabled={module.isLocked || isDemo}
                     variant={module.isCompleted ? 'outline' : 'default'}
                   >
-                    {module.isLocked ? (
+                    {isDemo ? (
+                      'Demo Mode'
+                    ) : module.isLocked ? (
                       <>
                         <Lock className="h-4 w-4 mr-2" />
                         Locked

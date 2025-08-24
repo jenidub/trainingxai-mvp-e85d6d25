@@ -39,6 +39,7 @@ interface SidebarProps {
   selectedGPT?: { id: string; name: string; type: 'prebuilt' | 'custom' } | null;
   onInterfaceChange: (interfaceType: 'chat' | 'prebuilt' | 'custom' | 'training' | 'dashboard') => void;
   activeInterface: 'chat' | 'prebuilt' | 'custom' | 'training' | 'dashboard';
+  isDemo?: boolean;
 }
 
 const prebuiltGPTs = [
@@ -103,7 +104,7 @@ const prebuiltGPTs = [
   }
 ];
 
-export const Sidebar = ({ onGPTSelect, selectedGPT, onInterfaceChange, activeInterface }: SidebarProps) => {
+export const Sidebar = ({ onGPTSelect, selectedGPT, onInterfaceChange, activeInterface, isDemo = false }: SidebarProps) => {
   const handleGPTClick = (gpt: any) => {
     const gptData = { id: gpt.id, name: gpt.name, type: 'prebuilt' as const };
     onGPTSelect(gptData);

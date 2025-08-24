@@ -110,9 +110,11 @@ const categories = ['All', 'General', 'Education', 'Practice', 'Family', 'Financ
 
 interface PrebuiltGPTsInterfaceProps {
   onGPTSelect: (gpt: { id: string; name: string; type: 'prebuilt' }) => void;
+  isDemo?: boolean;
+  onUpgrade?: () => void;
 }
 
-export const PrebuiltGPTsInterface = ({ onGPTSelect }: PrebuiltGPTsInterfaceProps) => {
+export const PrebuiltGPTsInterface = ({ onGPTSelect, isDemo = false, onUpgrade }: PrebuiltGPTsInterfaceProps) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortBy, setSortBy] = useState<'popular' | 'rating' | 'name'>('popular');
@@ -136,7 +138,11 @@ export const PrebuiltGPTsInterface = ({ onGPTSelect }: PrebuiltGPTsInterfaceProp
     });
 
   const handleGPTClick = (gpt: PrebuiltGPT) => {
-    onGPTSelect({ id: gpt.id, name: gpt.name, type: 'prebuilt' });
+    if (isDemo && onUpgrade) {
+      onUpgrade();
+    } else {
+      onGPTSelect({ id: gpt.id, name: gpt.name, type: 'prebuilt' });
+    }
   };
 
   return (
@@ -234,8 +240,8 @@ export const PrebuiltGPTsInterface = ({ onGPTSelect }: PrebuiltGPTsInterfaceProp
                     {gpt.usageCount?.toLocaleString()} uses
                   </div>
                 </div>
-                <Button className="w-full mt-3" size="sm">
-                  Start Chat
+                <Button className="w-full mt-3" size="sm" disabled={isDemo}>
+                  {isDemo ? 'Demo Mode' : 'Start Chat'}
                 </Button>
               </CardContent>
             </Card>

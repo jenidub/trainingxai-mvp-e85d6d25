@@ -8,9 +8,11 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 interface HeaderProps {
   onHomeClick?: () => void;
+  isDemo?: boolean;
+  onUpgrade?: () => void;
 }
 
-export const Header = ({ onHomeClick }: HeaderProps = {}) => {
+export const Header = ({ onHomeClick, isDemo = false, onUpgrade }: HeaderProps = {}) => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   
@@ -73,7 +75,17 @@ export const Header = ({ onHomeClick }: HeaderProps = {}) => {
           </div>
           
           <div className="flex items-center gap-3">
-            {user ? (
+            {isDemo ? (
+              <>
+                <Button variant="outline" size="sm" onClick={onUpgrade}>
+                  <User className="h-4 w-4 mr-2" />
+                  Sign In
+                </Button>
+                <Button size="sm" className="gradient-primary text-white border-0 shadow-primary" onClick={onUpgrade}>
+                  Get Started
+                </Button>
+              </>
+            ) : user ? (
               <>
                 <UserProfile 
                   trigger={

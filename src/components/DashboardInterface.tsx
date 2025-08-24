@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -34,7 +34,8 @@ import {
   Activity,
   Palette,
   Code,
-  Download
+  Download,
+  Crown
 } from 'lucide-react';
 import { UserProfile } from './UserProfile';
 import { supabase } from '@/integrations/supabase/client';
@@ -51,6 +52,11 @@ interface Profile {
   created_at: string;
 }
 
+interface DashboardInterfaceProps {
+  isDemo?: boolean;
+  onUpgrade?: () => void;
+}
+
 const achievements = [
   { id: 1, title: 'First Steps', description: 'Complete your first training module', icon: Star },
   { id: 2, title: 'Prompt Master', description: 'Master all fundamentals lessons', icon: Trophy },
@@ -58,7 +64,7 @@ const achievements = [
   { id: 4, title: 'Builder', description: 'Create your first custom GPT', icon: Code },
 ];
 
-export const DashboardInterface = () => {
+export const DashboardInterface = ({ isDemo = false, onUpgrade }: DashboardInterfaceProps) => {
   const { user } = useAuth();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [portfolioFilter, setPortfolioFilter] = useState('all');
@@ -390,6 +396,35 @@ export const DashboardInterface = () => {
   };
 
   const filteredTrainingData = getFilteredTrainingData();
+
+  if (isDemo) {
+    return (
+      <div className="p-4 space-y-6 max-w-7xl mx-auto overflow-x-hidden">
+        {/* Header */}
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <BarChart3 className="h-6 w-6 text-primary" />
+            <h1 className="text-2xl font-bold">Dashboard</h1>
+          </div>
+          <p className="text-muted-foreground">
+            Track your progress and achievements in AI training.
+          </p>
+        </div>
+
+        {/* Demo Message */}
+        <Card className="p-8 text-center border-2 border-primary">
+          <Crown className="h-16 w-16 text-primary mx-auto mb-4" />
+          <h3 className="text-xl font-semibold mb-2">Progress Tracking & Analytics</h3>
+          <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+            See detailed analytics of your learning journey, track module completions, chat usage, and earn achievements with a free account.
+          </p>
+          <Button onClick={onUpgrade} className="gradient-primary text-white border-0">
+            Sign Up to Track Progress
+          </Button>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="flex-1 h-[calc(100vh-8rem)] overflow-y-auto">

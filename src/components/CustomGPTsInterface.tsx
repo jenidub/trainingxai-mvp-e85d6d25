@@ -32,9 +32,11 @@ interface CustomGPT {
 
 interface CustomGPTsInterfaceProps {
   onGPTSelect: (gpt: { id: string; name: string; type: 'custom' }) => void;
+  isDemo?: boolean;
+  onUpgrade?: () => void;
 }
 
-export const CustomGPTsInterface = ({ onGPTSelect }: CustomGPTsInterfaceProps) => {
+export const CustomGPTsInterface = ({ onGPTSelect, isDemo = false, onUpgrade }: CustomGPTsInterfaceProps) => {
   const [customGPTs, setCustomGPTs] = useState<CustomGPT[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [editing, setEditing] = useState<string | null>(null);
@@ -179,13 +181,46 @@ export const CustomGPTsInterface = ({ onGPTSelect }: CustomGPTsInterfaceProps) =
   };
 
   const handleGPTClick = (gpt: CustomGPT) => {
-    onGPTSelect({ id: gpt.id, name: gpt.name, type: 'custom' });
+    if (isDemo && onUpgrade) {
+      onUpgrade();
+    } else {
+      onGPTSelect({ id: gpt.id, name: gpt.name, type: 'custom' });
+    }
   };
 
   const filteredGPTs = customGPTs.filter(gpt =>
     gpt.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     (gpt.description && gpt.description.toLowerCase().includes(searchTerm.toLowerCase()))
   );
+
+  if (isDemo) {
+    return (
+      <div className="p-6 space-y-6">
+        {/* Header */}
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <Sparkles className="h-6 w-6 text-primary" />
+            <h1 className="text-2xl font-bold">Custom GPTs</h1>
+          </div>
+          <p className="text-muted-foreground">
+            Create and manage your personalized AI assistants tailored to your specific needs.
+          </p>
+        </div>
+
+        {/* Demo Message */}
+        <Card className="p-8 text-center border-2 border-primary">
+          <Bot className="h-16 w-16 text-primary mx-auto mb-4" />
+          <h3 className="text-xl font-semibold mb-2">Custom GPT Creation</h3>
+          <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+            Build specialized AI assistants for coding, writing, research, or any specific task. Create unlimited custom GPTs with a free account.
+          </p>
+          <Button onClick={onUpgrade} className="gradient-primary text-white border-0">
+            Sign Up to Create Custom GPTs
+          </Button>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 space-y-6">
