@@ -65,56 +65,79 @@ export const DashboardInterface = () => {
   const [trainingFilter, setTrainingFilter] = useState('core-skills');
   const [timeRange, setTimeRange] = useState('weekly');
 
-  // Generate time-based data based on selected range
+  // State for real usage data
+  const [usageData, setUsageData] = useState<any[]>([]);
+  const [loadingUsageData, setLoadingUsageData] = useState(true);
+
+  // Generate time-based data from real database data
   const generateTimeData = () => {
+    if (!usageData || usageData.length === 0) return [];
+    
     const now = new Date();
     const data = [];
     
     switch (timeRange) {
       case 'today':
-        // Hourly data for today
+        // Show hourly data for today - aggregate by hour if we have data
         for (let i = 0; i < 24; i++) {
           data.push({
             period: `${i.toString().padStart(2, '0')}:00`,
-            minutes: Math.floor(Math.random() * 60) + 10, // 10-70 minutes
-            hours: ((Math.floor(Math.random() * 60) + 10) / 60).toFixed(1)
+            minutes: usageData.find(d => new Date(d.date).getDate() === now.getDate())?.minutes_used || 0
           });
         }
         break;
       case 'weekly':
-        // Daily data for the week
-        const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-        days.forEach(day => {
-          const minutes = Math.floor(Math.random() * 200) + 30; // 30-230 minutes
+        // Show last 7 days
+        for (let i = 6; i >= 0; i--) {
+          const date = new Date();
+          date.setDate(date.getDate() - i);
+          const dayData = usageData.find(d => new Date(d.date).toDateString() === date.toDateString());
           data.push({
-            period: day,
-            minutes,
-            hours: (minutes / 60).toFixed(1)
+            period: date.toLocaleDateString('en', { weekday: 'short' }),
+            minutes: dayData?.minutes_used || 0
           });
-        });
+        }
         break;
       case 'monthly':
-        // Weekly data for the month
-        for (let i = 1; i <= 4; i++) {
-          const minutes = Math.floor(Math.random() * 800) + 200; // 200-1000 minutes
+        // Show last 4 weeks
+        for (let i = 3; i >= 0; i--) {
+          const weekStart = new Date();
+          weekStart.setDate(weekStart.getDate() - (i * 7) - weekStart.getDay());
+          const weekEnd = new Date(weekStart);
+          weekEnd.setDate(weekStart.getDate() + 6);
+          
+          const weekMinutes = usageData
+            .filter(d => {
+              const dataDate = new Date(d.date);
+              return dataDate >= weekStart && dataDate <= weekEnd;
+            })
+            .reduce((sum, d) => sum + d.minutes_used, 0);
+          
           data.push({
-            period: `Week ${i}`,
-            minutes,
-            hours: (minutes / 60).toFixed(1)
+            period: `Week ${4 - i}`,
+            minutes: weekMinutes
           });
         }
         break;
       case 'annual':
-        // Monthly data for the year
-        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        months.forEach(month => {
-          const minutes = Math.floor(Math.random() * 2000) + 500; // 500-2500 minutes
+        // Show last 12 months
+        for (let i = 11; i >= 0; i--) {
+          const month = new Date();
+          month.setMonth(month.getMonth() - i);
+          
+          const monthMinutes = usageData
+            .filter(d => {
+              const dataDate = new Date(d.date);
+              return dataDate.getMonth() === month.getMonth() && 
+                     dataDate.getFullYear() === month.getFullYear();
+            })
+            .reduce((sum, d) => sum + d.minutes_used, 0);
+          
           data.push({
-            period: month,
-            minutes,
-            hours: (minutes / 60).toFixed(1)
+            period: month.toLocaleDateString('en', { month: 'short' }),
+            minutes: monthMinutes
           });
-        });
+        }
         break;
       default:
         break;
@@ -132,12 +155,36 @@ export const DashboardInterface = () => {
     return 500;
   };
 
+  // Load usage data from database
+  const loadUsageData = async () => {
+    if (!user) return;
+    
+    setLoadingUsageData(true);
+    try {
+      const { data, error } = await supabase
+        .from('daily_usage_stats')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('date', { ascending: true });
+      
+      if (error) {
+        console.error('Error loading usage data:', error);
+      } else {
+        setUsageData(data || []);
+      }
+    } catch (error) {
+      console.error('Error loading usage data:', error);
+    } finally {
+      setLoadingUsageData(false);
+    }
+  };
   useEffect(() => {
     if (user) {
       loadProfile();
       loadTrainingData();
       loadProjects();
       loadAnalytics();
+      loadUsageData();
     }
   }, [user]);
 
@@ -836,44 +883,72 @@ export const DashboardInterface = () => {
                     <div className="space-y-3">
                       <h3 className="font-medium text-foreground">Platform Usage Trends</h3>
                       <div className="h-32">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <LineChart data={generateTimeData()}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                            <XAxis 
-                              dataKey="period" 
-                              tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }}
-                              axisLine={{ stroke: 'hsl(var(--border))' }}
-                            />
-                            <YAxis 
-                              tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }}
-                              axisLine={{ stroke: 'hsl(var(--border))' }}
-                              tickFormatter={(value) => `${Math.round(value)}`}
-                              interval={getYAxisTickInterval(generateTimeData())}
-                              domain={['dataMin', 'dataMax']}
-                            />
-                            <Tooltip 
-                              contentStyle={{ 
-                                backgroundColor: 'hsl(var(--popover))',
-                                border: '1px solid hsl(var(--border))',
-                                borderRadius: '8px',
-                                fontSize: '12px'
-                              }}
-                              labelStyle={{ color: 'hsl(var(--foreground))' }}
-                              formatter={(value: any, name: string) => [
-                                `${Math.round(value)} minutes`,
-                                'Time on Platform'
-                              ]}
-                            />
-                            <Line 
-                              type="monotone" 
-                              dataKey="minutes" 
-                              stroke="hsl(var(--primary))" 
-                              strokeWidth={2}
-                              dot={{ fill: 'hsl(var(--primary))', strokeWidth: 2, r: 3 }}
-                              activeDot={{ r: 4, stroke: 'hsl(var(--primary))', strokeWidth: 2 }}
-                            />
-                          </LineChart>
-                        </ResponsiveContainer>
+                        {(() => {
+                          const timeData = generateTimeData();
+                          const validDataPoints = timeData.filter(d => d.minutes > 0);
+                          
+                          if (loadingUsageData) {
+                            return (
+                              <div className="flex items-center justify-center h-full">
+                                <div className="animate-pulse text-muted-foreground">Loading usage data...</div>
+                              </div>
+                            );
+                          }
+                          
+                          if (validDataPoints.length < 2) {
+                            return (
+                              <div className="flex items-center justify-center h-full">
+                                <div className="text-center space-y-2">
+                                  <BarChart3 className="h-8 w-8 text-muted-foreground mx-auto" />
+                                  <p className="text-sm text-muted-foreground">
+                                    There is not enough usage data available yet
+                                  </p>
+                                </div>
+                              </div>
+                            );
+                          }
+                          
+                          return (
+                            <ResponsiveContainer width="100%" height="100%">
+                              <LineChart data={timeData}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                                <XAxis 
+                                  dataKey="period" 
+                                  tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }}
+                                  axisLine={{ stroke: 'hsl(var(--border))' }}
+                                />
+                                <YAxis 
+                                  tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }}
+                                  axisLine={{ stroke: 'hsl(var(--border))' }}
+                                  tickFormatter={(value) => `${Math.round(value)}`}
+                                  interval={getYAxisTickInterval(timeData)}
+                                  domain={['dataMin', 'dataMax']}
+                                />
+                                <Tooltip 
+                                  contentStyle={{ 
+                                    backgroundColor: 'hsl(var(--popover))',
+                                    border: '1px solid hsl(var(--border))',
+                                    borderRadius: '8px',
+                                    fontSize: '12px'
+                                  }}
+                                  labelStyle={{ color: 'hsl(var(--foreground))' }}
+                                  formatter={(value: any, name: string) => [
+                                    `${Math.round(value)} minutes`,
+                                    'Time on Platform'
+                                  ]}
+                                />
+                                <Line 
+                                  type="monotone" 
+                                  dataKey="minutes" 
+                                  stroke="hsl(var(--primary))" 
+                                  strokeWidth={2}
+                                  dot={{ fill: 'hsl(var(--primary))', strokeWidth: 2, r: 3 }}
+                                  activeDot={{ r: 4, stroke: 'hsl(var(--primary))', strokeWidth: 2 }}
+                                />
+                              </LineChart>
+                            </ResponsiveContainer>
+                          );
+                        })()}
                       </div>
                     </div>
                   </Card>
