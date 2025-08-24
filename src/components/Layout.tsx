@@ -13,7 +13,7 @@ interface LayoutProps {
 
 export const Layout = ({ children }: LayoutProps) => {
   const [selectedGPT, setSelectedGPT] = useState<{ id: string; name: string; type: 'prebuilt' | 'custom' } | null>(null);
-  const [activeInterface, setActiveInterface] = useState<'chat' | 'prebuilt' | 'custom' | 'training' | 'dashboard'>('chat');
+  const [activeInterface, setActiveInterface] = useState<'chat' | 'prebuilt' | 'custom' | 'training' | 'dashboard'>('dashboard');
 
   const handleGPTSelect = (gpt: { id: string; name: string; type: 'prebuilt' | 'custom' }) => {
     setSelectedGPT(gpt);
@@ -47,7 +47,7 @@ export const Layout = ({ children }: LayoutProps) => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <Header onLogoClick={() => handleInterfaceChange('dashboard')} />
       <div className="flex">
         <Sidebar 
           onGPTSelect={handleGPTSelect} 
