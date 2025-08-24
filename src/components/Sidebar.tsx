@@ -164,13 +164,13 @@ export const Sidebar = ({ onGPTSelect, selectedGPT, onInterfaceChange, activeInt
           
           {/* Home */}
           <Card 
-            className={`p-4 border-2 hover:border-primary/40 transition-smooth cursor-pointer group ${
+            className={`p-3 border-2 hover:border-primary/40 transition-smooth cursor-pointer group ${
               activeInterface === 'chat' && !selectedGPT ? 'border-primary bg-primary/5' : 'border-primary/20'
             }`}
             onClick={handleHomeClick}
           >
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth">
+            <div className="flex items-center gap-2">
+              <div className="p-1.5 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth">
                 <Home className="h-5 w-5 text-primary" />
               </div>
               <div className="flex-1">
@@ -183,13 +183,13 @@ export const Sidebar = ({ onGPTSelect, selectedGPT, onInterfaceChange, activeInt
           
           {/* Dashboard */}
           <Card 
-            className={`p-4 border-2 hover:border-primary/40 transition-smooth cursor-pointer group ${
+            className={`p-3 border-2 hover:border-primary/40 transition-smooth cursor-pointer group ${
               activeInterface === 'dashboard' ? 'border-primary bg-primary/5' : 'border-primary/20'
             }`}
             onClick={() => onInterfaceChange('dashboard')}
           >
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth">
+            <div className="flex items-center gap-2">
+              <div className="p-1.5 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth">
                 <LayoutDashboard className="h-5 w-5 text-primary" />
               </div>
               <div className="flex-1">
@@ -202,13 +202,13 @@ export const Sidebar = ({ onGPTSelect, selectedGPT, onInterfaceChange, activeInt
           
           {/* Prebuilt GPTs */}
           <Card 
-            className={`p-4 border-2 hover:border-primary/40 transition-smooth cursor-pointer group ${
+            className={`p-3 border-2 hover:border-primary/40 transition-smooth cursor-pointer group ${
               activeInterface === 'prebuilt' ? 'border-primary bg-primary/5' : 'border-primary/20'
             }`}
             onClick={() => onInterfaceChange('prebuilt')}
           >
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth">
+            <div className="flex items-center gap-2">
+              <div className="p-1.5 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth">
                 <Bot className="h-5 w-5 text-primary" />
               </div>
               <div className="flex-1">
@@ -221,13 +221,13 @@ export const Sidebar = ({ onGPTSelect, selectedGPT, onInterfaceChange, activeInt
 
           {/* Custom GPTs */}
           <Card 
-            className={`p-4 border-2 hover:border-primary/40 transition-smooth cursor-pointer group ${
+            className={`p-3 border-2 hover:border-primary/40 transition-smooth cursor-pointer group ${
               activeInterface === 'custom' ? 'border-primary bg-primary/5' : 'border-primary/20'
             }`}
             onClick={() => onInterfaceChange('custom')}
           >
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth">
+            <div className="flex items-center gap-2">
+              <div className="p-1.5 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth">
                 <Sparkles className="h-5 w-5 text-primary" />
               </div>
               <div className="flex-1">
@@ -240,13 +240,13 @@ export const Sidebar = ({ onGPTSelect, selectedGPT, onInterfaceChange, activeInt
 
           {/* Training Mode */}
           <Card 
-            className={`p-4 border-2 hover:border-primary/40 transition-smooth cursor-pointer group ${
+            className={`p-3 border-2 hover:border-primary/40 transition-smooth cursor-pointer group ${
               activeInterface === 'training' ? 'border-primary bg-primary/5' : 'border-primary/20'
             }`}
             onClick={() => onInterfaceChange('training')}
           >
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth">
+            <div className="flex items-center gap-2">
+              <div className="p-1.5 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth">
                 <GraduationCap className="h-5 w-5 text-primary" />
               </div>
               <div className="flex-1">
