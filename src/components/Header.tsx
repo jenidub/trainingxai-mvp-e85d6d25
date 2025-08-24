@@ -6,11 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { UserProfile } from './UserProfile';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
-interface HeaderProps {
-  onLogoClick?: () => void;
-}
-
-export const Header = ({ onLogoClick }: HeaderProps = {}) => {
+export const Header = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   
@@ -57,7 +53,7 @@ export const Header = ({ onLogoClick }: HeaderProps = {}) => {
       {/* Main Header */}
       <header className="h-16 border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="flex items-center justify-between h-full px-6">
-          <div className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity" onClick={onLogoClick}>
+          <div className="flex items-center gap-3">
             <div className="gradient-primary p-2 rounded-lg">
               <Sparkles className="h-6 w-6 text-white" />
             </div>
