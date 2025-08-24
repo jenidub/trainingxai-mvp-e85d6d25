@@ -59,6 +59,7 @@ export const DashboardInterface = () => {
   const { user } = useAuth();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [portfolioFilter, setPortfolioFilter] = useState('all');
+  const [trainingFilter, setTrainingFilter] = useState('core-skills');
   const [timeRange, setTimeRange] = useState('weekly');
 
   // Generate time-based data based on selected range
@@ -281,6 +282,13 @@ export const DashboardInterface = () => {
     { id: 'music', name: 'Music Tracks', icon: Music },
   ];
 
+  const trainingCategories = [
+    { id: 'all', name: 'All Tracks', icon: Target },
+    { id: 'core-skills', name: 'Core Skills', icon: Star },
+    { id: 'advanced', name: 'Advanced Training', icon: Trophy },
+    { id: 'specialized', name: 'Specialized Tracks', icon: Zap },
+  ];
+
   const [trainingData, setTrainingData] = useState<any[]>([]);
   const [loadingTraining, setLoadingTraining] = useState(true);
   const [projects, setProjects] = useState<any[]>([]);
@@ -292,6 +300,36 @@ export const DashboardInterface = () => {
   const filteredPortfolio = portfolioFilter === 'all' 
     ? projects 
     : projects.filter(project => project.category === portfolioFilter);
+
+  // Filter training data based on selected category
+  const getFilteredTrainingData = () => {
+    if (trainingFilter === 'all') return trainingData;
+    
+    // Simple filtering logic based on track names and characteristics
+    return trainingData.filter(track => {
+      const trackName = track.track.toLowerCase();
+      switch (trainingFilter) {
+        case 'core-skills':
+          return trackName.includes('fundamentals') || 
+                 trackName.includes('basics') || 
+                 trackName.includes('core') ||
+                 trackName.includes('essential') ||
+                 track.level === 'Beginner';
+        case 'advanced':
+          return track.level === 'Advanced' || 
+                 trackName.includes('advanced') ||
+                 trackName.includes('expert');
+        case 'specialized':
+          return trackName.includes('specialized') || 
+                 trackName.includes('custom') ||
+                 trackName.includes('specific');
+        default:
+          return true;
+      }
+    });
+  };
+
+  const filteredTrainingData = getFilteredTrainingData();
 
   return (
     <div className="flex-1 h-[calc(100vh-8rem)] overflow-y-auto">
@@ -403,6 +441,30 @@ export const DashboardInterface = () => {
 
           {/* Training Zone Progress */}
           <TabsContent value="training" className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-foreground">Training Zone</h2>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="flex items-center gap-2">
+                    <Filter className="h-4 w-4" />
+                    {trainingCategories.find(cat => cat.id === trainingFilter)?.name}
+                    <ChevronDown className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  {trainingCategories.map((category) => (
+                    <DropdownMenuItem 
+                      key={category.id}
+                      onClick={() => setTrainingFilter(category.id)}
+                      className="flex items-center gap-2"
+                    >
+                      <category.icon className="h-4 w-4" />
+                      {category.name}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
             {loadingTraining ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[1, 2, 3, 4].map((i) => (
@@ -418,20 +480,26 @@ export const DashboardInterface = () => {
                   </Card>
                 ))}
               </div>
-            ) : trainingData.length === 0 ? (
+            ) : filteredTrainingData.length === 0 ? (
               <Card className="p-8 text-center">
                 <div className="space-y-4">
                   <Target className="h-12 w-12 text-muted-foreground mx-auto" />
                   <div>
-                    <h3 className="text-lg font-semibold text-foreground">Start Your Training Journey</h3>
-                    <p className="text-muted-foreground">Choose from our training tracks to begin building your AI skills.</p>
+                    <h3 className="text-lg font-semibold text-foreground">
+                      {trainingFilter === 'all' ? 'Start Your Training Journey' : `No ${trainingCategories.find(cat => cat.id === trainingFilter)?.name} Found`}
+                    </h3>
+                    <p className="text-muted-foreground">
+                      {trainingFilter === 'all' 
+                        ? 'Choose from our training tracks to begin building your AI skills.' 
+                        : 'Try selecting a different filter or check back later for new training content.'}
+                    </p>
                   </div>
                   <Button>Browse Training Tracks</Button>
                 </div>
               </Card>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {trainingData.map((track, index) => (
+                {filteredTrainingData.map((track, index) => (
                   <Card key={index} className="p-6 hover:shadow-lg transition-shadow">
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
