@@ -150,60 +150,80 @@ export const generateAnalyticsReport = async (
   userEmail?: string,
   timeRange: string = 'Weekly'
 ) => {
-  const template = new PDFTemplate();
-  
-  // Add header
-  template.addHeader({
-    title: 'Analytics Report',
-    subtitle: `${timeRange} Performance Overview`,
-    generatedDate: new Date().toLocaleDateString(),
-    userEmail
-  });
+  try {
+    console.log('Analytics data received:', analytics);
+    
+    // Handle null analytics data
+    if (!analytics) {
+      analytics = {
+        total_time_minutes: 0,
+        sessions_count: 0,
+        avg_session_minutes: 0,
+        achievements_count: 0,
+        projects_count: 0,
+        certificates_earned: 0
+      };
+    }
+    const template = new PDFTemplate();
+    
+    // Add header
+    template.addHeader({
+      title: 'Analytics Report',
+      subtitle: `${timeRange} Performance Overview`,
+      generatedDate: new Date().toLocaleDateString(),
+      userEmail
+    });
 
-  // Analytics Summary Section
-  template.addSection('Performance Metrics');
-  
-  const totalHours = Math.floor((analytics.total_time_minutes || 0) / 60);
-  const totalMinutes = (analytics.total_time_minutes || 0) % 60;
-  const avgSessionTime = Math.round(analytics.avg_session_minutes || 0);
-  
-  template.addMetricCard('Total Time', `${totalHours}h ${totalMinutes}m`, `${timeRange.toLowerCase()} activity`);
-  template.addMetricCard('Sessions', (analytics.sessions_count || 0).toString(), 'Learning sessions');
-  template.addMetricCard('Avg Session', `${avgSessionTime} min`, 'Average session duration');
-  template.addMetricCard('Achievements', (analytics.achievements_count || 0).toString(), 'Unlocked achievements');
-  template.addMetricCard('Active Projects', (analytics.projects_count || 0).toString(), 'Current projects');
-  template.addMetricCard('Certificates', (analytics.certificates_earned || 0).toString(), 'Earned certificates');
+    // Analytics Summary Section
+    template.addSection('Performance Metrics');
+    
+    const totalHours = Math.floor((analytics.total_time_minutes || 0) / 60);
+    const totalMinutes = (analytics.total_time_minutes || 0) % 60;
+    const avgSessionTime = Math.round(analytics.avg_session_minutes || 0);
+    
+    template.addMetricCard('Total Time', `${totalHours}h ${totalMinutes}m`, `${timeRange.toLowerCase()} activity`);
+    template.addMetricCard('Sessions', (analytics.sessions_count || 0).toString(), 'Learning sessions');
+    template.addMetricCard('Avg Session', `${avgSessionTime} min`, 'Average session duration');
+    template.addMetricCard('Achievements', (analytics.achievements_count || 0).toString(), 'Unlocked achievements');
+    template.addMetricCard('Active Projects', (analytics.projects_count || 0).toString(), 'Current projects');
+    template.addMetricCard('Certificates', (analytics.certificates_earned || 0).toString(), 'Earned certificates');
 
-  // Performance Insights Section
-  template.addSection('Performance Insights');
-  
-  const insights = [];
-  
-  if ((analytics.total_time_minutes || 0) > 300) {
-    insights.push('🎯 Excellent engagement! You\'ve spent significant time learning this period.');
-  }
-  
-  if ((analytics.avg_session_minutes || 0) > 30) {
-    insights.push('📚 Great focus! Your sessions are substantial and productive.');
-  }
-  
-  if ((analytics.sessions_count || 0) > 10) {
-    insights.push('🔥 Consistent learner! You maintain regular learning sessions.');
-  }
-  
-  if ((analytics.achievements_count || 0) > 5) {
-    insights.push('🏆 Achievement hunter! You\'re making great progress.');
-  }
+    // Performance Insights Section
+    template.addSection('Performance Insights');
+    
+    const insights = [];
+    
+    if ((analytics.total_time_minutes || 0) > 300) {
+      insights.push('🎯 Excellent engagement! You\'ve spent significant time learning this period.');
+    }
+    
+    if ((analytics.avg_session_minutes || 0) > 30) {
+      insights.push('📚 Great focus! Your sessions are substantial and productive.');
+    }
+    
+    if ((analytics.sessions_count || 0) > 10) {
+      insights.push('🔥 Consistent learner! You maintain regular learning sessions.');
+    }
+    
+    if ((analytics.achievements_count || 0) > 5) {
+      insights.push('🏆 Achievement hunter! You\'re making great progress.');
+    }
 
-  if (insights.length === 0) {
-    insights.push('📈 Keep building your learning momentum! Every session counts.');
+    if (insights.length === 0) {
+      insights.push('📈 Keep building your learning momentum! Every session counts.');
+    }
+
+    insights.forEach(insight => {
+      template.addText(insight, 12, [34, 197, 94]);
+    });
+
+    template.save('analytics-report.pdf');
+    console.log('Analytics report generated successfully');
+    
+  } catch (error) {
+    console.error('Error in generateAnalyticsReport:', error);
+    throw new Error(`Failed to generate analytics report: ${error.message}`);
   }
-
-  insights.forEach(insight => {
-    template.addText(insight, 12, [34, 197, 94]);
-  });
-
-  template.save('analytics-report.pdf');
 };
 
 // Legacy functions for backward compatibility
