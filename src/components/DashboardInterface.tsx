@@ -295,19 +295,19 @@ export const DashboardInterface = () => {
             <p className="text-sm text-muted-foreground mb-6">
               Unlock badges as you progress through your training
             </p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-4 gap-3">
               {achievements.map((achievement) => {
                 const IconComponent = achievement.icon;
                 return (
                   <div 
                     key={achievement.id}
-                    className="text-center p-4 rounded-lg border border-muted opacity-60"
+                    className="text-center p-3 rounded-lg border border-muted opacity-60"
                   >
-                    <div className="p-2 rounded-full bg-muted w-fit mx-auto mb-2">
-                      <IconComponent className="h-6 w-6 text-muted-foreground" />
+                    <div className="p-1.5 rounded-full bg-muted w-fit mx-auto mb-2">
+                      <IconComponent className="h-4 w-4 text-muted-foreground" />
                     </div>
-                    <h4 className="font-medium text-sm mb-1">{achievement.title}</h4>
-                    <p className="text-xs text-muted-foreground">{achievement.description}</p>
+                    <h4 className="font-medium text-xs mb-1">{achievement.title}</h4>
+                    <p className="text-xs text-muted-foreground leading-tight">{achievement.description}</p>
                   </div>
                 );
               })}
