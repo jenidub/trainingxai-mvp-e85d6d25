@@ -450,38 +450,31 @@ export const DashboardInterface = () => {
 
         {/* Achievements Section */}
         <Card>
-          <div className="p-6">
-            <div className="flex items-center gap-6">
-              {/* Text Section - 15% */}
-              <div className="w-[15%] space-y-2">
-                <h2 className="text-lg font-semibold flex items-center gap-2">
-                  <Award className="h-5 w-5 text-primary" />
-                  Achievements
-                </h2>
-                <p className="text-xs text-muted-foreground leading-tight">
-                  Unlock badges as you progress through your training
-                </p>
+          <div className="p-4">
+            <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                <Award className="h-5 w-5 text-primary" />
+                <h2 className="text-lg font-semibold">Achievements</h2>
               </div>
-              
-              {/* Achievement Items - 85% */}
-              <div className="w-[85%]">
-                <div className="grid grid-cols-4 gap-3">
-                  {achievements.map((achievement) => {
-                    const IconComponent = achievement.icon;
-                    return (
-                      <div 
-                        key={achievement.id}
-                        className="text-center p-3 rounded-lg border border-muted opacity-60"
-                      >
-                        <div className="p-1.5 rounded-full bg-muted w-fit mx-auto mb-2">
-                          <IconComponent className="h-4 w-4 text-muted-foreground" />
-                        </div>
-                        <h4 className="font-medium text-xs mb-1">{achievement.title}</h4>
-                        <p className="text-xs text-muted-foreground leading-tight">{achievement.description}</p>
+              <p className="text-xs text-muted-foreground">
+                Unlock badges as you progress through your training
+              </p>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                {achievements.map((achievement) => {
+                  const IconComponent = achievement.icon;
+                  return (
+                    <div 
+                      key={achievement.id}
+                      className="text-center p-3 rounded-lg border border-muted opacity-60 min-w-0"
+                    >
+                      <div className="p-1.5 rounded-full bg-muted w-fit mx-auto mb-2">
+                        <IconComponent className="h-4 w-4 text-muted-foreground" />
                       </div>
-                    );
-                  })}
-                </div>
+                      <h4 className="font-medium text-xs mb-1 truncate">{achievement.title}</h4>
+                      <p className="text-xs text-muted-foreground leading-tight">{achievement.description}</p>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
