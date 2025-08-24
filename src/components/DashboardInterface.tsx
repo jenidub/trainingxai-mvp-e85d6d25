@@ -392,8 +392,8 @@ export const DashboardInterface = () => {
   const filteredTrainingData = getFilteredTrainingData();
 
   return (
-    <div className="flex-1 h-[calc(100vh-8rem)] overflow-y-auto">
-      <div className="p-8 space-y-8">
+    <div className="flex-1 h-[calc(100vh-8rem)] overflow-y-auto overflow-x-hidden">
+      <div className="p-4 space-y-6 max-w-full">
         {/* Header Section */}
         <div className="bg-gradient-to-r from-primary/5 to-primary/10 rounded-2xl p-8 border border-primary/10">
           <div className="space-y-6 text-center">
