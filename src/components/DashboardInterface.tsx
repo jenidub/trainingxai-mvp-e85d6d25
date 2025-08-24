@@ -31,7 +31,9 @@ import {
   ChevronDown,
   Zap,
   Star,
-  Activity
+  Activity,
+  Palette,
+  Code
 } from 'lucide-react';
 import { UserProfile } from './UserProfile';
 import { supabase } from '@/integrations/supabase/client';
@@ -45,6 +47,13 @@ interface Profile {
   avatar_url: string | null;
   created_at: string;
 }
+
+const achievements = [
+  { id: 1, title: 'First Steps', description: 'Complete your first training module', icon: Star },
+  { id: 2, title: 'Prompt Master', description: 'Master all fundamentals lessons', icon: Trophy },
+  { id: 3, title: 'Creative Genius', description: 'Excel in creative AI applications', icon: Palette },
+  { id: 4, title: 'Builder', description: 'Create your first custom GPT', icon: Code },
+];
 
 export const DashboardInterface = () => {
   const { user } = useAuth();
@@ -275,6 +284,36 @@ export const DashboardInterface = () => {
             </div>
           </div>
         </div>
+
+        {/* Achievements Section */}
+        <Card>
+          <div className="p-6">
+            <div className="flex items-center gap-2 mb-4">
+              <Award className="h-5 w-5 text-primary" />
+              <h2 className="text-xl font-semibold">Achievements</h2>
+            </div>
+            <p className="text-sm text-muted-foreground mb-6">
+              Unlock badges as you progress through your training
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {achievements.map((achievement) => {
+                const IconComponent = achievement.icon;
+                return (
+                  <div 
+                    key={achievement.id}
+                    className="text-center p-4 rounded-lg border border-muted opacity-60"
+                  >
+                    <div className="p-2 rounded-full bg-muted w-fit mx-auto mb-2">
+                      <IconComponent className="h-6 w-6 text-muted-foreground" />
+                    </div>
+                    <h4 className="font-medium text-sm mb-1">{achievement.title}</h4>
+                    <p className="text-xs text-muted-foreground">{achievement.description}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </Card>
 
         <Tabs defaultValue="training" className="space-y-6">
           <TabsList className="grid w-full grid-cols-3">

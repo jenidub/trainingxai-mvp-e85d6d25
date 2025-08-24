@@ -12,9 +12,7 @@ import {
   Palette, 
   BarChart3,
   Clock,
-  Star,
   Play,
-  Award,
   ChevronRight,
   Lock,
   CheckCircle
@@ -116,12 +114,6 @@ const trainingModules: TrainingModule[] = [
   }
 ];
 
-const achievements = [
-  { id: 1, title: 'First Steps', description: 'Complete your first training module', icon: Star },
-  { id: 2, title: 'Prompt Master', description: 'Master all fundamentals lessons', icon: Trophy },
-  { id: 3, title: 'Creative Genius', description: 'Excel in creative AI applications', icon: Palette },
-  { id: 4, title: 'Builder', description: 'Create your first custom GPT', icon: Code },
-];
 
 interface TrainingModeInterfaceProps {
   onModuleSelect?: (moduleId: string) => void;
@@ -342,37 +334,6 @@ export const TrainingModeInterface = ({ onModuleSelect }: TrainingModeInterfaceP
         })}
       </div>
 
-      {/* Achievements Section */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Award className="h-5 w-5 text-primary" />
-            Achievements
-          </CardTitle>
-          <CardDescription>
-            Unlock badges as you progress through your training
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {achievements.map((achievement) => {
-              const IconComponent = achievement.icon;
-              return (
-                <div 
-                  key={achievement.id}
-                  className="text-center p-4 rounded-lg border border-muted opacity-60"
-                >
-                  <div className="p-2 rounded-full bg-muted w-fit mx-auto mb-2">
-                    <IconComponent className="h-6 w-6 text-muted-foreground" />
-                  </div>
-                  <h4 className="font-medium text-sm mb-1">{achievement.title}</h4>
-                  <p className="text-xs text-muted-foreground">{achievement.description}</p>
-                </div>
-              );
-            })}
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 };
