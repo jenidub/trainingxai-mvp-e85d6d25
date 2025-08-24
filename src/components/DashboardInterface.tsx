@@ -60,6 +60,7 @@ export const DashboardInterface = () => {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [portfolioFilter, setPortfolioFilter] = useState('all');
   const [timeRange, setTimeRange] = useState('weekly');
+  const [trainingFilter, setTrainingFilter] = useState('core-skills');
 
   // Generate time-based data based on selected range
   const generateTimeData = () => {
@@ -293,6 +294,40 @@ export const DashboardInterface = () => {
     ? projects 
     : projects.filter(project => project.category === portfolioFilter);
 
+  const getFilteredTrainingData = () => {
+    if (trainingFilter === 'all') return trainingData;
+    
+    const coreSkillsTracks = ['Fundamentals', 'Advanced Prompting', 'Ethics and Safety'];
+    const advancedTracks = ['Automations', 'Custom GPTs', 'Advanced Applications'];
+    const creativeTracks = ['Image Generation', 'Content Creation', 'Music & Audio'];
+    const specializationTracks = ['Business Intelligence', 'Code Generation', 'Data Analysis'];
+    
+    switch (trainingFilter) {
+      case 'core-skills':
+        return trainingData.filter(track => 
+          coreSkillsTracks.some(skillTrack => track.track.includes(skillTrack)) ||
+          track.level === 'Beginner'
+        );
+      case 'advanced':
+        return trainingData.filter(track => 
+          advancedTracks.some(advTrack => track.track.includes(advTrack)) ||
+          track.level === 'Advanced'
+        );
+      case 'creative':
+        return trainingData.filter(track => 
+          creativeTracks.some(creativeTrack => track.track.includes(creativeTrack))
+        );
+      case 'specializations':
+        return trainingData.filter(track => 
+          specializationTracks.some(specTrack => track.track.includes(specTrack))
+        );
+      default:
+        return trainingData;
+    }
+  };
+
+  const filteredTrainingData = getFilteredTrainingData();
+
   return (
     <div className="flex-1 h-[calc(100vh-8rem)] overflow-y-auto">
       <div className="p-8 space-y-8">
@@ -403,6 +438,38 @@ export const DashboardInterface = () => {
 
           {/* Training Zone Progress */}
           <TabsContent value="training" className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-foreground">Training Zone</h2>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="flex items-center gap-2">
+                    <Filter className="h-4 w-4" />
+                    {trainingFilter === 'all' ? 'All Tracks' : 
+                     trainingFilter === 'core-skills' ? 'Core Skills' :
+                     trainingFilter === 'advanced' ? 'Advanced' : 
+                     trainingFilter === 'creative' ? 'Creative AI' : 'Specializations'}
+                    <ChevronDown className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem onClick={() => setTrainingFilter('all')}>
+                    All Tracks
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setTrainingFilter('core-skills')}>
+                    Core Skills
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setTrainingFilter('advanced')}>
+                    Advanced
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setTrainingFilter('creative')}>
+                    Creative AI
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setTrainingFilter('specializations')}>
+                    Specializations
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
             {loadingTraining ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[1, 2, 3, 4].map((i) => (
@@ -418,20 +485,32 @@ export const DashboardInterface = () => {
                   </Card>
                 ))}
               </div>
-            ) : trainingData.length === 0 ? (
+            ) : filteredTrainingData.length === 0 ? (
               <Card className="p-8 text-center">
                 <div className="space-y-4">
                   <Target className="h-12 w-12 text-muted-foreground mx-auto" />
                   <div>
-                    <h3 className="text-lg font-semibold text-foreground">Start Your Training Journey</h3>
-                    <p className="text-muted-foreground">Choose from our training tracks to begin building your AI skills.</p>
+                    <h3 className="text-lg font-semibold text-foreground">
+                      {trainingFilter === 'core-skills' ? 'No Core Skills Tracks Yet' :
+                       trainingFilter === 'advanced' ? 'No Advanced Tracks Yet' :
+                       trainingFilter === 'creative' ? 'No Creative AI Tracks Yet' :
+                       trainingFilter === 'specializations' ? 'No Specialization Tracks Yet' :
+                       'Start Your Training Journey'}
+                    </h3>
+                    <p className="text-muted-foreground">
+                      {trainingFilter === 'core-skills' ? 'Begin with fundamentals to build your foundation.' :
+                       trainingFilter === 'advanced' ? 'Complete core skills first to unlock advanced training.' :
+                       trainingFilter === 'creative' ? 'Explore creative AI applications and tools.' :
+                       trainingFilter === 'specializations' ? 'Master specialized AI skills for your domain.' :
+                       'Choose from our training tracks to begin building your AI skills.'}
+                    </p>
                   </div>
                   <Button>Browse Training Tracks</Button>
                 </div>
               </Card>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {trainingData.map((track, index) => (
+                {filteredTrainingData.map((track, index) => (
                   <Card key={index} className="p-6 hover:shadow-lg transition-shadow">
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
