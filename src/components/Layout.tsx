@@ -22,6 +22,10 @@ export const Layout = ({ children }: LayoutProps) => {
 
   const handleInterfaceChange = (interfaceType: 'chat' | 'prebuilt' | 'custom' | 'training' | 'dashboard') => {
     setActiveInterface(interfaceType);
+    // Clear selected GPT when navigating away from chat
+    if (interfaceType !== 'chat') {
+      setSelectedGPT(null);
+    }
   };
 
   const renderMainContent = () => {
