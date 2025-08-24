@@ -122,6 +122,16 @@ export const DashboardInterface = () => {
     return data;
   };
 
+  // Calculate appropriate tick interval for Y-axis based on data range
+  const getYAxisTickInterval = (data: any[]) => {
+    const maxMinutes = Math.max(...data.map(d => d.minutes));
+    if (maxMinutes <= 100) return 20;
+    if (maxMinutes <= 300) return 50;
+    if (maxMinutes <= 600) return 100;
+    if (maxMinutes <= 1200) return 200;
+    return 500;
+  };
+
   useEffect(() => {
     if (user) {
       loadProfile();
@@ -837,6 +847,9 @@ export const DashboardInterface = () => {
                             <YAxis 
                               tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }}
                               axisLine={{ stroke: 'hsl(var(--border))' }}
+                              tickFormatter={(value) => `${Math.round(value)}`}
+                              interval={getYAxisTickInterval(generateTimeData())}
+                              domain={['dataMin', 'dataMax']}
                             />
                             <Tooltip 
                               contentStyle={{ 
@@ -847,13 +860,13 @@ export const DashboardInterface = () => {
                               }}
                               labelStyle={{ color: 'hsl(var(--foreground))' }}
                               formatter={(value: any, name: string) => [
-                                `${value} hours`,
+                                `${Math.round(value)} minutes`,
                                 'Time on Platform'
                               ]}
                             />
                             <Line 
                               type="monotone" 
-                              dataKey="hours" 
+                              dataKey="minutes" 
                               stroke="hsl(var(--primary))" 
                               strokeWidth={2}
                               dot={{ fill: 'hsl(var(--primary))', strokeWidth: 2, r: 3 }}
