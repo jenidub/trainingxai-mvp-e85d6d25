@@ -77,6 +77,36 @@ export type Database = {
         }
         Relationships: []
       }
+      daily_usage_stats: {
+        Row: {
+          created_at: string
+          date: string
+          id: string
+          minutes_used: number
+          sessions_count: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          id?: string
+          minutes_used?: number
+          sessions_count?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          id?: string
+          minutes_used?: number
+          sessions_count?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       messages: {
         Row: {
           content: string
@@ -320,7 +350,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      update_daily_usage: {
+        Args: { p_minutes?: number; p_user_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
