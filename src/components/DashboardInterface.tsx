@@ -373,6 +373,9 @@ export const DashboardInterface = () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
+                  <DropdownMenuItem onClick={() => setTimeRange('today')}>
+                    Today
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => setTimeRange('weekly')}>
                     Weekly
                   </DropdownMenuItem>
@@ -386,85 +389,85 @@ export const DashboardInterface = () => {
               </DropdownMenu>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <Card className="p-6">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-blue-500/10">
-                    <Clock className="h-5 w-5 text-blue-500" />
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <Card className="p-4">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-lg bg-blue-500/10">
+                    <Clock className="h-4 w-4 text-blue-500" />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Total Time</p>
-                    <p className="text-2xl font-bold text-foreground">{mockAnalytics.totalTime}</p>
+                    <p className="text-xs text-muted-foreground">Total Time</p>
+                    <p className="text-lg font-bold text-foreground">{mockAnalytics.totalTime}</p>
                   </div>
                 </div>
               </Card>
 
-              <Card className="p-6">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-green-500/10">
-                    <TrendingUp className="h-5 w-5 text-green-500" />
+              <Card className="p-4">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-lg bg-green-500/10">
+                    <TrendingUp className="h-4 w-4 text-green-500" />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Avg Daily</p>
-                    <p className="text-2xl font-bold text-foreground">{mockAnalytics.avgDailyTime}</p>
+                    <p className="text-xs text-muted-foreground">Avg Daily</p>
+                    <p className="text-lg font-bold text-foreground">{mockAnalytics.avgDailyTime}</p>
                   </div>
                 </div>
               </Card>
 
-              <Card className="p-6">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-purple-500/10">
-                    <Folder className="h-5 w-5 text-purple-500" />
+              <Card className="p-4">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-lg bg-purple-500/10">
+                    <Folder className="h-4 w-4 text-purple-500" />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Projects</p>
-                    <p className="text-2xl font-bold text-foreground">{mockAnalytics.projectsCompleted}</p>
+                    <p className="text-xs text-muted-foreground">Projects</p>
+                    <p className="text-lg font-bold text-foreground">{mockAnalytics.projectsCompleted}</p>
                   </div>
                 </div>
               </Card>
 
-              <Card className="p-6">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-orange-500/10">
-                    <Trophy className="h-5 w-5 text-orange-500" />
+              <Card className="p-4">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-lg bg-orange-500/10">
+                    <Trophy className="h-4 w-4 text-orange-500" />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Certificates</p>
-                    <p className="text-2xl font-bold text-foreground">{mockAnalytics.certificatesEarned}</p>
+                    <p className="text-xs text-muted-foreground">Certificates</p>
+                    <p className="text-lg font-bold text-foreground">{mockAnalytics.certificatesEarned}</p>
                   </div>
                 </div>
               </Card>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <Card className="p-6">
-                <div className="space-y-4">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              <Card className="p-4">
+                <div className="space-y-3">
                   <div className="flex items-center gap-2">
-                    <Activity className="h-5 w-5 text-primary" />
-                    <h3 className="font-semibold text-foreground">Training Stats</h3>
+                    <Activity className="h-4 w-4 text-primary" />
+                    <h3 className="font-medium text-foreground">Training Stats</h3>
                   </div>
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     <div className="flex justify-between">
-                      <span className="text-sm text-muted-foreground">Training Time</span>
-                      <span className="font-medium">{mockAnalytics.trainingTime}</span>
+                      <span className="text-xs text-muted-foreground">Training Time</span>
+                      <span className="text-sm font-medium">{mockAnalytics.trainingTime}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-sm text-muted-foreground">Drills Completed</span>
-                      <span className="font-medium">{mockAnalytics.drillsCompleted}</span>
+                      <span className="text-xs text-muted-foreground">Drills Completed</span>
+                      <span className="text-sm font-medium">{mockAnalytics.drillsCompleted}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-sm text-muted-foreground">Prompts Written</span>
-                      <span className="font-medium">{mockAnalytics.promptsWritten}</span>
+                      <span className="text-xs text-muted-foreground">Prompts Written</span>
+                      <span className="text-sm font-medium">{mockAnalytics.promptsWritten}</span>
                     </div>
                   </div>
                 </div>
               </Card>
 
-              <Card className="p-6 lg:col-span-2">
-                <div className="space-y-4">
-                  <h3 className="font-semibold text-foreground">Platform Usage Trends</h3>
-                  <div className="h-48 bg-muted/20 rounded-lg flex items-center justify-center">
-                    <p className="text-muted-foreground">Usage chart visualization would go here</p>
+              <Card className="p-4 lg:col-span-2">
+                <div className="space-y-3">
+                  <h3 className="font-medium text-foreground">Platform Usage Trends</h3>
+                  <div className="h-32 bg-muted/20 rounded-lg flex items-center justify-center">
+                    <p className="text-sm text-muted-foreground">Usage chart visualization would go here</p>
                   </div>
                 </div>
               </Card>
