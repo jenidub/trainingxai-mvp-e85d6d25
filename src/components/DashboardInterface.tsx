@@ -36,6 +36,7 @@ import {
 import { UserProfile } from './UserProfile';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip } from 'recharts';
 
 interface Profile {
   id: string;
@@ -50,6 +51,63 @@ export const DashboardInterface = () => {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [portfolioFilter, setPortfolioFilter] = useState('all');
   const [timeRange, setTimeRange] = useState('weekly');
+
+  // Generate time-based data based on selected range
+  const generateTimeData = () => {
+    const now = new Date();
+    const data = [];
+    
+    switch (timeRange) {
+      case 'today':
+        // Hourly data for today
+        for (let i = 0; i < 24; i++) {
+          data.push({
+            period: `${i.toString().padStart(2, '0')}:00`,
+            minutes: Math.floor(Math.random() * 60) + 10, // 10-70 minutes
+            hours: ((Math.floor(Math.random() * 60) + 10) / 60).toFixed(1)
+          });
+        }
+        break;
+      case 'weekly':
+        // Daily data for the week
+        const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        days.forEach(day => {
+          const minutes = Math.floor(Math.random() * 200) + 30; // 30-230 minutes
+          data.push({
+            period: day,
+            minutes,
+            hours: (minutes / 60).toFixed(1)
+          });
+        });
+        break;
+      case 'monthly':
+        // Weekly data for the month
+        for (let i = 1; i <= 4; i++) {
+          const minutes = Math.floor(Math.random() * 800) + 200; // 200-1000 minutes
+          data.push({
+            period: `Week ${i}`,
+            minutes,
+            hours: (minutes / 60).toFixed(1)
+          });
+        }
+        break;
+      case 'annual':
+        // Monthly data for the year
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        months.forEach(month => {
+          const minutes = Math.floor(Math.random() * 2000) + 500; // 500-2500 minutes
+          data.push({
+            period: month,
+            minutes,
+            hours: (minutes / 60).toFixed(1)
+          });
+        });
+        break;
+      default:
+        break;
+    }
+    return data;
+  };
 
   useEffect(() => {
     if (user) {
@@ -466,8 +524,42 @@ export const DashboardInterface = () => {
               <Card className="p-4 lg:col-span-2">
                 <div className="space-y-3">
                   <h3 className="font-medium text-foreground">Platform Usage Trends</h3>
-                  <div className="h-32 bg-muted/20 rounded-lg flex items-center justify-center">
-                    <p className="text-sm text-muted-foreground">Usage chart visualization would go here</p>
+                  <div className="h-32">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={generateTimeData()}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                        <XAxis 
+                          dataKey="period" 
+                          tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }}
+                          axisLine={{ stroke: 'hsl(var(--border))' }}
+                        />
+                        <YAxis 
+                          tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }}
+                          axisLine={{ stroke: 'hsl(var(--border))' }}
+                        />
+                        <Tooltip 
+                          contentStyle={{ 
+                            backgroundColor: 'hsl(var(--popover))',
+                            border: '1px solid hsl(var(--border))',
+                            borderRadius: '8px',
+                            fontSize: '12px'
+                          }}
+                          labelStyle={{ color: 'hsl(var(--foreground))' }}
+                          formatter={(value: any, name: string) => [
+                            `${value} hours`,
+                            'Time on Platform'
+                          ]}
+                        />
+                        <Line 
+                          type="monotone" 
+                          dataKey="hours" 
+                          stroke="hsl(var(--primary))" 
+                          strokeWidth={2}
+                          dot={{ fill: 'hsl(var(--primary))', strokeWidth: 2, r: 3 }}
+                          activeDot={{ r: 4, stroke: 'hsl(var(--primary))', strokeWidth: 2 }}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
                   </div>
                 </div>
               </Card>
