@@ -226,7 +226,7 @@ export const ChatInterface = ({ selectedGPT }: ChatInterfaceProps) => {
               </Card>
             </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-2">
+            <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
               <Badge variant="secondary" className="text-xs">
                 <Sparkles className="h-3 w-3 mr-1" />
                 AI-Powered
@@ -239,6 +239,13 @@ export const ChatInterface = ({ selectedGPT }: ChatInterfaceProps) => {
                 <Image className="h-3 w-3 mr-1" />
                 Visual Learning
               </Badge>
+            </div>
+
+            {/* Founder's Quote */}
+            <div className="max-w-3xl mx-auto">
+              <p className="text-base font-bold italic bg-gradient-to-r from-primary via-primary/80 to-primary bg-clip-text text-transparent leading-relaxed">
+                "Your Dashboard is more than progress tracking — it's proof of your skills. The more you build, the more valuable you become. Share your badges, certificates, and portfolio with employers, schools, and your community."
+              </p>
             </div>
           </div>
         </div>
