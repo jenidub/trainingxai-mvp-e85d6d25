@@ -29,7 +29,8 @@ import {
   TrendingUp,
   Users,
   Award,
-  LayoutDashboard
+  LayoutDashboard,
+  Home
 } from 'lucide-react';
 import { CustomGPTManager } from './CustomGPTManager';
 
@@ -108,6 +109,10 @@ export const Sidebar = ({ onGPTSelect, selectedGPT, onInterfaceChange, activeInt
     onGPTSelect(gptData);
   };
 
+  const handleHomeClick = () => {
+    onInterfaceChange('chat');
+  };
+
   return (
     <aside className="w-80 h-[calc(100vh-8rem)] border-r border-border bg-card/30 backdrop-blur-sm overflow-y-auto">
       <div className="p-6 space-y-6">
@@ -156,6 +161,25 @@ export const Sidebar = ({ onGPTSelect, selectedGPT, onInterfaceChange, activeInt
         {/* Main Navigation */}
         <div className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">AI Studio</h2>
+          
+          {/* Home */}
+          <Card 
+            className={`p-4 border-2 hover:border-primary/40 transition-smooth cursor-pointer group ${
+              activeInterface === 'chat' && !selectedGPT ? 'border-primary bg-primary/5' : 'border-primary/20'
+            }`}
+            onClick={handleHomeClick}
+          >
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth">
+                <Home className="h-5 w-5 text-primary" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-medium text-sm">Home</h3>
+                <p className="text-xs text-muted-foreground">Welcome & getting started</p>
+              </div>
+              <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-smooth" />
+            </div>
+          </Card>
           
           {/* Dashboard */}
           <Card 

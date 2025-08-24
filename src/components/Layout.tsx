@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, useState, useEffect } from 'react';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
 import { ChatInterface } from './ChatInterface';
@@ -22,11 +22,17 @@ export const Layout = ({ children }: LayoutProps) => {
 
   const handleInterfaceChange = (interfaceType: 'chat' | 'prebuilt' | 'custom' | 'training' | 'dashboard') => {
     setActiveInterface(interfaceType);
-    // Clear selected GPT when navigating away from chat
-    if (interfaceType !== 'chat') {
+    // Clear selected GPT when navigating away from chat OR when explicitly going to chat (home)
+    if (interfaceType !== 'chat' || interfaceType === 'chat') {
       setSelectedGPT(null);
     }
   };
+
+  const handleHomeClick = () => {
+    setActiveInterface('chat');
+    setSelectedGPT(null);
+  };
+
 
   const renderMainContent = () => {
     if (children) return children;
@@ -47,7 +53,7 @@ export const Layout = ({ children }: LayoutProps) => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <Header onHomeClick={handleHomeClick} />
       <div className="flex">
         <Sidebar 
           onGPTSelect={handleGPTSelect} 
