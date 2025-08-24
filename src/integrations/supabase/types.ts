@@ -232,6 +232,45 @@ export type Database = {
         }
         Relationships: []
       }
+      user_statistics: {
+        Row: {
+          certificates_earned: number
+          created_at: string
+          drills_completed: number
+          id: string
+          projects_completed: number
+          prompts_written: number
+          total_time_minutes: number
+          training_time_minutes: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          certificates_earned?: number
+          created_at?: string
+          drills_completed?: number
+          id?: string
+          projects_completed?: number
+          prompts_written?: number
+          total_time_minutes?: number
+          training_time_minutes?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          certificates_earned?: number
+          created_at?: string
+          drills_completed?: number
+          id?: string
+          projects_completed?: number
+          prompts_written?: number
+          total_time_minutes?: number
+          training_time_minutes?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_training_progress: {
         Row: {
           badges_earned: number

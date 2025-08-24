@@ -123,6 +123,7 @@ export const DashboardInterface = () => {
       loadProfile();
       loadTrainingData();
       loadProjects();
+      loadAnalytics();
     }
   }, [user]);
 
@@ -218,6 +219,53 @@ export const DashboardInterface = () => {
     }
   };
 
+  const loadAnalytics = async () => {
+    if (!user) return;
+    
+    setLoadingAnalytics(true);
+    
+    try {
+      const { data, error } = await supabase
+        .from('user_statistics')
+        .select('*')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      
+      if (error) {
+        console.error('Error loading analytics:', error);
+        // Create default analytics if none exist
+        const { data: newStats, error: createError } = await supabase
+          .from('user_statistics')
+          .insert([{ user_id: user.id }])
+          .select()
+          .single();
+          
+        if (createError) {
+          console.error('Error creating analytics:', createError);
+        } else {
+          setAnalytics(newStats);
+        }
+      } else {
+        setAnalytics(data);
+      }
+    } catch (error) {
+      console.error('Error loading analytics:', error);
+    } finally {
+      setLoadingAnalytics(false);
+    }
+  };
+
+  const formatTime = (minutes: number) => {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return `${hours}h ${mins}m`;
+  };
+
+  const formatAvgDaily = (totalMinutes: number, days: number = 7) => {
+    const avgMinutes = Math.floor(totalMinutes / days);
+    return formatTime(avgMinutes);
+  };
+
   const getInitials = (name: string | null) => {
     if (!name) return 'U';
     return name.split(' ').map(word => word.charAt(0)).join('').toUpperCase();
@@ -237,16 +285,9 @@ export const DashboardInterface = () => {
   const [loadingTraining, setLoadingTraining] = useState(true);
   const [projects, setProjects] = useState<any[]>([]);
   const [loadingProjects, setLoadingProjects] = useState(true);
+  const [analytics, setAnalytics] = useState<any>(null);
+  const [loadingAnalytics, setLoadingAnalytics] = useState(true);
 
-  const mockAnalytics = {
-    totalTime: '47h 32m',
-    avgDailyTime: '2h 15m',
-    projectsCompleted: 12,
-    certificatesEarned: 3,
-    trainingTime: '23h 45m',
-    drillsCompleted: 156,
-    promptsWritten: 1247,
-  };
 
   const filteredPortfolio = portfolioFilter === 'all' 
     ? projects 
@@ -521,123 +562,152 @@ export const DashboardInterface = () => {
               </DropdownMenu>
             </div>
 
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <Card className="p-4">
-                <div className="flex items-center gap-2">
-                  <div className="p-1.5 rounded-lg bg-blue-500/10">
-                    <Clock className="h-4 w-4 text-blue-500" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">Total Time</p>
-                    <p className="text-lg font-bold text-foreground">{mockAnalytics.totalTime}</p>
-                  </div>
-                </div>
-              </Card>
-
-              <Card className="p-4">
-                <div className="flex items-center gap-2">
-                  <div className="p-1.5 rounded-lg bg-green-500/10">
-                    <TrendingUp className="h-4 w-4 text-green-500" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">Avg Daily</p>
-                    <p className="text-lg font-bold text-foreground">{mockAnalytics.avgDailyTime}</p>
-                  </div>
-                </div>
-              </Card>
-
-              <Card className="p-4">
-                <div className="flex items-center gap-2">
-                  <div className="p-1.5 rounded-lg bg-purple-500/10">
-                    <Folder className="h-4 w-4 text-purple-500" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">Projects</p>
-                    <p className="text-lg font-bold text-foreground">{mockAnalytics.projectsCompleted}</p>
-                  </div>
-                </div>
-              </Card>
-
-              <Card className="p-4">
-                <div className="flex items-center gap-2">
-                  <div className="p-1.5 rounded-lg bg-orange-500/10">
-                    <Trophy className="h-4 w-4 text-orange-500" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">Certificates</p>
-                    <p className="text-lg font-bold text-foreground">{mockAnalytics.certificatesEarned}</p>
-                  </div>
-                </div>
-              </Card>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-              <Card className="p-4">
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <Activity className="h-4 w-4 text-primary" />
-                    <h3 className="font-medium text-foreground">Training Stats</h3>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="text-xs text-muted-foreground">Training Time</span>
-                      <span className="text-sm font-medium">{mockAnalytics.trainingTime}</span>
+            {loadingAnalytics ? (
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                {[1, 2, 3, 4].map((i) => (
+                  <Card key={i} className="p-4">
+                    <div className="space-y-3 animate-pulse">
+                      <div className="h-4 bg-muted rounded w-3/4"></div>
+                      <div className="h-6 bg-muted rounded w-1/2"></div>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-xs text-muted-foreground">Drills Completed</span>
-                      <span className="text-sm font-medium">{mockAnalytics.drillsCompleted}</span>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                  <Card className="p-4">
+                    <div className="flex items-center gap-2">
+                      <div className="p-1.5 rounded-lg bg-blue-500/10">
+                        <Clock className="h-4 w-4 text-blue-500" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">Total Time</p>
+                        <p className="text-lg font-bold text-foreground">
+                          {analytics ? formatTime(analytics.total_time_minutes) : '0h 0m'}
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-xs text-muted-foreground">Prompts Written</span>
-                      <span className="text-sm font-medium">{mockAnalytics.promptsWritten}</span>
-                    </div>
-                  </div>
-                </div>
-              </Card>
+                  </Card>
 
-              <Card className="p-4 lg:col-span-2">
-                <div className="space-y-3">
-                  <h3 className="font-medium text-foreground">Platform Usage Trends</h3>
-                  <div className="h-32">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={generateTimeData()}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                        <XAxis 
-                          dataKey="period" 
-                          tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }}
-                          axisLine={{ stroke: 'hsl(var(--border))' }}
-                        />
-                        <YAxis 
-                          tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }}
-                          axisLine={{ stroke: 'hsl(var(--border))' }}
-                        />
-                        <Tooltip 
-                          contentStyle={{ 
-                            backgroundColor: 'hsl(var(--popover))',
-                            border: '1px solid hsl(var(--border))',
-                            borderRadius: '8px',
-                            fontSize: '12px'
-                          }}
-                          labelStyle={{ color: 'hsl(var(--foreground))' }}
-                          formatter={(value: any, name: string) => [
-                            `${value} hours`,
-                            'Time on Platform'
-                          ]}
-                        />
-                        <Line 
-                          type="monotone" 
-                          dataKey="hours" 
-                          stroke="hsl(var(--primary))" 
-                          strokeWidth={2}
-                          dot={{ fill: 'hsl(var(--primary))', strokeWidth: 2, r: 3 }}
-                          activeDot={{ r: 4, stroke: 'hsl(var(--primary))', strokeWidth: 2 }}
-                        />
-                      </LineChart>
-                    </ResponsiveContainer>
-                  </div>
+                  <Card className="p-4">
+                    <div className="flex items-center gap-2">
+                      <div className="p-1.5 rounded-lg bg-green-500/10">
+                        <TrendingUp className="h-4 w-4 text-green-500" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">Avg Daily</p>
+                        <p className="text-lg font-bold text-foreground">
+                          {analytics ? formatAvgDaily(analytics.total_time_minutes) : '0h 0m'}
+                        </p>
+                      </div>
+                    </div>
+                  </Card>
+
+                  <Card className="p-4">
+                    <div className="flex items-center gap-2">
+                      <div className="p-1.5 rounded-lg bg-purple-500/10">
+                        <Folder className="h-4 w-4 text-purple-500" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">Projects</p>
+                        <p className="text-lg font-bold text-foreground">
+                          {analytics ? analytics.projects_completed : 0}
+                        </p>
+                      </div>
+                    </div>
+                  </Card>
+
+                  <Card className="p-4">
+                    <div className="flex items-center gap-2">
+                      <div className="p-1.5 rounded-lg bg-orange-500/10">
+                        <Trophy className="h-4 w-4 text-orange-500" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">Certificates</p>
+                        <p className="text-lg font-bold text-foreground">
+                          {analytics ? analytics.certificates_earned : 0}
+                        </p>
+                      </div>
+                    </div>
+                  </Card>
                 </div>
-              </Card>
-            </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                  <Card className="p-4">
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-2">
+                        <Activity className="h-4 w-4 text-primary" />
+                        <h3 className="font-medium text-foreground">Training Stats</h3>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex justify-between">
+                          <span className="text-xs text-muted-foreground">Training Time</span>
+                          <span className="text-sm font-medium">
+                            {analytics ? formatTime(analytics.training_time_minutes) : '0h 0m'}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-xs text-muted-foreground">Drills Completed</span>
+                          <span className="text-sm font-medium">
+                            {analytics ? analytics.drills_completed : 0}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-xs text-muted-foreground">Prompts Written</span>
+                          <span className="text-sm font-medium">
+                            {analytics ? analytics.prompts_written : 0}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+
+                  <Card className="p-4 lg:col-span-2">
+                    <div className="space-y-3">
+                      <h3 className="font-medium text-foreground">Platform Usage Trends</h3>
+                      <div className="h-32">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <LineChart data={generateTimeData()}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                            <XAxis 
+                              dataKey="period" 
+                              tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }}
+                              axisLine={{ stroke: 'hsl(var(--border))' }}
+                            />
+                            <YAxis 
+                              tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }}
+                              axisLine={{ stroke: 'hsl(var(--border))' }}
+                            />
+                            <Tooltip 
+                              contentStyle={{ 
+                                backgroundColor: 'hsl(var(--popover))',
+                                border: '1px solid hsl(var(--border))',
+                                borderRadius: '8px',
+                                fontSize: '12px'
+                              }}
+                              labelStyle={{ color: 'hsl(var(--foreground))' }}
+                              formatter={(value: any, name: string) => [
+                                `${value} hours`,
+                                'Time on Platform'
+                              ]}
+                            />
+                            <Line 
+                              type="monotone" 
+                              dataKey="hours" 
+                              stroke="hsl(var(--primary))" 
+                              strokeWidth={2}
+                              dot={{ fill: 'hsl(var(--primary))', strokeWidth: 2, r: 3 }}
+                              activeDot={{ r: 4, stroke: 'hsl(var(--primary))', strokeWidth: 2 }}
+                            />
+                          </LineChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </div>
+                  </Card>
+                </div>
+              </>
+            )}
           </TabsContent>
         </Tabs>
       </div>
