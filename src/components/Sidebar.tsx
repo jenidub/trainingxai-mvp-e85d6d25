@@ -175,7 +175,7 @@ export const Sidebar = ({ onGPTSelect, selectedGPT, onInterfaceChange, activeInt
               </div>
               <div className="flex-1">
                 <h3 className="font-medium text-sm">Home</h3>
-                <p className="text-xs text-muted-foreground">Welcome & getting started</p>
+                <p className="text-xs text-muted-foreground">Welcome & start here</p>
               </div>
               <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-smooth" />
             </div>
@@ -194,7 +194,7 @@ export const Sidebar = ({ onGPTSelect, selectedGPT, onInterfaceChange, activeInt
               </div>
               <div className="flex-1">
                 <h3 className="font-medium text-sm">Dashboard</h3>
-                <p className="text-xs text-muted-foreground">Your progress & analytics</p>
+                <p className="text-xs text-muted-foreground">Progress & analytics</p>
               </div>
               <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-smooth" />
             </div>
@@ -213,7 +213,7 @@ export const Sidebar = ({ onGPTSelect, selectedGPT, onInterfaceChange, activeInt
               </div>
               <div className="flex-1">
                 <h3 className="font-medium text-sm">Prebuilt GPTs</h3>
-                <p className="text-xs text-muted-foreground">Ready-to-use AI assistants</p>
+                <p className="text-xs text-muted-foreground">Ready-to-use assistants</p>
               </div>
               <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-smooth" />
             </div>
@@ -232,7 +232,7 @@ export const Sidebar = ({ onGPTSelect, selectedGPT, onInterfaceChange, activeInt
               </div>
               <div className="flex-1">
                 <h3 className="font-medium text-sm">Custom GPTs</h3>
-                <p className="text-xs text-muted-foreground">Build your own AI agents</p>
+                <p className="text-xs text-muted-foreground">Build custom agents</p>
               </div>
               <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-smooth" />
             </div>
@@ -251,56 +251,12 @@ export const Sidebar = ({ onGPTSelect, selectedGPT, onInterfaceChange, activeInt
               </div>
               <div className="flex-1">
                 <h3 className="font-medium text-sm">Training Mode</h3>
-                <p className="text-xs text-muted-foreground">Interactive learning & practice</p>
+                <p className="text-xs text-muted-foreground">Interactive learning</p>
               </div>
               <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-smooth" />
             </div>
           </Card>
         </div>
-
-        {/* Quick GPT Selection - only show when in chat mode */}
-        {activeInterface === 'chat' && (
-          <>
-            <Separator />
-            <div className="space-y-3">
-              <h3 className="text-sm font-medium text-foreground">Quick Select</h3>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="w-full justify-between">
-                    {selectedGPT?.type === 'prebuilt' ? selectedGPT.name : 'Select a GPT'}
-                    <ChevronDown className="h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent side="top" className="w-80 max-h-80 overflow-y-auto bg-popover border border-border z-50">
-                  {prebuiltGPTs.map((gpt) => (
-                    <DropdownMenuItem
-                      key={gpt.id}
-                      onClick={() => handleGPTClick(gpt)}
-                      className="p-3 cursor-pointer flex items-start gap-3 hover:bg-accent"
-                    >
-                      <div className="p-1.5 rounded-md bg-muted">
-                        <gpt.icon className="h-3.5 w-3.5" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h3 className="font-medium text-sm truncate">{gpt.name}</h3>
-                          {gpt.popular && (
-                            <Badge variant="secondary" className="text-[10px] py-0 px-1 h-3.5">
-                              <Zap className="h-2 w-2 mr-0.5" />
-                              Popular
-                            </Badge>
-                          )}
-                        </div>
-                        <p className="text-xs text-muted-foreground line-clamp-2 leading-tight mb-1">{gpt.description}</p>
-                        <Badge variant="outline" className="text-[10px] py-0 px-1.5 h-4">{gpt.category}</Badge>
-                      </div>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </>
-        )}
 
       </div>
     </aside>
