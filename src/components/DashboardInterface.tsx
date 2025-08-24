@@ -119,47 +119,45 @@ export const DashboardInterface = () => {
       <div className="p-8 space-y-8">
         {/* Header Section */}
         <div className="bg-gradient-to-r from-primary/5 to-primary/10 rounded-2xl p-8 border border-primary/10">
-          <div className="space-y-6">
-            <h1 className="text-4xl font-bold text-foreground w-full text-center">
+          <div className="space-y-6 text-center">
+            <h1 className="text-4xl font-bold text-foreground">
               Your Studio. Your Progress. Your Future.
             </h1>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <UserProfile 
-                  trigger={
-                    <div className="flex items-center gap-3 cursor-pointer group">
-                      <div className="relative">
-                        <Avatar className="h-16 w-16 border-2 border-primary/20 group-hover:border-primary/40 transition-colors">
-                          <AvatarImage src={profile?.avatar_url || ''} alt="Profile" />
-                          <AvatarFallback className="bg-primary/10 text-primary text-lg font-semibold">
-                            {getInitials(profile?.display_name)}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="absolute -bottom-1 -right-1 p-1 bg-primary rounded-full">
-                          <Camera className="h-3 w-3 text-primary-foreground" />
-                        </div>
-                      </div>
-                      <div>
-                        <h2 className="text-xl font-semibold text-foreground">
-                          {profile?.display_name || 'Welcome!'}
-                        </h2>
-                        <p className="text-sm text-muted-foreground">
-                          {user?.email}
-                        </p>
+            <div className="flex items-center justify-center gap-6">
+              <UserProfile 
+                trigger={
+                  <div className="flex items-center gap-3 cursor-pointer group">
+                    <div className="relative">
+                      <Avatar className="h-16 w-16 border-2 border-primary/20 group-hover:border-primary/40 transition-colors">
+                        <AvatarImage src={profile?.avatar_url || ''} alt="Profile" />
+                        <AvatarFallback className="bg-primary/10 text-primary text-lg font-semibold">
+                          {getInitials(profile?.display_name)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="absolute -bottom-1 -right-1 p-1 bg-primary rounded-full">
+                        <Camera className="h-3 w-3 text-primary-foreground" />
                       </div>
                     </div>
-                  }
-                />
-                <div className="space-y-2 ml-4">
-                  <div className="flex items-center gap-2 text-primary">
-                    <Trophy className="h-5 w-5" />
-                    <span className="font-medium">Studio Member</span>
+                    <div>
+                      <h2 className="text-xl font-semibold text-foreground">
+                        {profile?.display_name || 'Welcome!'}
+                      </h2>
+                      <p className="text-sm text-muted-foreground">
+                        {user?.email}
+                      </p>
+                    </div>
                   </div>
-                  <Badge variant="secondary" className="bg-primary/10 text-primary">
-                    <Star className="h-3 w-3 mr-1" />
-                    Level 2 Creator
-                  </Badge>
+                }
+              />
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-primary">
+                  <Trophy className="h-5 w-5" />
+                  <span className="font-medium">Studio Member</span>
                 </div>
+                <Badge variant="secondary" className="bg-primary/10 text-primary">
+                  <Star className="h-3 w-3 mr-1" />
+                  Level 2 Creator
+                </Badge>
               </div>
             </div>
           </div>
