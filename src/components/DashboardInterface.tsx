@@ -59,8 +59,8 @@ export const DashboardInterface = () => {
   const { user } = useAuth();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [portfolioFilter, setPortfolioFilter] = useState('all');
-  const [timeRange, setTimeRange] = useState('weekly');
   const [trainingFilter, setTrainingFilter] = useState('core-skills');
+  const [timeRange, setTimeRange] = useState('weekly');
 
   // Generate time-based data based on selected range
   const generateTimeData = () => {
@@ -282,6 +282,13 @@ export const DashboardInterface = () => {
     { id: 'music', name: 'Music Tracks', icon: Music },
   ];
 
+  const trainingCategories = [
+    { id: 'all', name: 'All Tracks', icon: Target },
+    { id: 'core-skills', name: 'Core Skills', icon: Star },
+    { id: 'advanced', name: 'Advanced Training', icon: Trophy },
+    { id: 'specialized', name: 'Specialized Tracks', icon: Zap },
+  ];
+
   const [trainingData, setTrainingData] = useState<any[]>([]);
   const [loadingTraining, setLoadingTraining] = useState(true);
   const [projects, setProjects] = useState<any[]>([]);
@@ -294,36 +301,32 @@ export const DashboardInterface = () => {
     ? projects 
     : projects.filter(project => project.category === portfolioFilter);
 
+  // Filter training data based on selected category
   const getFilteredTrainingData = () => {
     if (trainingFilter === 'all') return trainingData;
     
-    const coreSkillsTracks = ['Fundamentals', 'Advanced Prompting', 'Ethics and Safety'];
-    const advancedTracks = ['Automations', 'Custom GPTs', 'Advanced Applications'];
-    const creativeTracks = ['Image Generation', 'Content Creation', 'Music & Audio'];
-    const specializationTracks = ['Business Intelligence', 'Code Generation', 'Data Analysis'];
-    
-    switch (trainingFilter) {
-      case 'core-skills':
-        return trainingData.filter(track => 
-          coreSkillsTracks.some(skillTrack => track.track.includes(skillTrack)) ||
-          track.level === 'Beginner'
-        );
-      case 'advanced':
-        return trainingData.filter(track => 
-          advancedTracks.some(advTrack => track.track.includes(advTrack)) ||
-          track.level === 'Advanced'
-        );
-      case 'creative':
-        return trainingData.filter(track => 
-          creativeTracks.some(creativeTrack => track.track.includes(creativeTrack))
-        );
-      case 'specializations':
-        return trainingData.filter(track => 
-          specializationTracks.some(specTrack => track.track.includes(specTrack))
-        );
-      default:
-        return trainingData;
-    }
+    // Simple filtering logic based on track names and characteristics
+    return trainingData.filter(track => {
+      const trackName = track.track.toLowerCase();
+      switch (trainingFilter) {
+        case 'core-skills':
+          return trackName.includes('fundamentals') || 
+                 trackName.includes('basics') || 
+                 trackName.includes('core') ||
+                 trackName.includes('essential') ||
+                 track.level === 'Beginner';
+        case 'advanced':
+          return track.level === 'Advanced' || 
+                 trackName.includes('advanced') ||
+                 trackName.includes('expert');
+        case 'specialized':
+          return trackName.includes('specialized') || 
+                 trackName.includes('custom') ||
+                 trackName.includes('specific');
+        default:
+          return true;
+      }
+    });
   };
 
   const filteredTrainingData = getFilteredTrainingData();
@@ -444,29 +447,21 @@ export const DashboardInterface = () => {
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" className="flex items-center gap-2">
                     <Filter className="h-4 w-4" />
-                    {trainingFilter === 'all' ? 'All Tracks' : 
-                     trainingFilter === 'core-skills' ? 'Core Skills' :
-                     trainingFilter === 'advanced' ? 'Advanced' : 
-                     trainingFilter === 'creative' ? 'Creative AI' : 'Specializations'}
+                    {trainingCategories.find(cat => cat.id === trainingFilter)?.name}
                     <ChevronDown className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem onClick={() => setTrainingFilter('all')}>
-                    All Tracks
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setTrainingFilter('core-skills')}>
-                    Core Skills
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setTrainingFilter('advanced')}>
-                    Advanced
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setTrainingFilter('creative')}>
-                    Creative AI
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setTrainingFilter('specializations')}>
-                    Specializations
-                  </DropdownMenuItem>
+                  {trainingCategories.map((category) => (
+                    <DropdownMenuItem 
+                      key={category.id}
+                      onClick={() => setTrainingFilter(category.id)}
+                      className="flex items-center gap-2"
+                    >
+                      <category.icon className="h-4 w-4" />
+                      {category.name}
+                    </DropdownMenuItem>
+                  ))}
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
@@ -491,18 +486,12 @@ export const DashboardInterface = () => {
                   <Target className="h-12 w-12 text-muted-foreground mx-auto" />
                   <div>
                     <h3 className="text-lg font-semibold text-foreground">
-                      {trainingFilter === 'core-skills' ? 'No Core Skills Tracks Yet' :
-                       trainingFilter === 'advanced' ? 'No Advanced Tracks Yet' :
-                       trainingFilter === 'creative' ? 'No Creative AI Tracks Yet' :
-                       trainingFilter === 'specializations' ? 'No Specialization Tracks Yet' :
-                       'Start Your Training Journey'}
+                      {trainingFilter === 'all' ? 'Start Your Training Journey' : `No ${trainingCategories.find(cat => cat.id === trainingFilter)?.name} Found`}
                     </h3>
                     <p className="text-muted-foreground">
-                      {trainingFilter === 'core-skills' ? 'Begin with fundamentals to build your foundation.' :
-                       trainingFilter === 'advanced' ? 'Complete core skills first to unlock advanced training.' :
-                       trainingFilter === 'creative' ? 'Explore creative AI applications and tools.' :
-                       trainingFilter === 'specializations' ? 'Master specialized AI skills for your domain.' :
-                       'Choose from our training tracks to begin building your AI skills.'}
+                      {trainingFilter === 'all' 
+                        ? 'Choose from our training tracks to begin building your AI skills.' 
+                        : 'Try selecting a different filter or check back later for new training content.'}
                     </p>
                   </div>
                   <Button>Browse Training Tracks</Button>
