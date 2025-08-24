@@ -291,7 +291,7 @@ export const DashboardInterface = () => {
             <div className="flex items-center gap-6">
               {/* Text Section - 15% */}
               <div className="w-[15%] space-y-2">
-                <div className="flex items-center gap-2">
+                <div className="flex items-start gap-2">
                   <Award className="h-5 w-5 text-primary" />
                   <h2 className="text-lg font-semibold">Achievements</h2>
                 </div>
