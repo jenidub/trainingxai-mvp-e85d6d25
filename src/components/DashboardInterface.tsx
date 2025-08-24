@@ -397,7 +397,11 @@ export const DashboardInterface = () => {
         {/* Header Section */}
         <div className="bg-gradient-to-r from-primary/5 to-primary/10 rounded-2xl p-8 border border-primary/10">
           <div className="space-y-6 text-center">
-            <h1 className="text-4xl font-bold text-foreground">
+            <h1 className="font-bold text-foreground whitespace-nowrap overflow-hidden text-ellipsis"
+                style={{
+                  fontSize: 'clamp(1.5rem, 4vw, 3rem)',
+                  lineHeight: '1.2'
+                }}>
               Your Studio. Your Progress. Your Future.
             </h1>
             <div className="flex w-full">
