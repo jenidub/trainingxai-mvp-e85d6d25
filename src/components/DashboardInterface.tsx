@@ -40,7 +40,7 @@ import { UserProfile } from './UserProfile';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip } from 'recharts';
-import { downloadTrainingReport, downloadPortfolioReport, downloadAnalyticsReport } from '@/utils/pdfGenerator';
+import { generateTrainingReport, generatePortfolioReport, generateAnalyticsReport } from '@/utils/pdfGenerator';
 import { toast } from 'sonner';
 
 interface Profile {
@@ -451,11 +451,18 @@ export const DashboardInterface = () => {
                   variant="outline" 
                   onClick={async () => {
                     try {
-                      toast.promise(downloadTrainingReport(), {
-                        loading: 'Generating training report...',
-                        success: 'Training report downloaded successfully!',
-                        error: 'Failed to generate training report'
-                      });
+                      toast.promise(
+                        generateTrainingReport(
+                          filteredTrainingData, 
+                          user?.email,
+                          trainingCategories.find(cat => cat.id === trainingFilter)?.name
+                        ), 
+                        {
+                          loading: 'Generating professional training report...',
+                          success: 'Training report downloaded successfully!',
+                          error: 'Failed to generate training report'
+                        }
+                      );
                     } catch (error) {
                       console.error('Download error:', error);
                     }
@@ -569,11 +576,18 @@ export const DashboardInterface = () => {
                   variant="outline" 
                   onClick={async () => {
                     try {
-                      toast.promise(downloadPortfolioReport(), {
-                        loading: 'Generating portfolio report...',
-                        success: 'Portfolio report downloaded successfully!',
-                        error: 'Failed to generate portfolio report'
-                      });
+                      toast.promise(
+                        generatePortfolioReport(
+                          filteredPortfolio, 
+                          user?.email,
+                          portfolioCategories.find(cat => cat.id === portfolioFilter)?.name
+                        ), 
+                        {
+                          loading: 'Generating professional portfolio report...',
+                          success: 'Portfolio report downloaded successfully!',
+                          error: 'Failed to generate portfolio report'
+                        }
+                      );
                     } catch (error) {
                       console.error('Download error:', error);
                     }
@@ -658,11 +672,18 @@ export const DashboardInterface = () => {
                   variant="outline" 
                   onClick={async () => {
                     try {
-                      toast.promise(downloadAnalyticsReport(), {
-                        loading: 'Generating analytics report...',
-                        success: 'Analytics report downloaded successfully!',
-                        error: 'Failed to generate analytics report'
-                      });
+                      toast.promise(
+                        generateAnalyticsReport(
+                          analytics, 
+                          user?.email,
+                          timeRange.charAt(0).toUpperCase() + timeRange.slice(1)
+                        ), 
+                        {
+                          loading: 'Generating professional analytics report...',
+                          success: 'Analytics report downloaded successfully!',
+                          error: 'Failed to generate analytics report'
+                        }
+                      );
                     } catch (error) {
                       console.error('Download error:', error);
                     }
