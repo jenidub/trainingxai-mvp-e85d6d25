@@ -28,15 +28,16 @@ import {
   Target,
   TrendingUp,
   Users,
-  Award
+  Award,
+  LayoutDashboard
 } from 'lucide-react';
 import { CustomGPTManager } from './CustomGPTManager';
 
 interface SidebarProps {
   onGPTSelect: (gpt: { id: string; name: string; type: 'prebuilt' | 'custom' }) => void;
   selectedGPT?: { id: string; name: string; type: 'prebuilt' | 'custom' } | null;
-  onInterfaceChange: (interfaceType: 'chat' | 'prebuilt' | 'custom' | 'training') => void;
-  activeInterface: 'chat' | 'prebuilt' | 'custom' | 'training';
+  onInterfaceChange: (interfaceType: 'chat' | 'prebuilt' | 'custom' | 'training' | 'dashboard') => void;
+  activeInterface: 'chat' | 'prebuilt' | 'custom' | 'training' | 'dashboard';
 }
 
 const prebuiltGPTs = [
@@ -155,6 +156,25 @@ export const Sidebar = ({ onGPTSelect, selectedGPT, onInterfaceChange, activeInt
         {/* Main Navigation */}
         <div className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">AI Studio</h2>
+          
+          {/* Dashboard */}
+          <Card 
+            className={`p-4 border-2 hover:border-primary/40 transition-smooth cursor-pointer group ${
+              activeInterface === 'dashboard' ? 'border-primary bg-primary/5' : 'border-primary/20'
+            }`}
+            onClick={() => onInterfaceChange('dashboard')}
+          >
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth">
+                <LayoutDashboard className="h-5 w-5 text-primary" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-medium text-sm">Dashboard</h3>
+                <p className="text-xs text-muted-foreground">Your progress & analytics</p>
+              </div>
+              <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-smooth" />
+            </div>
+          </Card>
           
           {/* Prebuilt GPTs */}
           <Card 

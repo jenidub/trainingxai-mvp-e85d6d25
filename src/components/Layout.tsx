@@ -5,6 +5,7 @@ import { ChatInterface } from './ChatInterface';
 import { PrebuiltGPTsInterface } from './PrebuiltGPTsInterface';
 import { CustomGPTsInterface } from './CustomGPTsInterface';
 import { TrainingModeInterface } from './TrainingModeInterface';
+import { DashboardInterface } from './DashboardInterface';
 
 interface LayoutProps {
   children?: ReactNode;
@@ -12,14 +13,14 @@ interface LayoutProps {
 
 export const Layout = ({ children }: LayoutProps) => {
   const [selectedGPT, setSelectedGPT] = useState<{ id: string; name: string; type: 'prebuilt' | 'custom' } | null>(null);
-  const [activeInterface, setActiveInterface] = useState<'chat' | 'prebuilt' | 'custom' | 'training'>('chat');
+  const [activeInterface, setActiveInterface] = useState<'chat' | 'prebuilt' | 'custom' | 'training' | 'dashboard'>('chat');
 
   const handleGPTSelect = (gpt: { id: string; name: string; type: 'prebuilt' | 'custom' }) => {
     setSelectedGPT(gpt);
     setActiveInterface('chat');
   };
 
-  const handleInterfaceChange = (interfaceType: 'chat' | 'prebuilt' | 'custom' | 'training') => {
+  const handleInterfaceChange = (interfaceType: 'chat' | 'prebuilt' | 'custom' | 'training' | 'dashboard') => {
     setActiveInterface(interfaceType);
   };
 
@@ -33,6 +34,8 @@ export const Layout = ({ children }: LayoutProps) => {
         return <CustomGPTsInterface onGPTSelect={handleGPTSelect} />;
       case 'training':
         return <TrainingModeInterface />;
+      case 'dashboard':
+        return <DashboardInterface />;
       default:
         return <ChatInterface selectedGPT={selectedGPT} />;
     }
