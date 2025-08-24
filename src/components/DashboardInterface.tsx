@@ -433,37 +433,43 @@ export const DashboardInterface = () => {
               </DropdownMenu>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredPortfolio.map((item) => (
-                <Card key={item.id} className="p-6 hover:shadow-lg transition-shadow cursor-pointer group">
-                  <div className="space-y-4">
-                    <div className="flex items-start justify-between">
-                      <div className="p-3 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                        {portfolioCategories.find(cat => cat.id === item.category)?.icon && (
-                          <div className="h-6 w-6 text-primary">
-                            {(() => {
-                              const IconComponent = portfolioCategories.find(cat => cat.id === item.category)?.icon;
-                              return IconComponent ? <IconComponent className="h-6 w-6" /> : null;
-                            })()}
-                          </div>
-                        )}
+            {filteredPortfolio.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground">No projects yet</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredPortfolio.map((item) => (
+                  <Card key={item.id} className="p-6 hover:shadow-lg transition-shadow cursor-pointer group">
+                    <div className="space-y-4">
+                      <div className="flex items-start justify-between">
+                        <div className="p-3 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                          {portfolioCategories.find(cat => cat.id === item.category)?.icon && (
+                            <div className="h-6 w-6 text-primary">
+                              {(() => {
+                                const IconComponent = portfolioCategories.find(cat => cat.id === item.category)?.icon;
+                                return IconComponent ? <IconComponent className="h-6 w-6" /> : null;
+                              })()}
+                            </div>
+                          )}
+                        </div>
+                        <Badge variant="outline" className="text-xs">
+                          {item.type}
+                        </Badge>
                       </div>
-                      <Badge variant="outline" className="text-xs">
-                        {item.type}
-                      </Badge>
+                      <div>
+                        <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
+                          {item.name}
+                        </h3>
+                        <p className="text-sm text-muted-foreground">
+                          Created {new Date(item.date).toLocaleDateString()}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
-                        {item.name}
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        Created {new Date(item.date).toLocaleDateString()}
-                      </p>
-                    </div>
-                  </div>
-                </Card>
-              ))}
-            </div>
+                  </Card>
+                ))}
+              </div>
+            )}
           </TabsContent>
 
           {/* Analytics View */}
