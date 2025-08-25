@@ -121,7 +121,7 @@ export const Sidebar = ({ onGPTSelect, selectedGPT, onInterfaceChange, activeInt
         <div className="space-y-3">
           <div className="flex items-center gap-2">
             <Target className="h-5 w-5 text-primary" />
-            <h2 className="text-lg font-semibold text-foreground">The Prompt to Success Difference</h2>
+            <h2 className="text-lg font-semibold text-foreground">The PtoS Difference</h2>
           </div>
           
           <div className="space-y-3">
