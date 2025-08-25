@@ -78,7 +78,7 @@ export const DemoChatInterface = ({ selectedGPT, onInterfaceChange, onUpgrade }:
                 <Sparkles className="h-8 w-8 text-white" />
               </div>
               <h1 className="text-3xl font-bold mb-3 bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
-                Welcome to TrainingX.ai Demo
+                Welcome to Prompt to Success Demo
               </h1>
               <p className="text-lg text-muted-foreground mb-6">
                 Explore our AI-powered training platform. Upgrade to unlock full chat functionality and premium features.
@@ -282,7 +282,7 @@ export const DemoChatInterface = ({ selectedGPT, onInterfaceChange, onUpgrade }:
               Unlock Full Access
             </DialogTitle>
             <DialogDescription className="text-left space-y-3">
-              <p>Get unlimited access to all features with a free TrainingX.ai account:</p>
+              <p>Get unlimited access to all features with a free Prompt to Success account:</p>
               <ul className="space-y-2 text-sm">
                 <li className="flex items-center gap-2">
                   <div className="w-1.5 h-1.5 rounded-full bg-primary"></div>

@@ -122,7 +122,7 @@ export default function Auth() {
           </div>
           <div>
             <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-brand-accent bg-clip-text text-transparent">
-              TrainingX.ai
+              Prompt to Success
             </h1>
             <p className="text-xs text-muted-foreground -mt-1">AI Training Platform</p>
           </div>
