@@ -80,6 +80,9 @@ export const DemoChatInterface = ({ selectedGPT, onInterfaceChange, onUpgrade }:
               <h1 className="text-3xl font-bold mb-3 bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
                 Welcome to Prompt to Success Demo
               </h1>
+              <p className="text-xl text-muted-foreground mb-4 italic">
+                We Take the 'I Don't Know' Out of AI
+              </p>
               <p className="text-lg text-muted-foreground mb-6">
                 Explore our AI-powered training platform. Upgrade to unlock full chat functionality and premium features.
               </p>

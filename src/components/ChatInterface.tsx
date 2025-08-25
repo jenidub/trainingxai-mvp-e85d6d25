@@ -196,6 +196,9 @@ export const ChatInterface = ({ selectedGPT, onInterfaceChange }: ChatInterfaceP
               <h1 className="text-3xl font-bold mb-3 bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
                 Welcome to Prompt to Success
               </h1>
+              <p className="text-xl text-muted-foreground mb-4 italic">
+                We Take the 'I Don't Know' Out of AI
+              </p>
               <p className="text-lg text-muted-foreground mb-6">
                 Your AI-powered coding and training environment. Practice with prebuilt GPTs or create your own custom AI assistants.
               </p>
