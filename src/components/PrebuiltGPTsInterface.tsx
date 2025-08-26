@@ -154,6 +154,10 @@ export const PrebuiltGPTsInterface = ({ onGPTSelect, isDemo = false, onUpgrade }
     });
 
   const handleGPTClick = (gpt: PrebuiltGPT) => {
+    if (gpt.isPremium) {
+      // Do nothing for premium GPTs - they're disabled
+      return;
+    }
     if (isDemo && onUpgrade) {
       onUpgrade();
     } else {
@@ -225,13 +229,23 @@ export const PrebuiltGPTsInterface = ({ onGPTSelect, isDemo = false, onUpgrade }
           return (
             <Card 
               key={gpt.id} 
-              className="hover:shadow-lg transition-all cursor-pointer group border-2 hover:border-primary/20"
+              className={`hover:shadow-lg transition-all group border-2 ${
+                gpt.isPremium 
+                  ? 'opacity-60 cursor-not-allowed border-muted' 
+                  : 'cursor-pointer hover:border-primary/20'
+              }`}
               onClick={() => handleGPTClick(gpt)}
             >
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between mb-2">
-                  <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth">
-                    <IconComponent className="h-5 w-5 text-primary" />
+                  <div className={`p-2 rounded-lg transition-smooth ${
+                    gpt.isPremium 
+                      ? 'bg-muted/50' 
+                      : 'bg-primary/10 group-hover:bg-primary/20'
+                  }`}>
+                    <IconComponent className={`h-5 w-5 ${
+                      gpt.isPremium ? 'text-muted-foreground' : 'text-primary'
+                    }`} />
                   </div>
                   <div className="flex gap-1">
                     {gpt.isPremium && (
@@ -251,7 +265,11 @@ export const PrebuiltGPTsInterface = ({ onGPTSelect, isDemo = false, onUpgrade }
                     </Badge>
                   </div>
                 </div>
-                <CardTitle className="text-lg group-hover:text-primary transition-smooth">
+                <CardTitle className={`text-lg transition-smooth ${
+                  gpt.isPremium 
+                    ? 'text-muted-foreground' 
+                    : 'group-hover:text-primary'
+                }`}>
                   {gpt.name}
                 </CardTitle>
                 <CardDescription className="text-sm leading-relaxed">
@@ -272,8 +290,13 @@ export const PrebuiltGPTsInterface = ({ onGPTSelect, isDemo = false, onUpgrade }
                     {gpt.usageCount?.toLocaleString()} uses
                   </div>
                 </div>
-                <Button className="w-full mt-3" size="sm" disabled={isDemo}>
-                  {isDemo ? 'Demo Mode' : 'Start Chat'}
+                <Button 
+                  className="w-full mt-3" 
+                  size="sm" 
+                  disabled={isDemo || gpt.isPremium}
+                  variant={gpt.isPremium ? "outline" : "default"}
+                >
+                  {isDemo ? 'Demo Mode' : gpt.isPremium ? 'Premium Required' : 'Start Chat'}
                 </Button>
               </CardContent>
             </Card>
