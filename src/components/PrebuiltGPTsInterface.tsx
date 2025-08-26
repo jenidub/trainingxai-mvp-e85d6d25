@@ -3,6 +3,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 import { 
   Bot, 
   Search, 
@@ -15,7 +17,8 @@ import {
   Music,
   GraduationCap,
   Globe,
-  Zap 
+  Zap,
+  Crown
 } from 'lucide-react';
 
 interface PrebuiltGPT {
@@ -27,18 +30,11 @@ interface PrebuiltGPT {
   popular?: boolean;
   rating?: number;
   usageCount?: number;
+  isPremium?: boolean;
 }
 
 const prebuiltGPTs: PrebuiltGPT[] = [
-  {
-    id: 'wizard-gary-payton',
-    name: 'Wizard (Gary Payton)',
-    description: 'Your global guide for everything. Get expert advice on any topic with personalized responses.',
-    icon: Compass,
-    category: 'General',
-    rating: 4.8,
-    usageCount: 1200
-  },
+  // Free agents (available to all registered members)
   {
     id: 'spiral-study-buddy',
     name: 'Spiral the Study Buddy',
@@ -47,7 +43,39 @@ const prebuiltGPTs: PrebuiltGPT[] = [
     category: 'Education',
     popular: true,
     rating: 4.9,
-    usageCount: 850
+    usageCount: 850,
+    isPremium: false
+  },
+  {
+    id: 'family-night-agent',
+    name: 'Family Night Agent',
+    description: 'Create engaging family storybooks and plan memorable activities for all ages.',
+    icon: BookOpen,
+    category: 'Family',
+    rating: 4.6,
+    usageCount: 420,
+    isPremium: false
+  },
+  {
+    id: 'finance-agent',
+    name: 'Finance Agent',
+    description: 'Budget management & financial literacy coach. Learn to manage money effectively.',
+    icon: DollarSign,
+    category: 'Finance',
+    rating: 4.5,
+    usageCount: 380,
+    isPremium: false
+  },
+  // Premium agents
+  {
+    id: 'wizard-gary-payton',
+    name: 'Wizard (Gary Payton)',
+    description: 'Your global guide for everything. Get expert advice on any topic with personalized responses.',
+    icon: Compass,
+    category: 'General',
+    rating: 4.8,
+    usageCount: 1200,
+    isPremium: true
   },
   {
     id: 'notebooklm-practice',
@@ -57,25 +85,8 @@ const prebuiltGPTs: PrebuiltGPT[] = [
     category: 'Practice',
     popular: true,
     rating: 4.7,
-    usageCount: 650
-  },
-  {
-    id: 'family-night-agent',
-    name: 'Family Night Agent',
-    description: 'Create engaging family storybooks and plan memorable activities for all ages.',
-    icon: BookOpen,
-    category: 'Family',
-    rating: 4.6,
-    usageCount: 420
-  },
-  {
-    id: 'finance-agent',
-    name: 'Finance Agent',
-    description: 'Budget management & financial literacy coach. Learn to manage money effectively.',
-    icon: DollarSign,
-    category: 'Finance',
-    rating: 4.5,
-    usageCount: 380
+    usageCount: 650,
+    isPremium: true
   },
   {
     id: 'movie-agent',
@@ -84,7 +95,8 @@ const prebuiltGPTs: PrebuiltGPT[] = [
     icon: Film,
     category: 'Creative',
     rating: 4.4,
-    usageCount: 320
+    usageCount: 320,
+    isPremium: true
   },
   {
     id: 'music-agent',
@@ -93,7 +105,8 @@ const prebuiltGPTs: PrebuiltGPT[] = [
     icon: Music,
     category: 'Creative',
     rating: 4.3,
-    usageCount: 290
+    usageCount: 290,
+    isPremium: true
   },
   {
     id: 'website-agent',
@@ -102,7 +115,8 @@ const prebuiltGPTs: PrebuiltGPT[] = [
     icon: Globe,
     category: 'Development',
     rating: 4.2,
-    usageCount: 510
+    usageCount: 510,
+    isPremium: true
   }
 ];
 
@@ -118,13 +132,15 @@ export const PrebuiltGPTsInterface = ({ onGPTSelect, isDemo = false, onUpgrade }
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortBy, setSortBy] = useState<'popular' | 'rating' | 'name'>('popular');
+  const [showPremium, setShowPremium] = useState(false);
 
   const filteredGPTs = prebuiltGPTs
     .filter(gpt => {
       const matchesSearch = gpt.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           gpt.description.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCategory = selectedCategory === 'All' || gpt.category === selectedCategory;
-      return matchesSearch && matchesCategory;
+      const matchesPremiumFilter = showPremium || !gpt.isPremium;
+      return matchesSearch && matchesCategory && matchesPremiumFilter;
     })
     .sort((a, b) => {
       switch (sortBy) {
@@ -153,8 +169,8 @@ export const PrebuiltGPTsInterface = ({ onGPTSelect, isDemo = false, onUpgrade }
           <Bot className="h-6 w-6 text-primary" />
           <h1 className="text-2xl font-bold">Prebuilt GPTs</h1>
         </div>
-        <p className="text-muted-foreground">
-          Choose from our collection of specialized AI assistants ready to help with specific tasks.
+         <p className="text-muted-foreground">
+          Practice prompting skills with our specialized AI assistants. Three agents included with membership, premium options available.
         </p>
       </div>
 
@@ -170,10 +186,20 @@ export const PrebuiltGPTsInterface = ({ onGPTSelect, isDemo = false, onUpgrade }
               className="pl-10"
             />
           </div>
-          <Button variant="outline" className="gap-2">
-            <Filter className="h-4 w-4" />
-            Sort by: {sortBy === 'popular' ? 'Usage' : sortBy === 'rating' ? 'Rating' : 'Name'}
-          </Button>
+          <div className="flex items-center gap-4">
+            <Button variant="outline" className="gap-2">
+              <Filter className="h-4 w-4" />
+              Sort by: {sortBy === 'popular' ? 'Usage' : sortBy === 'rating' ? 'Rating' : 'Name'}
+            </Button>
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="premium-mode"
+                checked={showPremium}
+                onCheckedChange={setShowPremium}
+              />
+              <Label htmlFor="premium-mode" className="text-sm">Show Premium</Label>
+            </div>
+          </div>
         </div>
 
         {/* Category Pills */}
@@ -208,6 +234,12 @@ export const PrebuiltGPTsInterface = ({ onGPTSelect, isDemo = false, onUpgrade }
                     <IconComponent className="h-5 w-5 text-primary" />
                   </div>
                   <div className="flex gap-1">
+                    {gpt.isPremium && (
+                      <Badge variant="default" className="gap-1 h-5 bg-amber-500 hover:bg-amber-600">
+                        <Crown className="h-2.5 w-2.5" />
+                        Premium
+                      </Badge>
+                    )}
                     {gpt.popular && (
                       <Badge variant="default" className="gap-1 h-5">
                         <Zap className="h-2.5 w-2.5" />
