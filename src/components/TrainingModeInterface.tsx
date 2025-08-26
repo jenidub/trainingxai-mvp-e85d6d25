@@ -15,7 +15,8 @@ import {
   Play,
   ChevronRight,
   Lock,
-  CheckCircle
+  CheckCircle,
+  Crown
 } from 'lucide-react';
 import NotebookLMPractice from './NotebookLMPractice';
 import { FundamentalsPage } from './PromptFundamentals/FundamentalsPage';
@@ -34,6 +35,7 @@ interface TrainingModule {
   isCompleted: boolean;
   progress: number;
   category: string;
+  isPremium?: boolean;
 }
 
 const trainingModules: TrainingModule[] = [
@@ -48,7 +50,8 @@ const trainingModules: TrainingModule[] = [
     isLocked: false,
     isCompleted: false,
     progress: 0,
-    category: 'Core Skills'
+    category: 'Core Skills',
+    isPremium: false
   },
   {
     id: 'advanced-prompting',
@@ -61,7 +64,8 @@ const trainingModules: TrainingModule[] = [
     isLocked: true,
     isCompleted: false,
     progress: 0,
-    category: 'Core Skills'
+    category: 'Core Skills',
+    isPremium: true
   },
   {
     id: 'custom-gpt-creation',
@@ -74,7 +78,8 @@ const trainingModules: TrainingModule[] = [
     isLocked: true,
     isCompleted: false,
     progress: 0,
-    category: 'Development'
+    category: 'Development',
+    isPremium: true
   },
   {
     id: 'creative-ai',
@@ -87,7 +92,8 @@ const trainingModules: TrainingModule[] = [
     isLocked: false,
     isCompleted: false,
     progress: 0,
-    category: 'Creative'
+    category: 'Creative',
+    isPremium: true
   },
   {
     id: 'business-automation',
@@ -100,7 +106,8 @@ const trainingModules: TrainingModule[] = [
     isLocked: true,
     isCompleted: false,
     progress: 0,
-    category: 'Business'
+    category: 'Business',
+    isPremium: true
   },
   {
     id: 'notebooklm-mastery',
@@ -113,7 +120,8 @@ const trainingModules: TrainingModule[] = [
     isLocked: false,
     isCompleted: false,
     progress: 0,
-    category: 'Practice'
+    category: 'Practice',
+    isPremium: false
   }
 ];
 
@@ -128,20 +136,28 @@ export const TrainingModeInterface = ({ onModuleSelect, isDemo = false, onUpgrad
   const [selectedModule, setSelectedModule] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState<string>('fundamentals'); // Track current page within module
   const [activeCategory, setActiveCategory] = useState('All');
+  const [showPremium, setShowPremium] = useState(false);
 
   const categories = ['All', 'Core Skills', 'Development', 'Creative', 'Business', 'Practice'];
 
-  const filteredModules = trainingModules.filter(module => 
-    activeCategory === 'All' || module.category === activeCategory
-  );
+  const filteredModules = trainingModules.filter(module => {
+    const categoryMatch = activeCategory === 'All' || module.category === activeCategory;
+    const premiumMatch = showPremium || !module.isPremium;
+    return categoryMatch && premiumMatch;
+  });
 
   const handleModuleClick = (moduleId: string) => {
+    const module = trainingModules.find(m => m.id === moduleId);
+    
     if (isDemo && onUpgrade) {
       onUpgrade();
       return;
     }
     
-    const module = trainingModules.find(m => m.id === moduleId);
+    if (module?.isPremium) {
+      return; // Do nothing for premium modules
+    }
+    
     if (module && !module.isLocked) {
       if (moduleId === 'notebooklm-mastery' || moduleId === 'prompt-fundamentals') {
         setSelectedModule(moduleId);
@@ -293,7 +309,21 @@ export const TrainingModeInterface = ({ onModuleSelect, isDemo = false, onUpgrad
 
       {/* Category Filter */}
       <div className="space-y-4">
-        <h2 className="text-lg font-semibold">Training Modules</h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold">Training Modules</h2>
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-muted-foreground">Show Premium</span>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                className="sr-only"
+                checked={showPremium}
+                onChange={(e) => setShowPremium(e.target.checked)}
+              />
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+            </label>
+          </div>
+        </div>
         <div className="flex flex-wrap gap-2">
           {categories.map((category) => (
             <Button
@@ -317,7 +347,7 @@ export const TrainingModeInterface = ({ onModuleSelect, isDemo = false, onUpgrad
             <Card 
               key={module.id}
               className={`hover:shadow-lg transition-all cursor-pointer group border-2 ${
-                module.isLocked 
+                module.isLocked || module.isPremium
                   ? 'opacity-60 cursor-not-allowed' 
                   : 'hover:border-primary/20'
               }`}
@@ -326,11 +356,11 @@ export const TrainingModeInterface = ({ onModuleSelect, isDemo = false, onUpgrad
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between mb-2">
                   <div className={`p-2 rounded-lg transition-smooth ${
-                    module.isLocked 
+                    module.isLocked || module.isPremium
                       ? 'bg-muted' 
                       : 'bg-primary/10 group-hover:bg-primary/20'
                   }`}>
-                    {module.isLocked ? (
+                    {module.isLocked || module.isPremium ? (
                       <Lock className="h-5 w-5 text-muted-foreground" />
                     ) : module.isCompleted ? (
                       <CheckCircle className="h-5 w-5 text-green-500" />
@@ -345,10 +375,16 @@ export const TrainingModeInterface = ({ onModuleSelect, isDemo = false, onUpgrad
                     <Badge variant="outline">
                       {module.category}
                     </Badge>
+                    {module.isPremium && (
+                      <Badge className="bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200">
+                        <Crown className="h-3 w-3 mr-1" />
+                        Premium
+                      </Badge>
+                    )}
                   </div>
                 </div>
                 <CardTitle className={`text-lg transition-smooth ${
-                  !module.isLocked ? 'group-hover:text-primary' : ''
+                  !(module.isLocked || module.isPremium) ? 'group-hover:text-primary' : 'text-muted-foreground'
                 }`}>
                   {module.title}
                 </CardTitle>
@@ -386,11 +422,13 @@ export const TrainingModeInterface = ({ onModuleSelect, isDemo = false, onUpgrad
                   <Button 
                     className="w-full" 
                     size="sm"
-                    disabled={module.isLocked || isDemo}
+                    disabled={module.isLocked || isDemo || module.isPremium}
                     variant={module.isCompleted ? 'outline' : 'default'}
                   >
                     {isDemo ? (
                       'Demo Mode'
+                    ) : module.isPremium ? (
+                      'Coming Soon'
                     ) : module.isLocked ? (
                       <>
                         <Lock className="h-4 w-4 mr-2" />
