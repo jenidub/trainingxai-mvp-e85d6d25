@@ -223,112 +223,91 @@ export const PracticeZone = ({
   }
 
   return (
-    <div className="h-full flex flex-col lg:flex-row gap-6 p-6">
-      {/* Left Panel - Task List */}
-      <div className="lg:w-1/3 space-y-4">
-        <Card>
-          <CardHeader className="pb-3">
+    <div className="h-full flex flex-col gap-6 p-6">
+      {/* Progress Header */}
+      <Card>
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2 text-lg">
               <Target className="h-5 w-5 text-primary" />
-              Practice Tasks
+              Task #{currentTask.id}: {currentTask.title}
             </CardTitle>
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm">
-                <span>Progress</span>
-                <span>{progress.completedTaskIds.length}/{practiceTasks.length}</span>
+            <div className="flex items-center gap-4">
+              <div className="text-sm text-muted-foreground">
+                Progress: {progress.completedTaskIds.length}/{practiceTasks.length}
               </div>
-              <Progress value={progressPercentage} className="h-2" />
+              <Progress value={progressPercentage} className="w-32 h-2" />
+              {isTaskCompleted && (
+                <CheckCircle className="h-5 w-5 text-green-500" />
+              )}
             </div>
-          </CardHeader>
-          <CardContent className="space-y-2 max-h-96 overflow-y-auto">
-            {practiceTasks.map((task) => {
-              const isCompleted = progress.completedTaskIds.includes(task.id);
-              const isCurrent = task.id === currentTaskId;
-              
-              return (
-                <Card
-                  key={task.id}
-                  className={`cursor-pointer transition-all hover:shadow-md ${
-                    isCurrent ? 'ring-2 ring-primary' : ''
-                  }`}
-                  onClick={() => handleTaskSelect(task.id)}
-                >
-                  <CardContent className="p-3">
-                    <div className="flex items-start gap-3">
-                      <div className="flex-shrink-0 mt-0.5">
-                        {isCompleted ? (
-                          <CheckCircle className="h-4 w-4 text-green-500" />
-                        ) : (
-                          <div className="w-4 h-4 rounded-full border-2 border-muted-foreground" />
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="text-xs font-medium text-muted-foreground">
-                            #{task.id}
-                          </span>
-                          <Badge variant="outline" className="text-xs">
-                            {task.difficulty}
-                          </Badge>
-                        </div>
-                        <h4 className="text-sm font-medium leading-tight">
-                          {task.title}
-                        </h4>
-                        <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
-                          {task.description}
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
+          </div>
+        </CardHeader>
+      </Card>
+
+      {/* Task Navigation */}
+      <Card>
+        <CardContent className="p-4">
+          <div className="flex items-center justify-between">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handleTaskSelect(Math.max(1, currentTaskId - 1))}
+              disabled={currentTaskId === 1}
+            >
+              ← Previous Task
+            </Button>
+            
+            <div className="flex items-center gap-2">
+              <Badge variant="outline">Task #{currentTask.id}</Badge>
+              <Badge className={
+                currentTask.difficulty === 'Easy' ? 'bg-green-100 text-green-800' :
+                currentTask.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                'bg-red-100 text-red-800'
+              }>
+                {currentTask.difficulty}
+              </Badge>
+              <Badge variant="secondary">{currentTask.category}</Badge>
+            </div>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handleTaskSelect(Math.min(practiceTasks.length, currentTaskId + 1))}
+              disabled={currentTaskId === practiceTasks.length}
+            >
+              Next Task →
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {allTasksCompleted && (
+        <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-primary/10">
+          <CardContent className="p-4 text-center">
+            <Award className="h-8 w-8 text-primary mx-auto mb-2" />
+            <h3 className="font-semibold mb-2">Congratulations!</h3>
+            <p className="text-sm text-muted-foreground mb-3">
+              You've completed all tasks!
+            </p>
+            <Button 
+              onClick={() => setShowCertificate(true)}
+              className="w-full"
+            >
+              View Certificate
+            </Button>
           </CardContent>
         </Card>
+      )}
 
-        {allTasksCompleted && (
-          <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-primary/10">
-            <CardContent className="p-4 text-center">
-              <Award className="h-8 w-8 text-primary mx-auto mb-2" />
-              <h3 className="font-semibold mb-2">Congratulations!</h3>
-              <p className="text-sm text-muted-foreground mb-3">
-                You've completed all tasks!
-              </p>
-              <Button 
-                onClick={() => setShowCertificate(true)}
-                className="w-full"
-              >
-                View Certificate
-              </Button>
-            </CardContent>
-          </Card>
-        )}
-      </div>
-
-      {/* Right Panel - Task Interface */}
-      <div className="lg:w-2/3 space-y-4">
-        {/* Current Task Header */}
+      {/* Main Content */}
+      <div className="space-y-4">
+        {/* Current Task Details */}
         <Card>
           <CardHeader>
-            <div className="flex items-start justify-between">
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <Badge variant="outline">Task #{currentTask.id}</Badge>
-                  <Badge className={
-                    currentTask.difficulty === 'Easy' ? 'bg-green-100 text-green-800' :
-                    currentTask.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-red-100 text-red-800'
-                  }>
-                    {currentTask.difficulty}
-                  </Badge>
-                  <Badge variant="secondary">{currentTask.category}</Badge>
-                </div>
-                <CardTitle className="text-xl">{currentTask.title}</CardTitle>
-                <p className="text-muted-foreground">{currentTask.description}</p>
-              </div>
-              {isTaskCompleted && (
-                <CheckCircle className="h-6 w-6 text-green-500 flex-shrink-0" />
-              )}
+            <div className="space-y-2">
+              <CardTitle className="text-xl">{currentTask.title}</CardTitle>
+              <p className="text-muted-foreground">{currentTask.description}</p>
             </div>
           </CardHeader>
           <CardContent>
@@ -356,7 +335,7 @@ export const PracticeZone = ({
                   </ul>
                 </div>
               )}
-            </div>
+        </div>
           </CardContent>
         </Card>
 
