@@ -72,7 +72,7 @@ export const DemoChatInterface = ({ selectedGPT, onInterfaceChange, onUpgrade }:
         </div>
 
         {/* Welcome Area */}
-        <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-background via-muted/20 to-primary/5">
+        <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-background via-muted/20 to-primary/5 pt-8">
           <div className="text-center max-w-2xl px-6">
             <div className="mb-6">
               <div className="inline-flex p-4 rounded-2xl gradient-primary mb-4 shadow-glow">

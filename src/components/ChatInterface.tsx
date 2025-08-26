@@ -188,7 +188,7 @@ export const ChatInterface = ({ selectedGPT, onInterfaceChange }: ChatInterfaceP
     return (
       <div className="flex flex-col h-[calc(100vh-8rem)]">
         {/* Welcome Area */}
-        <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-background via-muted/20 to-primary/5">
+        <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-background via-muted/20 to-primary/5 pt-8">
           <div className="text-center max-w-2xl px-6">
             <div className="mb-6">
               <div className="inline-flex p-4 rounded-2xl gradient-primary mb-4 shadow-glow">
