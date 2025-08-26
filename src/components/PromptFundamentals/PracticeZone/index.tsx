@@ -350,22 +350,12 @@ export const PracticeZone = ({
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <span>Your Prompt</span>
-              <div className="flex gap-2">
-                {userPrompt && (
-                  <Button variant="outline" size="sm" onClick={handleRetry}>
-                    <RotateCcw className="h-4 w-4 mr-1" />
-                    Reset
-                  </Button>
-                )}
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => setShowHints(!showHints)}
-                >
-                  <Lightbulb className="h-4 w-4 mr-1" />
-                  {showHints ? 'Hide' : 'Show'} Hints
+              {userPrompt && (
+                <Button variant="outline" size="sm" onClick={handleRetry}>
+                  <RotateCcw className="h-4 w-4 mr-1" />
+                  Reset
                 </Button>
-              </div>
+              )}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 max-h-none">
