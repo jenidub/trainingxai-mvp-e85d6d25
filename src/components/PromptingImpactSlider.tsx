@@ -125,19 +125,19 @@ const PromptingImpactSlider: React.FC<PromptingImpactSliderProps> = ({
 
         {/* Results - Simplified Layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6" aria-live="polite">
-          <div className="text-center p-6 bg-muted/30 rounded-lg">
-            <div className="text-sm text-muted-foreground mb-2">Base salary</div>
-            <div className="text-2xl font-semibold text-foreground">
+          <div className="text-center p-4 bg-muted/30 rounded-lg">
+            <div className="text-sm text-muted-foreground mb-1">Base salary</div>
+            <div className="text-xl font-semibold text-foreground">
               {formatCurrency(animatedBase)}
             </div>
           </div>
 
-          <div className="text-center p-6 bg-primary/10 rounded-lg border border-primary/30">
-            <div className="text-sm text-muted-foreground mb-2">AI-adjusted salary</div>
-            <div className="text-3xl font-bold text-primary">
+          <div className="text-center p-4 bg-primary/10 rounded-lg border border-primary/30">
+            <div className="text-sm text-muted-foreground mb-1">AI-adjusted salary</div>
+            <div className="text-2xl font-bold text-primary">
               {formatCurrency(animatedAdjusted)}
             </div>
-            <div className="text-xs text-muted-foreground mt-2">
+            <div className="text-xs text-muted-foreground mt-1">
               typical range {formatCurrency(rangeMin)} – {formatCurrency(rangeMax)}
             </div>
           </div>
