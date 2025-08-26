@@ -211,14 +211,16 @@ export const PracticeZone = ({
   // Show celebration page first
   if (showCelebration) {
     return (
-      <CelebrationPage
-        brandName={brandName}
-        onContinue={() => {
-          if (onFinished && progress.certificateId) {
-            onFinished(progress.certificateId);
-          }
-        }}
-      />
+      <div className="h-full w-full overflow-auto">
+        <CelebrationPage
+          brandName={brandName}
+          onContinue={() => {
+            if (onFinished && progress.certificateId) {
+              onFinished(progress.certificateId);
+            }
+          }}
+        />
+      </div>
     );
   }
 

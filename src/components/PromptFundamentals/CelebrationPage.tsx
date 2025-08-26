@@ -100,11 +100,11 @@ export const CelebrationPage: React.FC<CelebrationPageProps> = ({
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5 relative overflow-hidden">
+    <div className="min-h-screen w-full bg-gradient-to-br from-primary/5 via-background to-secondary/5 relative overflow-auto">
       {showConfetti && <Confetti />}
       
       <motion.div 
-        className="max-w-4xl mx-auto p-6 pt-12 space-y-12"
+        className="w-full max-w-4xl mx-auto p-6 pt-12 pb-12 space-y-12"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, staggerChildren: 0.3 }}
