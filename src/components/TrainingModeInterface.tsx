@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -23,6 +23,8 @@ import { FundamentalsPage } from './PromptFundamentals/FundamentalsPage';
 import { IntroPage } from './PromptFundamentals/IntroPage';
 import { PracticeZone } from './PromptFundamentals/PracticeZone';
 import { Switch } from "@/components/ui/switch";
+import { useUserProgress } from '@/hooks/useUserProgress';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface TrainingModule {
   id: string;
@@ -138,10 +140,55 @@ export const TrainingModeInterface = ({ onModuleSelect, isDemo = false, onUpgrad
   const [currentPage, setCurrentPage] = useState<string>('fundamentals'); // Track current page within module
   const [activeCategory, setActiveCategory] = useState('All');
   const [showPremium, setShowPremium] = useState(false);
+  const [courseOverview, setCourseOverview] = useState<any[]>([]);
+  
+  const { user } = useAuth();
+  const { getCourseOverview } = useUserProgress('prompt-fundamentals'); // We'll use this to get all course data
+
+  // Load course progress overview
+  useEffect(() => {
+    const loadCourseOverview = async () => {
+      if (!user) return;
+      
+      try {
+        const overview = await getCourseOverview();
+        setCourseOverview(overview || []);
+      } catch (error) {
+        console.error('Error loading course overview:', error);
+      }
+    };
+
+    loadCourseOverview();
+  }, [user, getCourseOverview]);
+
+  // Calculate progress for a specific course
+  const getCourseProgress = (courseId: string) => {
+    const courseData = courseOverview.find(course => course.course_id === courseId);
+    if (!courseData?.progress_data) return { progress: 0, isCompleted: false };
+    
+    const progressData = courseData.progress_data;
+    if (courseId === 'prompt-fundamentals') {
+      const totalTasks = 20; // Based on practiceTasks.length, but hardcoded to avoid import issues
+      const completedTasks = progressData.completedTaskIds?.length || 0;
+      return {
+        progress: Math.round((completedTasks / totalTasks) * 100),
+        isCompleted: completedTasks === totalTasks
+      };
+    }
+    
+    return { progress: 0, isCompleted: false };
+  };
 
   const categories = ['All', 'Core Skills', 'Development', 'Creative', 'Business', 'Practice'];
 
-  const filteredModules = trainingModules.filter(module => {
+  const filteredModules = trainingModules.map(module => {
+    const courseProgress = getCourseProgress(module.id);
+    return {
+      ...module,
+      progress: courseProgress.progress,
+      isCompleted: courseProgress.isCompleted
+    };
+  }).filter(module => {
     const categoryMatch = activeCategory === 'All' || module.category === activeCategory;
     const premiumMatch = showPremium || !module.isPremium;
     return categoryMatch && premiumMatch;
@@ -293,12 +340,19 @@ export const TrainingModeInterface = ({ onModuleSelect, isDemo = false, onUpgrad
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="text-center">
-              <div className="text-2xl font-bold text-primary">0</div>
-              <div className="text-sm text-muted-foreground">Certificates Earned</div>
+              <div className="text-2xl font-bold text-primary">
+                {courseOverview.filter(course => course.completed_at).length}
+              </div>
+              <div className="text-sm text-muted-foreground">Courses Completed</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-primary">0h</div>
-              <div className="text-sm text-muted-foreground">Time Invested</div>
+              <div className="text-2xl font-bold text-primary">
+                {courseOverview.reduce((total, course) => {
+                  const progressData = course.progress_data;
+                  return total + (progressData?.completedTaskIds?.length || 0);
+                }, 0)}
+              </div>
+              <div className="text-sm text-muted-foreground">Tasks Completed</div>
             </div>
           </div>
         </CardContent>

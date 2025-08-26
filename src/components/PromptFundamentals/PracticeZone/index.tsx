@@ -24,6 +24,7 @@ import { Certificate } from "./Certificate";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { CelebrationPage } from "../CelebrationPage";
+import { useUserProgress } from "@/hooks/useUserProgress";
 
 export type PracticeZoneProps = {
   onFinished?: (certificateId: string) => void;
@@ -33,14 +34,7 @@ export type PracticeZoneProps = {
   gptModel?: string;
 };
 
-interface ProgressState {
-  completedTaskIds: number[];
-  startedAt: string;
-  finishedAt?: string;
-  certificateId?: string;
-  learnerName?: string;
-  lastUsedModel?: string;
-}
+// ProgressState is now imported from useUserProgress hook
 
 export const PracticeZone = ({
   onFinished,
@@ -57,12 +51,11 @@ export const PracticeZone = ({
   const [aiResponse, setAiResponse] = useState("");
   const [isCheckingPrompt, setIsCheckingPrompt] = useState(false);
   const [showHints, setShowHints] = useState(showHintsByDefault);
-  const [progress, setProgress] = useState<ProgressState>({
-    completedTaskIds: [],
-    startedAt: new Date().toISOString()
-  });
   const [showCertificate, setShowCertificate] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
+  
+  // Use the new progress hook
+  const { progress, saveProgress, isLoading: progressLoading, isAuthenticated } = useUserProgress('prompt-fundamentals');
   
   const { toast } = useToast();
   
@@ -71,29 +64,23 @@ export const PracticeZone = ({
   const isTaskCompleted = progress.completedTaskIds.includes(currentTaskId);
   const allTasksCompleted = progress.completedTaskIds.length === practiceTasks.length;
 
-  // Load progress from localStorage
+  // Show authentication notice if not logged in
   useEffect(() => {
-    const savedProgress = localStorage.getItem('promptEngineering_progress');
-    if (savedProgress) {
-      try {
-        const parsed = JSON.parse(savedProgress);
-        setProgress(parsed);
-        
-        // If all tasks are completed, show certificate option
-        if (parsed.completedTaskIds.length === practiceTasks.length) {
-          setShowCertificate(true);
-        }
-      } catch (error) {
-        console.error('Error loading progress:', error);
-      }
+    if (!isAuthenticated) {
+      toast({
+        title: "Authentication Required",
+        description: "Please log in to save your progress across sessions.",
+        variant: "default"
+      });
     }
-  }, []);
+  }, [isAuthenticated, toast]);
 
-  // Save progress to localStorage
-  const saveProgress = (newProgress: ProgressState) => {
-    setProgress(newProgress);
-    localStorage.setItem('promptEngineering_progress', JSON.stringify(newProgress));
-  };
+  // Check if all tasks are completed when progress loads
+  useEffect(() => {
+    if (!progressLoading && progress.completedTaskIds.length === practiceTasks.length) {
+      setShowCertificate(true);
+    }
+  }, [progress.completedTaskIds.length, progressLoading]);
 
   const handleRunCheck = async () => {
     if (!currentTask || !userPrompt.trim()) {
@@ -148,11 +135,11 @@ export const PracticeZone = ({
             newProgress.finishedAt = new Date().toISOString();
           }
           
-          saveProgress(newProgress);
+          await saveProgress(newProgress);
           
           toast({
             title: "Task Completed! ✅",
-            description: `You've successfully completed task ${currentTaskId}`,
+            description: `You've successfully completed task ${currentTaskId}${!isAuthenticated ? ' (saved locally only)' : ''}`,
           });
         }
       } else {
@@ -196,13 +183,13 @@ export const PracticeZone = ({
     });
   };
 
-  const handleCertificateFinish = (certificateId: string) => {
+  const handleCertificateFinish = async (certificateId: string) => {
     const finalProgress = {
       ...progress,
       certificateId,
       finishedAt: new Date().toISOString()
     };
-    saveProgress(finalProgress);
+    await saveProgress(finalProgress);
     
     // Show celebration page instead of calling onFinished immediately
     setShowCelebration(true);
@@ -238,6 +225,18 @@ export const PracticeZone = ({
 
   if (!currentTask) {
     return <div>Task not found</div>;
+  }
+
+  // Show loading state while progress is loading
+  if (progressLoading) {
+    return (
+      <div className="h-full flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-lg font-semibold mb-2">Loading your progress...</div>
+          <Progress value={50} className="w-64" />
+        </div>
+      </div>
+    );
   }
 
   return (
