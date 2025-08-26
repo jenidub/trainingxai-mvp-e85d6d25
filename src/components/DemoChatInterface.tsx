@@ -160,7 +160,6 @@ export const DemoChatInterface = ({ selectedGPT, onInterfaceChange, onUpgrade }:
             <div className="mb-6">
               <PromptingImpactSlider 
                 initialYears={2}
-                defaultTier="mid"
                 ctaHref="/auth"
                 ctaText="Sign Up to Build Skills"
               />

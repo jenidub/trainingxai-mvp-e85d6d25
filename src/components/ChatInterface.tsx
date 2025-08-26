@@ -257,7 +257,6 @@ export const ChatInterface = ({ selectedGPT, onInterfaceChange }: ChatInterfaceP
 
             <PromptingImpactSlider 
               initialYears={2}
-              defaultTier="mid"
               ctaHref="/auth"
             />
           </div>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
@@ -11,7 +10,6 @@ export type PromptingImpactSliderProps = {
   maxYears?: number;
   step?: number;
   maturityYears?: number;
-  defaultTier?: "low" | "mid" | "high";
   showCTA?: boolean;
   ctaText?: string;
   ctaHref?: string;
@@ -32,12 +30,8 @@ export const mockAnchors = [
   { years: 20, salary: 185709 }
 ];
 
-// Tier maximum uplifts
-const tierMaxUplifts = {
-  low: 0.28,
-  mid: 0.40,
-  high: 0.56
-};
+// Fixed uplift percentage (mid-tier: 40%)
+const FIXED_MAX_UPLIFT = 0.40;
 
 export function estimateBaseSalary(years: number): number {
   if (years <= mockAnchors[0].years) return mockAnchors[0].salary;
@@ -56,9 +50,8 @@ export function estimateBaseSalary(years: number): number {
   return mockAnchors[mockAnchors.length - 1].salary;
 }
 
-export function aiUpliftPercent(years: number, tier: "low" | "mid" | "high", maturityYears: number): number {
-  const maxPct = tierMaxUplifts[tier];
-  const pct = Math.min(1, Math.max(0, years / maturityYears)) * maxPct;
+export function aiUpliftPercent(years: number, maturityYears: number): number {
+  const pct = Math.min(1, Math.max(0, years / maturityYears)) * FIXED_MAX_UPLIFT;
   return pct;
 }
 
@@ -98,20 +91,18 @@ const PromptingImpactSlider: React.FC<PromptingImpactSliderProps> = ({
   maxYears = 20,
   step = 0.5,
   maturityYears = 5,
-  defaultTier = "mid",
   showCTA = true,
   ctaText = "Build your prompting skills",
   ctaHref = "/learn",
   currency = "USD",
   locale = "en-US",
   title = "How much can AI skills add to your salary?",
-  subtitle = "Drag your years of prompting experience, then choose an AI-skills tier."
+  subtitle = "Drag your years of prompting experience to see the impact."
 }) => {
   const [years, setYears] = useState(initialYears);
-  const [selectedTier, setSelectedTier] = useState<"low" | "mid" | "high">(defaultTier);
 
   const baseSalary = estimateBaseSalary(years);
-  const upliftPct = aiUpliftPercent(years, selectedTier, maturityYears);
+  const upliftPct = aiUpliftPercent(years, maturityYears);
   const adjustedSalary = estimateAdjustedSalary(baseSalary, upliftPct);
   const delta = adjustedSalary - baseSalary;
 
@@ -131,78 +122,52 @@ const PromptingImpactSlider: React.FC<PromptingImpactSliderProps> = ({
   const rangeMax = Math.round(adjustedSalary * 1.1);
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-4 bg-card rounded-lg border shadow-sm">
-      <div className="text-center mb-4">
-        <h3 className="text-lg font-semibold text-foreground mb-1">{title}</h3>
+    <div className="w-full mx-auto p-6 bg-card rounded-lg border shadow-sm">
+      <div className="text-center mb-6">
+        <h3 className="text-xl font-semibold text-foreground mb-2">{title}</h3>
         <p className="text-sm text-muted-foreground">{subtitle}</p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
-        {/* Controls */}
+      <div className="space-y-6">
+        {/* Years Slider */}
         <div className="space-y-4">
-          {/* Years Slider */}
-          <div className="space-y-2">
-            <Label htmlFor="years-slider" className="text-sm font-medium">
-              Years of experience: {years.toFixed(1)}
-            </Label>
-            <Slider
-              id="years-slider"
-              min={minYears}
-              max={maxYears}
-              step={step}
-              value={[years]}
-              onValueChange={(value) => setYears(value[0])}
-              className="w-full"
-              aria-valuemin={minYears}
-              aria-valuemax={maxYears}
-              aria-valuenow={years}
-            />
-          </div>
-
-          {/* Tier Selector */}
-          <div className="space-y-2">
-            <Label className="text-sm font-medium">AI-skills tier:</Label>
-            <RadioGroup 
-              value={selectedTier} 
-              onValueChange={(value) => setSelectedTier(value as "low" | "mid" | "high")}
-              className="flex gap-4"
-            >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="low" id="low" />
-                <Label htmlFor="low" className="text-sm">Low (+28%)</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="mid" id="mid" />
-                <Label htmlFor="mid" className="text-sm">Mid (+40%)</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="high" id="high" />
-                <Label htmlFor="high" className="text-sm">High (+56%)</Label>
-              </div>
-            </RadioGroup>
-          </div>
+          <Label htmlFor="years-slider" className="text-base font-medium block text-center">
+            Years of experience: {years.toFixed(1)}
+          </Label>
+          <Slider
+            id="years-slider"
+            min={minYears}
+            max={maxYears}
+            step={step}
+            value={[years]}
+            onValueChange={(value) => setYears(value[0])}
+            className="w-full"
+            aria-valuemin={minYears}
+            aria-valuemax={maxYears}
+            aria-valuenow={years}
+          />
         </div>
 
-        {/* Results */}
-        <div className="space-y-3" aria-live="polite">
-          <div className="text-center">
-            <div className="text-sm text-muted-foreground">Base salary</div>
-            <div className="text-lg font-semibold text-foreground">
+        {/* Results - Full Width Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4" aria-live="polite">
+          <div className="text-center p-4 bg-muted/30 rounded-lg">
+            <div className="text-sm text-muted-foreground mb-1">Base salary</div>
+            <div className="text-xl font-semibold text-foreground">
               {formatCurrency(animatedBase)}
             </div>
           </div>
 
-          <div className="text-center">
-            <div className="text-sm text-muted-foreground">
+          <div className="text-center p-4 bg-primary/5 rounded-lg border border-primary/20">
+            <div className="text-sm text-muted-foreground mb-1">
               AI-skills uplift ({(upliftPct * 100).toFixed(1)}%)
             </div>
-            <div className="text-lg font-semibold text-primary">
+            <div className="text-xl font-semibold text-primary">
               +{formatCurrency(animatedDelta)}
             </div>
           </div>
 
-          <div className="text-center p-3 bg-primary/5 rounded-lg border border-primary/20">
-            <div className="text-sm text-muted-foreground">AI-adjusted salary</div>
+          <div className="text-center p-4 bg-primary/10 rounded-lg border border-primary/30">
+            <div className="text-sm text-muted-foreground mb-1">AI-adjusted salary</div>
             <div className="text-2xl font-bold text-primary">
               {formatCurrency(animatedAdjusted)}
             </div>
@@ -211,38 +176,38 @@ const PromptingImpactSlider: React.FC<PromptingImpactSliderProps> = ({
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="flex items-center justify-between mt-4 pt-3 border-t">
-        <Dialog>
-          <DialogTrigger asChild>
-            <button className="text-xs text-muted-foreground hover:text-foreground underline">
-              About these numbers
-            </button>
-          </DialogTrigger>
-          <DialogContent className="max-w-md">
-            <DialogHeader>
-              <DialogTitle>About These Salary Estimates</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-3 text-sm">
-              <p>
-                Base salary figures aggregate public sources including Glassdoor via Coursera, BuiltIn, and other industry reports, last updated mid-2025.
-              </p>
-              <p>
-                AI-skills uplifts are synthesized from PwC, Lightcast, and AWS surveys on AI productivity impacts and vary significantly by role and market.
-              </p>
-              <p className="text-xs text-muted-foreground">
-                <strong>Disclaimer:</strong> Estimates only; actual compensation varies by role, location, company, and total compensation packages at top firms can be significantly higher than base salary.
-              </p>
-            </div>
-          </DialogContent>
-        </Dialog>
+        <div className="flex items-center justify-between pt-4 border-t">
+          <Dialog>
+            <DialogTrigger asChild>
+              <button className="text-sm text-muted-foreground hover:text-foreground underline">
+                About these numbers
+              </button>
+            </DialogTrigger>
+            <DialogContent className="max-w-md">
+              <DialogHeader>
+                <DialogTitle>About These Salary Estimates</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-3 text-sm">
+                <p>
+                  Base salary figures aggregate public sources including Glassdoor via Coursera, BuiltIn, and other industry reports, last updated mid-2025.
+                </p>
+                <p>
+                  AI-skills uplifts are synthesized from PwC, Lightcast, and AWS surveys on AI productivity impacts and vary significantly by role and market.
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  <strong>Disclaimer:</strong> Estimates only; actual compensation varies by role, location, company, and total compensation packages at top firms can be significantly higher than base salary.
+                </p>
+              </div>
+            </DialogContent>
+          </Dialog>
 
-        {showCTA && (
-          <Button asChild size="sm">
-            <a href={ctaHref}>{ctaText}</a>
-          </Button>
-        )}
+          {showCTA && (
+            <Button asChild size="sm">
+              <a href={ctaHref}>{ctaText}</a>
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );
