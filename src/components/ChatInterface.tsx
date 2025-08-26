@@ -256,7 +256,7 @@ export const ChatInterface = ({ selectedGPT, onInterfaceChange }: ChatInterfaceP
             </div>
 
             {/* AI Salary Slider */}
-            <div className="mt-12">
+            <div className="mt-8">
               <PromptingSalarySlider 
                 initialYears={2}
                 ctaHref="/auth"

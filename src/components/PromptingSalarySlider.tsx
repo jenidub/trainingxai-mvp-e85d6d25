@@ -168,80 +168,76 @@ const PromptingSalarySlider: React.FC<PromptingSalarySliderProps> = ({
   };
 
   return (
-    <Card className="w-full max-w-4xl mx-auto bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
-      <CardContent className="p-8">
-        <div className="space-y-8">
+    <Card className="w-full max-w-3xl mx-auto bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
+      <CardContent className="p-6">
+        <div className="space-y-6">
           {/* Header */}
-          <div className="text-center space-y-3">
-            <h2 className="text-3xl font-bold text-foreground">
+          <div className="text-center space-y-2">
+            <h2 className="text-2xl font-bold text-foreground">
               {title}
             </h2>
-            <p className="text-muted-foreground text-lg">
+            <p className="text-muted-foreground">
               {subtitle}
             </p>
           </div>
 
-          {/* Main Content Grid */}
-          <div className="grid lg:grid-cols-2 gap-8 items-center">
+          {/* Compact Single Column Layout */}
+          <div className="space-y-4">
             {/* Slider Section */}
-            <div className="space-y-6">
-              <div className="space-y-4">
-                <label 
-                  htmlFor="experience-slider"
-                  className="block text-sm font-medium text-foreground"
-                >
-                  Years of Prompting Experience
-                </label>
-                <div className="space-y-2">
-                  <Slider
-                    id="experience-slider"
-                    value={[years]}
-                    onValueChange={handleSliderChange}
-                    onKeyDown={handleKeyDown}
-                    min={minYears}
-                    max={maxYears}
-                    step={step}
-                    className="w-full"
-                    aria-valuemin={minYears}
-                    aria-valuemax={maxYears}
-                    aria-valuenow={years}
-                    aria-label={`Experience: ${years} years`}
-                  />
-                  <div className="flex justify-between text-sm text-muted-foreground">
-                    <span>{minYears} years</span>
-                    <span className="font-medium text-primary">
-                      {years} years
-                    </span>
-                    <span>{maxYears}+ years</span>
-                  </div>
+            <div className="space-y-3">
+              <label 
+                htmlFor="experience-slider"
+                className="block text-sm font-medium text-foreground"
+              >
+                Years of Prompting Experience
+              </label>
+              <div className="space-y-2">
+                <Slider
+                  id="experience-slider"
+                  value={[years]}
+                  onValueChange={handleSliderChange}
+                  onKeyDown={handleKeyDown}
+                  min={minYears}
+                  max={maxYears}
+                  step={step}
+                  className="w-full"
+                  aria-valuemin={minYears}
+                  aria-valuemax={maxYears}
+                  aria-valuenow={years}
+                  aria-label={`Experience: ${years} years`}
+                />
+                <div className="flex justify-between text-sm text-muted-foreground">
+                  <span>{minYears} years</span>
+                  <span className="font-medium text-primary">
+                    {years} years
+                  </span>
+                  <span>{maxYears}+ years</span>
                 </div>
               </div>
             </div>
 
             {/* Salary Display Section */}
-            <div className="text-center lg:text-left space-y-4">
-              <div>
-                <p className="text-sm text-muted-foreground mb-2">
-                  Estimated AI Salary
-                </p>
-                <div className={`text-4xl lg:text-5xl font-bold text-primary transition-all duration-300 ${isAnimating ? 'scale-105' : 'scale-100'}`}>
-                  <span aria-live="polite" aria-atomic="true">
-                    {formatCurrency(displaySalary)}
-                  </span>
-                </div>
-                <p className="text-sm text-muted-foreground mt-2">
-                  typical range {formatCurrency(lowerBound)} – {formatCurrency(upperBound)}
-                </p>
+            <div className="text-center space-y-2">
+              <p className="text-sm text-muted-foreground">
+                Estimated AI Salary
+              </p>
+              <div className={`text-3xl font-bold text-primary transition-all duration-300 ${isAnimating ? 'scale-105' : 'scale-100'}`}>
+                <span aria-live="polite" aria-atomic="true">
+                  {formatCurrency(displaySalary)}
+                </span>
               </div>
+              <p className="text-sm text-muted-foreground">
+                typical range {formatCurrency(lowerBound)} – {formatCurrency(upperBound)}
+              </p>
             </div>
           </div>
 
-          {/* Footer Section */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-primary/20">
+          {/* Compact Footer Section */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-primary/20">
             <Dialog>
               <DialogTrigger asChild>
-                <button className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors underline-offset-4 hover:underline">
-                  <InfoIcon className="h-4 w-4" />
+                <button className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors underline-offset-4 hover:underline">
+                  <InfoIcon className="h-3 w-3" />
                   About these numbers
                 </button>
               </DialogTrigger>
@@ -269,6 +265,7 @@ const PromptingSalarySlider: React.FC<PromptingSalarySliderProps> = ({
             {showCTA && (
               <Button 
                 asChild 
+                size="sm"
                 className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-200"
               >
                 <a href={ctaHref}>
