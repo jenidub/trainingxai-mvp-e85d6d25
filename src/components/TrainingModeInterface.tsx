@@ -20,6 +20,7 @@ import {
 import NotebookLMPractice from './NotebookLMPractice';
 import { FundamentalsPage } from './PromptFundamentals/FundamentalsPage';
 import { IntroPage } from './PromptFundamentals/IntroPage';
+import { PracticeZone } from './PromptFundamentals/PracticeZone';
 
 interface TrainingModule {
   id: string;
@@ -205,11 +206,17 @@ export const TrainingModeInterface = ({ onModuleSelect, isDemo = false, onUpgrad
           )}
           {currentPage === 'intro' && (
             <IntroPage 
-              onEnterPractice={() => {
-                // This will be connected to the practice zone later
-                console.log('Enter Practice Zone');
-              }}
+              onEnterPractice={() => setCurrentPage('practice')}
               onBackToFundamentals={() => setCurrentPage('fundamentals')}
+            />
+          )}
+          {currentPage === 'practice' && (
+            <PracticeZone 
+              onFinished={(certificateId) => {
+                console.log('Course completed with certificate:', certificateId);
+                // Could navigate back to training or show success message
+              }}
+              brandName="Somos Ujima"
             />
           )}
         </div>
