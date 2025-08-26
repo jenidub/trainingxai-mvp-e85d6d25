@@ -184,6 +184,7 @@ export const TrainingModeInterface = ({ onModuleSelect, isDemo = false, onUpgrad
 
   // If Prompt Fundamentals module is selected, show that component
   if (selectedModule === 'prompt-fundamentals') {
+    console.log('Current page in prompt-fundamentals:', currentPage);
     // For Practice Zone, use full screen layout without sidebar
     if (currentPage === 'practice') {
       return (
@@ -236,7 +237,10 @@ export const TrainingModeInterface = ({ onModuleSelect, isDemo = false, onUpgrad
           )}
           {currentPage === 'intro' && (
             <IntroPage 
-              onEnterPractice={() => setCurrentPage('practice')}
+              onEnterPractice={() => {
+                console.log('Setting current page to practice');
+                setCurrentPage('practice');
+              }}
               onBackToFundamentals={() => setCurrentPage('fundamentals')}
             />
           )}

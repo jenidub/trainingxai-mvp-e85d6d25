@@ -22,6 +22,7 @@ import { practiceTasks, PracticeTask } from "./tasks";
 import { validatePrompt, ValidationResult } from "@/lib/promptChecks";
 import { Certificate } from "./Certificate";
 import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 export type PracticeZoneProps = {
   onFinished?: (certificateId: string) => void;
@@ -47,6 +48,8 @@ export const PracticeZone = ({
   allowSkip = true,
   gptModel = "gpt-4o-mini"
 }: PracticeZoneProps) => {
+  console.log('PracticeZone component rendered');
+  
   const [currentTaskId, setCurrentTaskId] = useState(1);
   const [userPrompt, setUserPrompt] = useState("");
   const [validationResults, setValidationResults] = useState<ValidationResult[]>([]);
@@ -108,20 +111,23 @@ export const PracticeZone = ({
       setValidationResults(results);
       
       // Call AI to get response
-      const response = await fetch('/api/supabase/functions/v1/prompt-checker', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      console.log('Calling edge function with prompt:', userPrompt.substring(0, 50) + '...');
+      
+      const { data, error } = await supabase.functions.invoke('prompt-checker', {
+        body: {
           prompt: userPrompt,
           model: gptModel
-        })
+        }
       });
       
-      const data = await response.json();
+      console.log('Edge function response:', { data, error });
       
-      if (data.success) {
+      if (error) {
+        console.error('Supabase function error:', error);
+        throw new Error(`Function error: ${error.message}`);
+      }
+      
+      if (data?.success) {
         setAiResponse(data.response);
         
         // Check if all validations passed
@@ -148,7 +154,7 @@ export const PracticeZone = ({
           });
         }
       } else {
-        setAiResponse(`Error: ${data.error}`);
+        setAiResponse(`Error: ${data?.error || 'Unknown error'}`);
         toast({
           title: "AI Request Failed",
           description: "There was an error getting the AI response. Please try again.",

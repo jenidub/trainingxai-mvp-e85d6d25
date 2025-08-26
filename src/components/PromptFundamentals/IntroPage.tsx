@@ -158,7 +158,10 @@ export const IntroPage = ({ onEnterPractice, onBackToFundamentals }: IntroPagePr
       {/* CTA Section */}
       <div className="space-y-4 text-center pt-4">
         <Button 
-          onClick={onEnterPractice}
+          onClick={() => {
+            console.log('Enter Practice Zone button clicked');
+            onEnterPractice();
+          }}
           size="lg"
           className="text-lg px-8 py-3 mb-4"
         >
