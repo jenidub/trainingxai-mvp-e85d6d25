@@ -23,6 +23,7 @@ import { validatePrompt, ValidationResult } from "@/lib/promptChecks";
 import { Certificate } from "./Certificate";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { CelebrationPage } from "../CelebrationPage";
 
 export type PracticeZoneProps = {
   onFinished?: (certificateId: string) => void;
@@ -61,6 +62,7 @@ export const PracticeZone = ({
     startedAt: new Date().toISOString()
   });
   const [showCertificate, setShowCertificate] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
   
   const { toast } = useToast();
   
@@ -202,11 +204,25 @@ export const PracticeZone = ({
     };
     saveProgress(finalProgress);
     
-    if (onFinished) {
-      onFinished(certificateId);
-    }
+    // Show celebration page instead of calling onFinished immediately
+    setShowCelebration(true);
   };
 
+  // Show celebration page first
+  if (showCelebration) {
+    return (
+      <CelebrationPage
+        brandName={brandName}
+        onContinue={() => {
+          if (onFinished && progress.certificateId) {
+            onFinished(progress.certificateId);
+          }
+        }}
+      />
+    );
+  }
+
+  // Then show certificate if requested
   if (showCertificate && allTasksCompleted) {
     return (
       <Certificate
