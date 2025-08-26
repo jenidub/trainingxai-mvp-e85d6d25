@@ -262,6 +262,39 @@ export type Database = {
         }
         Relationships: []
       }
+      user_course_progress: {
+        Row: {
+          completed_at: string | null
+          course_id: string
+          created_at: string
+          id: string
+          progress_data: Json
+          task_id: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          course_id: string
+          created_at?: string
+          id?: string
+          progress_data?: Json
+          task_id?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          course_id?: string
+          created_at?: string
+          id?: string
+          progress_data?: Json
+          task_id?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_statistics: {
         Row: {
           certificates_earned: number
