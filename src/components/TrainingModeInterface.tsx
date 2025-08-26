@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import NotebookLMPractice from './NotebookLMPractice';
 import { FundamentalsPage } from './PromptFundamentals/FundamentalsPage';
+import { IntroPage } from './PromptFundamentals/IntroPage';
 
 interface TrainingModule {
   id: string;
@@ -124,6 +125,7 @@ interface TrainingModeInterfaceProps {
 
 export const TrainingModeInterface = ({ onModuleSelect, isDemo = false, onUpgrade }: TrainingModeInterfaceProps) => {
   const [selectedModule, setSelectedModule] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState<string>('fundamentals'); // Track current page within module
   const [activeCategory, setActiveCategory] = useState('All');
 
   const categories = ['All', 'Core Skills', 'Development', 'Creative', 'Business', 'Practice'];
@@ -142,6 +144,7 @@ export const TrainingModeInterface = ({ onModuleSelect, isDemo = false, onUpgrad
     if (module && !module.isLocked) {
       if (moduleId === 'notebooklm-mastery' || moduleId === 'prompt-fundamentals') {
         setSelectedModule(moduleId);
+        setCurrentPage('fundamentals'); // Reset to first page when entering module
       } else {
         // Handle other modules (future implementation)
         onModuleSelect?.(moduleId);
@@ -185,19 +188,30 @@ export const TrainingModeInterface = ({ onModuleSelect, isDemo = false, onUpgrad
         <div className="p-4 border-b bg-background/50">
           <Button 
             variant="outline" 
-            onClick={() => setSelectedModule(null)}
+            onClick={() => {
+              setSelectedModule(null);
+              setCurrentPage('fundamentals');
+            }}
             className="mb-2"
           >
             ← Back to Training
           </Button>
         </div>
         <div className="flex-1 overflow-auto">
-          <FundamentalsPage 
-            onContinue={() => {
-              // This will be connected to the next page later
-              console.log('Continue to Course Intro');
-            }}
-          />
+          {currentPage === 'fundamentals' && (
+            <FundamentalsPage 
+              onContinue={() => setCurrentPage('intro')}
+            />
+          )}
+          {currentPage === 'intro' && (
+            <IntroPage 
+              onEnterPractice={() => {
+                // This will be connected to the practice zone later
+                console.log('Enter Practice Zone');
+              }}
+              onBackToFundamentals={() => setCurrentPage('fundamentals')}
+            />
+          )}
         </div>
       </div>
     );
