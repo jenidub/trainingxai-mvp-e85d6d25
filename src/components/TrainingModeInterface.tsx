@@ -184,6 +184,36 @@ export const TrainingModeInterface = ({ onModuleSelect, isDemo = false, onUpgrad
 
   // If Prompt Fundamentals module is selected, show that component
   if (selectedModule === 'prompt-fundamentals') {
+    // For Practice Zone, use full screen layout without sidebar
+    if (currentPage === 'practice') {
+      return (
+        <div className="h-screen w-full flex flex-col">
+          <div className="p-4 border-b bg-background/50 flex-shrink-0">
+            <Button 
+              variant="outline" 
+              onClick={() => {
+                setSelectedModule(null);
+                setCurrentPage('fundamentals');
+              }}
+              className="mb-2"
+            >
+              ← Back to Training
+            </Button>
+          </div>
+          <div className="flex-1 overflow-hidden">
+            <PracticeZone 
+              onFinished={(certificateId) => {
+                console.log('Course completed with certificate:', certificateId);
+                // Could navigate back to training or show success message
+              }}
+              brandName="Somos Ujima"
+            />
+          </div>
+        </div>
+      );
+    }
+    
+    // For other pages, use regular layout
     return (
       <div className="h-full flex flex-col">
         <div className="p-4 border-b bg-background/50">
@@ -208,15 +238,6 @@ export const TrainingModeInterface = ({ onModuleSelect, isDemo = false, onUpgrad
             <IntroPage 
               onEnterPractice={() => setCurrentPage('practice')}
               onBackToFundamentals={() => setCurrentPage('fundamentals')}
-            />
-          )}
-          {currentPage === 'practice' && (
-            <PracticeZone 
-              onFinished={(certificateId) => {
-                console.log('Course completed with certificate:', certificateId);
-                // Could navigate back to training or show success message
-              }}
-              brandName="Somos Ujima"
             />
           )}
         </div>
