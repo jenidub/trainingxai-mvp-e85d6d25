@@ -371,24 +371,24 @@ export const DashboardInterface = ({ isDemo = false, onUpgrade }: DashboardInter
   const getFilteredTrainingData = () => {
     if (trainingFilter === 'all') return trainingData;
     
-    // Simple filtering logic based on track names and characteristics
+    // Updated filtering logic - Core Skills only contains Prompt Engineering
     return trainingData.filter(track => {
       const trackName = track.track.toLowerCase();
       switch (trainingFilter) {
         case 'core-skills':
-          return trackName.includes('fundamentals') || 
-                 trackName.includes('basics') || 
-                 trackName.includes('core') ||
-                 trackName.includes('essential') ||
-                 track.level === 'Beginner';
+          // Only show Prompt Engineering in Core Skills
+          return trackName.includes('prompt engineering') || 
+                 trackName.includes('prompt fundamentals') ||
+                 trackName.includes('prompting');
         case 'advanced':
           return track.level === 'Advanced' || 
                  trackName.includes('advanced') ||
                  trackName.includes('expert');
         case 'specialized':
-          return trackName.includes('specialized') || 
-                 trackName.includes('custom') ||
-                 trackName.includes('specific');
+          // Show all tracks except Prompt Engineering
+          return !(trackName.includes('prompt engineering') || 
+                   trackName.includes('prompt fundamentals') ||
+                   trackName.includes('prompting'));
         default:
           return true;
       }
