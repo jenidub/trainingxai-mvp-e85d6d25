@@ -147,7 +147,7 @@ export const IntroPage = ({ onEnterPractice, onBackToFundamentals }: IntroPagePr
             <div>
               <h3 className="font-semibold text-foreground mb-1">Pro Tip</h3>
               <p className="text-muted-foreground">
-                If you're stuck, click <span className="font-medium text-foreground">"Ask Spiral"</span> for a hint. 
+                If you're stuck, click <span className="font-medium text-foreground">"I need help with this prompt"</span> for a hint. 
                 Our AI assistant is here to guide you through challenging tasks.
               </p>
             </div>
