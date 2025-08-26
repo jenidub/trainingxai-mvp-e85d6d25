@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -23,8 +22,6 @@ export type CelebrationPageProps = {
   onContinue?: () => void;
 };
 
-// Removed Confetti component for accessibility and to eliminate flickering
-
 export const CelebrationPage: React.FC<CelebrationPageProps> = ({
   brandName = "Somos Ujima",
   prebuiltGptsUrl = "/prebuilt-gpts",
@@ -33,8 +30,6 @@ export const CelebrationPage: React.FC<CelebrationPageProps> = ({
   mascotImageUrl,
   onContinue
 }) => {
-  // Removed confetti state and useEffect for better accessibility
-
   const nextSteps = [
     {
       icon: BookOpen,
@@ -56,89 +51,43 @@ export const CelebrationPage: React.FC<CelebrationPageProps> = ({
 
   return (
     <div className="min-h-screen w-full overflow-auto bg-gradient-to-br from-background via-muted/20 to-background">
-      
-      <motion.div 
-        className="w-full max-w-4xl mx-auto p-6 pt-12 pb-12 space-y-12"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, staggerChildren: 0.3 }}
-      >
+      <div className="w-full max-w-4xl mx-auto p-6 pt-12 pb-12 space-y-12">
         {/* Hero Section */}
-        <motion.div 
-          className="text-center space-y-6"
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          {/* Mascot/Trophy Animation */}
-          <motion.div 
-            className="flex justify-center mb-8"
-            animate={{ 
-              y: [0, -10, 0],
-              rotate: [0, 5, -5, 0]
-            }}
-            transition={{ 
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          >
+        <div className="text-center space-y-6">
+          {/* Mascot/Trophy */}
+          <div className="flex justify-center mb-8">
             <div className="relative">
               <div className="w-24 h-24 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
                 <Trophy className="h-12 w-12 text-white" />
               </div>
-              <motion.div
-                className="absolute -top-2 -right-2"
-                animate={{ rotate: 360 }}
-                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-              >
+              <div className="absolute -top-2 -right-2">
                 <Sparkles className="h-6 w-6 text-yellow-500" />
-              </motion.div>
+              </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* Title */}
-          <motion.h1 
-            className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-primary via-purple-600 to-primary bg-clip-text text-transparent"
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
+          <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-primary via-purple-600 to-primary bg-clip-text text-transparent">
             Congratulations! 🎉
-          </motion.h1>
+          </h1>
 
           {/* Subtitle */}
-          <motion.p 
-            className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed"
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-          >
+          <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             You have successfully completed the{' '}
             <span className="font-semibold text-foreground">Prompt Engineering Fundamentals Course!</span>
-          </motion.p>
+          </p>
 
           {/* Achievement Badge */}
-          <motion.div
-            className="flex justify-center"
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.8 }}
-          >
+          <div className="flex justify-center">
             <Badge className="text-lg px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white">
               <Brain className="h-4 w-4 mr-2" />
               Course Completed
             </Badge>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
 
         {/* Message Block */}
-        <motion.div 
-          className="text-center max-w-2xl mx-auto"
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1.0 }}
-        >
+        <div className="text-center max-w-2xl mx-auto">
           <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-primary/10">
             <CardContent className="p-8">
               <p className="text-lg text-muted-foreground leading-relaxed">
@@ -146,15 +95,10 @@ export const CelebrationPage: React.FC<CelebrationPageProps> = ({
               </p>
             </CardContent>
           </Card>
-        </motion.div>
+        </div>
 
         {/* Next Steps Section */}
-        <motion.div 
-          className="space-y-6"
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1.2 }}
-        >
+        <div className="space-y-6">
           <h2 className="text-3xl font-bold text-center text-foreground">
             What's Next?
           </h2>
@@ -163,18 +107,8 @@ export const CelebrationPage: React.FC<CelebrationPageProps> = ({
             {nextSteps.map((step, index) => {
               const IconComponent = step.icon;
               return (
-                <motion.div
-                  key={step.title}
-                  initial={{ y: 30, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 0.6, delay: 1.4 + index * 0.2 }}
-                  whileHover={{ 
-                    scale: 1.02,
-                    transition: { duration: 0.2 }
-                  }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <Card className="h-full border-2 border-border/50 hover:border-primary/30 transition-all duration-300 overflow-hidden group">
+                <div key={step.title} className="h-full">
+                  <Card className="h-full border-2 border-border/50 hover:border-primary/30 transition-colors duration-300 overflow-hidden group">
                     <div className={`h-2 bg-gradient-to-r ${step.color}`} />
                     <CardHeader className="pb-4">
                       <div className="flex items-center gap-3 mb-3">
@@ -189,7 +123,7 @@ export const CelebrationPage: React.FC<CelebrationPageProps> = ({
                     </CardHeader>
                     <CardContent className="pt-0">
                       <Button 
-                        className="w-full group-hover:scale-105 transition-transform duration-200"
+                        className="w-full hover:scale-105 transition-transform duration-200"
                         onClick={() => window.location.href = step.url}
                       >
                         {step.buttonText}
@@ -197,23 +131,15 @@ export const CelebrationPage: React.FC<CelebrationPageProps> = ({
                       </Button>
                     </CardContent>
                   </Card>
-                </motion.div>
+                </div>
               );
             })}
           </div>
-        </motion.div>
+        </div>
 
         {/* Workshop CTA Section */}
-        <motion.div 
-          className="text-center"
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1.8 }}
-        >
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            className="max-w-2xl mx-auto"
-          >
+        <div className="text-center">
+          <div className="max-w-2xl mx-auto">
             <Card className="border-2 border-primary/30 bg-gradient-to-br from-primary/10 via-primary/5 to-secondary/10 overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20 opacity-50" />
               <CardContent className="relative p-8 text-center space-y-6">
@@ -240,17 +166,12 @@ export const CelebrationPage: React.FC<CelebrationPageProps> = ({
                 </Button>
               </CardContent>
             </Card>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
 
         {/* Continue Button */}
         {onContinue && (
-          <motion.div 
-            className="text-center pt-8"
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 2.0 }}
-          >
+          <div className="text-center pt-8">
             <Button 
               variant="outline"
               onClick={onContinue}
@@ -259,9 +180,9 @@ export const CelebrationPage: React.FC<CelebrationPageProps> = ({
               Continue Exploring
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
-          </motion.div>
+          </div>
         )}
-      </motion.div>
+      </div>
     </div>
   );
 };
