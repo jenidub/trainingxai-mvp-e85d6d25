@@ -268,6 +268,11 @@ export const PracticeZone = ({
                 {currentTask.difficulty}
               </Badge>
               <Badge variant="secondary">{currentTask.category}</Badge>
+              {isTaskCompleted && (
+                <Badge className="bg-green-500 text-white">
+                  ✓ Completed
+                </Badge>
+              )}
             </div>
 
             <Button
