@@ -5,7 +5,6 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Send, Bot, User, Sparkles, Code, FileText, Image } from 'lucide-react';
 import NotebookLMPractice from './NotebookLMPractice';
-import PromptingSalarySlider from './PromptingSalarySlider';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -253,15 +252,6 @@ export const ChatInterface = ({ selectedGPT, onInterfaceChange }: ChatInterfaceP
                 <Image className="h-3 w-3 mr-1" />
                 Visual Learning
               </Badge>
-            </div>
-
-            {/* AI Salary Slider */}
-            <div className="mt-8">
-              <PromptingSalarySlider 
-                initialYears={2}
-                ctaHref="/auth"
-                ctaText="Start Building Your Skills"
-              />
             </div>
           </div>
         </div>

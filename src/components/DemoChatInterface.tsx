@@ -6,7 +6,6 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Send, Bot, User, Sparkles, Code, FileText, Image, Lock, Crown, Star } from 'lucide-react';
 import NotebookLMPractice from './NotebookLMPractice';
-import PromptingSalarySlider from './PromptingSalarySlider';
 
 interface DemoChatInterfaceProps {
   selectedGPT?: {
@@ -155,15 +154,6 @@ export const DemoChatInterface = ({ selectedGPT, onInterfaceChange, onUpgrade }:
                 <Image className="h-3 w-3 mr-1" />
                 Visual Learning
               </Badge>
-            </div>
-
-            {/* AI Salary Slider */}
-            <div className="mt-6 mb-6">
-              <PromptingSalarySlider 
-                initialYears={2}
-                ctaHref="/auth"
-                ctaText="Upgrade to Build Your Skills"
-              />
             </div>
 
             <Card className="p-4 bg-gradient-to-r from-primary/5 to-brand-accent/5 border-primary/20">
