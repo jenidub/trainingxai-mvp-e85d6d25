@@ -19,38 +19,15 @@ export type PromptingImpactSliderProps = {
   subtitle?: string;
 };
 
-// Salary anchors for piecewise linear interpolation
-export const mockAnchors = [
-  { years: 0.5, salary: 103140 },
-  { years: 2, salary: 121641 },
-  { years: 5, salary: 138301 },
-  { years: 8, salary: 155132 },
-  { years: 12, salary: 172468 },
-  { years: 17, salary: 185709 },
-  { years: 20, salary: 185709 }
-];
-
-// Fixed uplift percentage (mid-tier: 40%)
-const FIXED_MAX_UPLIFT = 0.40;
+// Static base salary
+const STATIC_BASE_SALARY = 103140;
 
 export function estimateBaseSalary(years: number): number {
-  if (years <= mockAnchors[0].years) return mockAnchors[0].salary;
-  if (years >= mockAnchors[mockAnchors.length - 1].years) return mockAnchors[mockAnchors.length - 1].salary;
-
-  for (let i = 0; i < mockAnchors.length - 1; i++) {
-    const current = mockAnchors[i];
-    const next = mockAnchors[i + 1];
-    
-    if (years >= current.years && years <= next.years) {
-      const ratio = (years - current.years) / (next.years - current.years);
-      return current.salary + ratio * (next.salary - current.salary);
-    }
-  }
-  
-  return mockAnchors[mockAnchors.length - 1].salary;
+  return STATIC_BASE_SALARY;
 }
 
 export function aiUpliftPercent(years: number, maturityYears: number): number {
+  const FIXED_MAX_UPLIFT = 0.40;
   const pct = Math.min(1, Math.max(0, years / maturityYears)) * FIXED_MAX_UPLIFT;
   return pct;
 }
@@ -104,11 +81,9 @@ const PromptingImpactSlider: React.FC<PromptingImpactSliderProps> = ({
   const baseSalary = estimateBaseSalary(years);
   const upliftPct = aiUpliftPercent(years, maturityYears);
   const adjustedSalary = estimateAdjustedSalary(baseSalary, upliftPct);
-  const delta = adjustedSalary - baseSalary;
 
   const animatedBase = useAnimatedNumber(baseSalary);
   const animatedAdjusted = useAnimatedNumber(adjustedSalary);
-  const animatedDelta = useAnimatedNumber(delta);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat(locale, {
@@ -148,30 +123,21 @@ const PromptingImpactSlider: React.FC<PromptingImpactSliderProps> = ({
           />
         </div>
 
-        {/* Results - Full Width Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4" aria-live="polite">
-          <div className="text-center p-4 bg-muted/30 rounded-lg">
-            <div className="text-sm text-muted-foreground mb-1">Base salary</div>
-            <div className="text-xl font-semibold text-foreground">
+        {/* Results - Simplified Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6" aria-live="polite">
+          <div className="text-center p-6 bg-muted/30 rounded-lg">
+            <div className="text-sm text-muted-foreground mb-2">Base salary</div>
+            <div className="text-2xl font-semibold text-foreground">
               {formatCurrency(animatedBase)}
             </div>
           </div>
 
-          <div className="text-center p-4 bg-primary/5 rounded-lg border border-primary/20">
-            <div className="text-sm text-muted-foreground mb-1">
-              AI-skills uplift ({(upliftPct * 100).toFixed(1)}%)
-            </div>
-            <div className="text-xl font-semibold text-primary">
-              +{formatCurrency(animatedDelta)}
-            </div>
-          </div>
-
-          <div className="text-center p-4 bg-primary/10 rounded-lg border border-primary/30">
-            <div className="text-sm text-muted-foreground mb-1">AI-adjusted salary</div>
-            <div className="text-2xl font-bold text-primary">
+          <div className="text-center p-6 bg-primary/10 rounded-lg border border-primary/30">
+            <div className="text-sm text-muted-foreground mb-2">AI-adjusted salary</div>
+            <div className="text-3xl font-bold text-primary">
               {formatCurrency(animatedAdjusted)}
             </div>
-            <div className="text-xs text-muted-foreground mt-1">
+            <div className="text-xs text-muted-foreground mt-2">
               typical range {formatCurrency(rangeMin)} – {formatCurrency(rangeMax)}
             </div>
           </div>
