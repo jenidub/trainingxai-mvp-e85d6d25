@@ -55,12 +55,10 @@ export const CelebrationPage: React.FC<CelebrationPageProps> = ({
   ];
 
   return (
-    <div className="min-h-screen w-full relative overflow-auto bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-blue-950/20 dark:via-purple-950/20 dark:to-pink-950/20">
-      {/* Static decorative gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 via-pink-500/5 via-orange-500/5 to-red-500/5 pointer-events-none" />
+    <div className="min-h-screen w-full overflow-auto bg-gradient-to-br from-background via-muted/20 to-background">
       
       <motion.div 
-        className="relative z-10 w-full max-w-4xl mx-auto p-6 pt-12 pb-12 space-y-12"
+        className="w-full max-w-4xl mx-auto p-6 pt-12 pb-12 space-y-12"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, staggerChildren: 0.3 }}
