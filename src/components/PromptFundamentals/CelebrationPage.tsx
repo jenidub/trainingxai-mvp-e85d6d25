@@ -23,46 +23,7 @@ export type CelebrationPageProps = {
   onContinue?: () => void;
 };
 
-const Confetti = () => {
-  const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b', '#eb4d4b', '#6c5ce7'];
-  const [particles] = useState(() => 
-    Array.from({ length: 50 }, (_, i) => ({
-      id: i,
-      x: Math.random() * 100,
-      delay: Math.random() * 3,
-      duration: 3 + Math.random() * 2,
-      color: colors[Math.floor(Math.random() * colors.length)]
-    }))
-  );
-
-  return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden z-10">
-      {particles.map((particle) => (
-        <motion.div
-          key={particle.id}
-          className="absolute w-2 h-2 rounded-full"
-          style={{
-            backgroundColor: particle.color,
-            left: `${particle.x}%`,
-            top: '-10px'
-          }}
-          initial={{ y: -10, opacity: 1, rotate: 0 }}
-          animate={{ 
-            y: typeof window !== 'undefined' ? window.innerHeight + 20 : 600, 
-            opacity: 0, 
-            rotate: 360,
-            x: [-50, 50, -30, 30, 0]
-          }}
-          transition={{
-            duration: particle.duration,
-            delay: particle.delay,
-            ease: "easeOut"
-          }}
-        />
-      ))}
-    </div>
-  );
-};
+// Removed Confetti component for accessibility and to eliminate flickering
 
 export const CelebrationPage: React.FC<CelebrationPageProps> = ({
   brandName = "Somos Ujima",
@@ -72,14 +33,7 @@ export const CelebrationPage: React.FC<CelebrationPageProps> = ({
   mascotImageUrl,
   onContinue
 }) => {
-  // Remove confetti state since we're using static background
-  // const [showConfetti, setShowConfetti] = useState(true);
-
-  // useEffect(() => {
-  //   // Hide confetti after 5 seconds
-  //   const timer = setTimeout(() => setShowConfetti(false), 5000);
-  //   return () => clearTimeout(timer);
-  // }, []);
+  // Removed confetti state and useEffect for better accessibility
 
   const nextSteps = [
     {
@@ -265,20 +219,9 @@ export const CelebrationPage: React.FC<CelebrationPageProps> = ({
             <Card className="border-2 border-primary/30 bg-gradient-to-br from-primary/10 via-primary/5 to-secondary/10 overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20 opacity-50" />
               <CardContent className="relative p-8 text-center space-y-6">
-                <motion.div
-                  animate={{ 
-                    scale: [1, 1.1, 1],
-                  }}
-                  transition={{ 
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                >
-                  <div className="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Users className="h-8 w-8 text-white" />
-                  </div>
-                </motion.div>
+                <div className="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Users className="h-8 w-8 text-white" />
+                </div>
                 
                 <h3 className="text-2xl font-bold text-foreground">
                   Ready to Level Up?
