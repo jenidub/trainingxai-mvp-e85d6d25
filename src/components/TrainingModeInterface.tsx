@@ -18,6 +18,7 @@ import {
   CheckCircle
 } from 'lucide-react';
 import NotebookLMPractice from './NotebookLMPractice';
+import { FundamentalsPage } from './PromptFundamentals/FundamentalsPage';
 
 interface TrainingModule {
   id: string;
@@ -139,7 +140,7 @@ export const TrainingModeInterface = ({ onModuleSelect, isDemo = false, onUpgrad
     
     const module = trainingModules.find(m => m.id === moduleId);
     if (module && !module.isLocked) {
-      if (moduleId === 'notebooklm-mastery') {
+      if (moduleId === 'notebooklm-mastery' || moduleId === 'prompt-fundamentals') {
         setSelectedModule(moduleId);
       } else {
         // Handle other modules (future implementation)
@@ -172,6 +173,31 @@ export const TrainingModeInterface = ({ onModuleSelect, isDemo = false, onUpgrad
         </div>
         <div className="flex-1">
           <NotebookLMPractice />
+        </div>
+      </div>
+    );
+  }
+
+  // If Prompt Fundamentals module is selected, show that component
+  if (selectedModule === 'prompt-fundamentals') {
+    return (
+      <div className="h-full flex flex-col">
+        <div className="p-4 border-b bg-background/50">
+          <Button 
+            variant="outline" 
+            onClick={() => setSelectedModule(null)}
+            className="mb-2"
+          >
+            ← Back to Training
+          </Button>
+        </div>
+        <div className="flex-1 overflow-auto">
+          <FundamentalsPage 
+            onContinue={() => {
+              // This will be connected to the next page later
+              console.log('Continue to Course Intro');
+            }}
+          />
         </div>
       </div>
     );
