@@ -223,7 +223,7 @@ export const PracticeZone = ({
   }
 
   return (
-    <div className="h-full flex flex-col gap-6 p-6">
+    <div className="h-full flex flex-col gap-6 p-6 overflow-auto">
       {/* Progress Header */}
       <Card>
         <CardHeader className="pb-3">
@@ -301,7 +301,7 @@ export const PracticeZone = ({
       )}
 
       {/* Main Content */}
-      <div className="space-y-4">
+      <div className="flex-1 space-y-4 min-h-0">
         {/* Current Task Details */}
         <Card>
           <CardHeader>
@@ -334,13 +334,14 @@ export const PracticeZone = ({
                     ))}
                   </ul>
                 </div>
-              )}
-        </div>
+                )}
+            </div>
           </CardContent>
         </Card>
 
         {/* Prompt Editor */}
-        <Card>
+        <div className="flex-shrink-0">
+          <Card>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <span>Your Prompt</span>
@@ -362,7 +363,7 @@ export const PracticeZone = ({
               </div>
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 max-h-none">
             <Textarea
               value={userPrompt}
               onChange={(e) => setUserPrompt(e.target.value)}
@@ -386,17 +387,19 @@ export const PracticeZone = ({
               </div>
             </div>
           </CardContent>
-        </Card>
+          </Card>
+        </div>
 
         {/* Results Panel */}
         {(validationResults.length > 0 || aiResponse) && (
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="flex-shrink-0">
+            <div className="grid md:grid-cols-2 gap-4">
             {/* Feedback Panel */}
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">Validation Feedback</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
+              <CardContent className="space-y-3 max-h-80 overflow-y-auto">
                 {validationResults.map((result, index) => (
                   <div key={index} className="flex items-start gap-2">
                     {result.passed ? (
@@ -433,7 +436,7 @@ export const PracticeZone = ({
                   )}
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="max-h-80 overflow-y-auto">
                 {aiResponse ? (
                   <div className="bg-muted/50 p-4 rounded-lg">
                     <p className="text-sm whitespace-pre-wrap" aria-label="Example AI Output">
@@ -448,17 +451,20 @@ export const PracticeZone = ({
                 )}
               </CardContent>
             </Card>
+            </div>
           </div>
         )}
 
         {/* Hint for Stuck Users */}
         {validationResults.some(r => !r.passed) && (
-          <Alert>
-            <Lightbulb className="h-4 w-4" />
-            <AlertDescription>
-              Stuck? Click "Ask Spiral" in the chat for personalized hints and guidance!
-            </AlertDescription>
-          </Alert>
+          <div className="flex-shrink-0">
+            <Alert>
+              <Lightbulb className="h-4 w-4" />
+              <AlertDescription>
+                Stuck? Click "I need help with this prompt" in the chat for personalized hints and guidance!
+              </AlertDescription>
+            </Alert>
+          </div>
         )}
       </div>
     </div>
