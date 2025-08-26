@@ -291,11 +291,7 @@ export const TrainingModeInterface = ({ onModuleSelect, isDemo = false, onUpgrad
           </div>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-primary">0/6</div>
-              <div className="text-sm text-muted-foreground">Modules Completed</div>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="text-center">
               <div className="text-2xl font-bold text-primary">0</div>
               <div className="text-sm text-muted-foreground">Certificates Earned</div>
