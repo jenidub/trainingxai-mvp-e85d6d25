@@ -121,7 +121,7 @@ const trainingModules: TrainingModule[] = [
     isCompleted: false,
     progress: 0,
     category: 'Practice',
-    isPremium: false
+    isPremium: true
   }
 ];
 
