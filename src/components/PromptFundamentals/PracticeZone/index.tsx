@@ -249,6 +249,15 @@ export const PracticeZone = ({
               Task #{currentTask.id}: {currentTask.title}
             </CardTitle>
             <div className="flex items-center gap-4">
+              {/* Temporary preview button - REMOVE AFTER DEMO */}
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => setShowCelebration(true)}
+                className="text-xs"
+              >
+                🎉 Preview Celebration
+              </Button>
               <div className="text-sm text-muted-foreground">
                 Progress: {progress.completedTaskIds.length}/{practiceTasks.length}
               </div>
