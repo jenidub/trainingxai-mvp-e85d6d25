@@ -5,6 +5,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Send, Bot, User, Sparkles, Code, FileText, Image } from 'lucide-react';
 import NotebookLMPractice from './NotebookLMPractice';
+import PromptingImpactSlider from './PromptingImpactSlider';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -239,7 +240,7 @@ export const ChatInterface = ({ selectedGPT, onInterfaceChange }: ChatInterfaceP
               </Card>
             </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-2">
+            <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
               <Badge variant="secondary" className="text-xs">
                 <Sparkles className="h-3 w-3 mr-1" />
                 AI-Powered
@@ -253,6 +254,12 @@ export const ChatInterface = ({ selectedGPT, onInterfaceChange }: ChatInterfaceP
                 Visual Learning
               </Badge>
             </div>
+
+            <PromptingImpactSlider 
+              initialYears={2}
+              defaultTier="mid"
+              ctaHref="/auth"
+            />
           </div>
         </div>
       </div>

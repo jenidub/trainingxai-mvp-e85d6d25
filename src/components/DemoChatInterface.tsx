@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Send, Bot, User, Sparkles, Code, FileText, Image, Lock, Crown, Star } from 'lucide-react';
 import NotebookLMPractice from './NotebookLMPractice';
+import PromptingImpactSlider from './PromptingImpactSlider';
 
 interface DemoChatInterfaceProps {
   selectedGPT?: {
@@ -154,6 +155,15 @@ export const DemoChatInterface = ({ selectedGPT, onInterfaceChange, onUpgrade }:
                 <Image className="h-3 w-3 mr-1" />
                 Visual Learning
               </Badge>
+            </div>
+
+            <div className="mb-6">
+              <PromptingImpactSlider 
+                initialYears={2}
+                defaultTier="mid"
+                ctaHref="/auth"
+                ctaText="Sign Up to Build Skills"
+              />
             </div>
 
             <Card className="p-4 bg-gradient-to-r from-primary/5 to-brand-accent/5 border-primary/20">
