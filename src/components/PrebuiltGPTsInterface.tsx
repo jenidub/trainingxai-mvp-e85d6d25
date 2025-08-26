@@ -296,7 +296,7 @@ export const PrebuiltGPTsInterface = ({ onGPTSelect, isDemo = false, onUpgrade }
                   disabled={isDemo || gpt.isPremium}
                   variant={gpt.isPremium ? "outline" : "default"}
                 >
-                  {isDemo ? 'Demo Mode' : gpt.isPremium ? 'Premium Required' : 'Start Chat'}
+                  {isDemo ? 'Demo Mode' : gpt.isPremium ? 'Coming Soon' : 'Start Chat'}
                 </Button>
               </CardContent>
             </Card>
