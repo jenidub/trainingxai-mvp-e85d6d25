@@ -141,42 +141,82 @@ export const ChatInterface = ({ selectedGPT, onInterfaceChange }: ChatInterfaceP
         content: userMessage,
       });
 
-      // Simulate AI response (replace with actual AI integration)
-      setTimeout(async () => {
-        try {
-          const aiResponse = generateAIResponse(userMessage, currentSession.gpt_name);
-          await saveMessage({
-            session_id: currentSession.id,
-            role: 'assistant',
-            content: aiResponse,
-          });
-        } catch (error) {
-          console.error('Error saving AI response:', error);
-        }
-        setLoading(false);
-      }, 1000);
+      // Get AI response from edge function
+      const aiResponse = await getAIResponse(userMessage, currentSession);
+      await saveMessage({
+        session_id: currentSession.id,
+        role: 'assistant',
+        content: aiResponse,
+      });
     } catch (error) {
-      console.error('Error sending message:', error);
-      setLoading(false);
+      console.error('Error in conversation:', error);
       toast({
         title: "Error",
-        description: "Failed to send message",
+        description: "Failed to get AI response. Please try again.",
         variant: "destructive",
       });
+      
+      // Save an error message to the conversation
+      try {
+        await saveMessage({
+          session_id: currentSession.id,
+          role: 'assistant',
+          content: "I apologize, but I'm having trouble responding right now. Please try again in a moment.",
+        });
+      } catch (saveError) {
+        console.error('Error saving error message:', saveError);
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
-  const generateAIResponse = (userMessage: string, gptName: string): string => {
-    const responses = {
-      'Cody the Coding Companion': `Great question about coding! As your coding companion, I'd suggest breaking this down step by step. Let me help you with that implementation.`,
-      'Alex the AI Trainer': `Excellent topic for AI learning! Let me explain this concept in a way that builds your understanding progressively.`,
-      'Maya the Creative Assistant': `I love the creative direction you're thinking! Let's explore some innovative approaches to bring your vision to life.`,
-      'Milo the Math Mentor': `Perfect math problem! Let me walk you through the solution methodology step by step.`,
-      'Sophie the Communication Coach': `That's a great communication challenge! Let me help you craft a clear and effective approach.`,
-    };
+  const getAIResponse = async (userMessage: string, session: ChatSession): Promise<string> => {
+    try {
+      // Get custom instructions if it's a custom GPT
+      let customInstructions = '';
+      if (session.gpt_type === 'custom') {
+        const { data: customGPT } = await supabase
+          .from('custom_gpts')
+          .select('instructions')
+          .eq('id', session.gpt_id)
+          .single();
+        
+        customInstructions = customGPT?.instructions || '';
+      }
 
-    return responses[gptName as keyof typeof responses] || 
-           `Thanks for your message! As ${gptName}, I'm here to help you with specialized guidance and expertise.`;
+      // Get recent conversation history for context
+      const conversationHistory = messages.slice(-10).map(msg => ({
+        role: msg.role,
+        content: msg.content
+      }));
+
+      // Call the chat completion edge function
+      const { data, error } = await supabase.functions.invoke('chat-completion', {
+        body: {
+          message: userMessage,
+          gptName: session.gpt_name,
+          gptType: session.gpt_type,
+          gptId: session.gpt_id,
+          customInstructions,
+          conversationHistory
+        }
+      });
+
+      if (error) {
+        console.error('Edge function error:', error);
+        throw new Error(error.message || 'Failed to get AI response');
+      }
+
+      if (!data.success) {
+        throw new Error(data.error || 'AI response failed');
+      }
+
+      return data.response;
+    } catch (error) {
+      console.error('Error getting AI response:', error);
+      throw error;
+    }
   };
 
   // Handle practice modes
