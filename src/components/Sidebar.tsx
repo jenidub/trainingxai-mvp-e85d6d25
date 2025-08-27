@@ -201,20 +201,20 @@ export const Sidebar = ({ onGPTSelect, selectedGPT, onInterfaceChange, activeInt
             </div>
           </Card>
           
-          {/* Prebuilt GPTs */}
+          {/* Training Zone */}
           <Card 
             className={`p-3 border-2 hover:border-primary/40 transition-smooth cursor-pointer group ${
-              activeInterface === 'prebuilt' ? 'border-primary bg-primary/5' : 'border-primary/20'
+              activeInterface === 'training' ? 'border-primary bg-primary/5' : 'border-primary/20'
             }`}
-            onClick={() => onInterfaceChange('prebuilt')}
+            onClick={() => onInterfaceChange('training')}
           >
             <div className="flex items-center gap-2">
               <div className="p-1.5 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth">
-                <Bot className="h-5 w-5 text-primary" />
+                <GraduationCap className="h-5 w-5 text-primary" />
               </div>
               <div className="flex-1">
-                <h3 className="font-medium text-sm">Prebuilt GPTs</h3>
-                <p className="text-xs text-muted-foreground">Practice prompting skills</p>
+                <h3 className="font-medium text-sm">Training Zone</h3>
+                <p className="text-xs text-muted-foreground">Interactive learning</p>
               </div>
               <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-smooth" />
             </div>
@@ -238,21 +238,21 @@ export const Sidebar = ({ onGPTSelect, selectedGPT, onInterfaceChange, activeInt
               <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-smooth" />
             </div>
           </Card>
-
-          {/* Training Zone */}
+          
+          {/* Prebuilt GPTs */}
           <Card 
             className={`p-3 border-2 hover:border-primary/40 transition-smooth cursor-pointer group ${
-              activeInterface === 'training' ? 'border-primary bg-primary/5' : 'border-primary/20'
+              activeInterface === 'prebuilt' ? 'border-primary bg-primary/5' : 'border-primary/20'
             }`}
-            onClick={() => onInterfaceChange('training')}
+            onClick={() => onInterfaceChange('prebuilt')}
           >
             <div className="flex items-center gap-2">
               <div className="p-1.5 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth">
-                <GraduationCap className="h-5 w-5 text-primary" />
+                <Bot className="h-5 w-5 text-primary" />
               </div>
               <div className="flex-1">
-                <h3 className="font-medium text-sm">Training Zone</h3>
-                <p className="text-xs text-muted-foreground">Interactive learning</p>
+                <h3 className="font-medium text-sm">Prebuilt GPTs</h3>
+                <p className="text-xs text-muted-foreground">Practice prompting skills</p>
               </div>
               <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-smooth" />
             </div>
