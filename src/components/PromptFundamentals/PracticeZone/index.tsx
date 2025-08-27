@@ -6,6 +6,13 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { 
   CheckCircle, 
   XCircle, 
@@ -16,7 +23,8 @@ import {
   BookOpen,
   Target,
   Clock,
-  Copy
+  Copy,
+  Check
 } from "lucide-react";
 import { practiceTasks, PracticeTask } from "./tasks";
 import { validatePrompt, ValidationResult } from "@/lib/promptChecks";
@@ -241,77 +249,97 @@ export const PracticeZone = ({
 
   return (
     <div className="h-full flex flex-col gap-6 p-6 overflow-auto">
-      {/* Progress Header */}
-      <Card>
-        <CardHeader className="pb-3">
-          <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center gap-2 text-lg">
-              <Target className="h-5 w-5 text-primary" />
-              Task #{currentTask.id}: {currentTask.title}
-            </CardTitle>
-            <div className="flex items-center gap-4">
-              {/* Temporary preview button - REMOVE AFTER DEMO */}
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => setShowCelebration(true)}
-                className="text-xs"
-              >
-                🎉 Preview Celebration
-              </Button>
-              <div className="text-sm text-muted-foreground">
-                Progress: {progress.completedTaskIds.length}/{practiceTasks.length}
-              </div>
-              <Progress value={progressPercentage} className="w-32 h-2" />
-              {isTaskCompleted && (
-                <CheckCircle className="h-5 w-5 text-green-500" />
-              )}
-            </div>
+      {/* Progress Header with Task Dropdown */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Target className="h-5 w-5 text-primary" />
+            <Select value={currentTaskId.toString()} onValueChange={(value) => handleTaskSelect(parseInt(value))}>
+              <SelectTrigger className="w-80 bg-background border-border">
+                <SelectValue>
+                  <div className="flex items-center gap-2">
+                    <span>Task #{currentTask.id}: {currentTask.title}</span>
+                    {isTaskCompleted && (
+                      <Check className="h-4 w-4 text-green-500" />
+                    )}
+                  </div>
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent className="bg-background border-border z-50">
+                {practiceTasks.map((task) => {
+                  const isCompleted = progress.completedTaskIds.includes(task.id);
+                  return (
+                    <SelectItem key={task.id} value={task.id.toString()}>
+                      <div className="flex items-center justify-between w-full">
+                        <span className="flex-1">Task #{task.id}: {task.title}</span>
+                        {isCompleted && (
+                          <Check className="h-4 w-4 text-green-500 ml-2" />
+                        )}
+                      </div>
+                    </SelectItem>
+                  );
+                })}
+              </SelectContent>
+            </Select>
           </div>
-        </CardHeader>
-      </Card>
-
-      {/* Task Navigation */}
-      <Card>
-        <CardContent className="p-4">
-          <div className="flex items-center justify-between">
-            <Button
-              variant="outline"
+          <div className="flex items-center gap-4">
+            {/* Temporary preview button - REMOVE AFTER DEMO */}
+            <Button 
+              variant="outline" 
               size="sm"
-              onClick={() => handleTaskSelect(Math.max(1, currentTaskId - 1))}
-              disabled={currentTaskId === 1}
+              onClick={() => setShowCelebration(true)}
+              className="text-xs"
             >
-              ← Previous Task
+              🎉 Preview Celebration
             </Button>
-            
-            <div className="flex items-center gap-2">
-              <Badge variant="outline">Task #{currentTask.id}</Badge>
-              <Badge className={
-                currentTask.difficulty === 'Easy' ? 'bg-green-100 text-green-800' :
-                currentTask.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
-                'bg-red-100 text-red-800'
-              }>
-                {currentTask.difficulty}
+            <div className="text-sm text-muted-foreground">
+              Progress: {progress.completedTaskIds.length}/{practiceTasks.length}
+            </div>
+            <Progress value={progressPercentage} className="w-32 h-2" />
+            {isTaskCompleted && (
+              <CheckCircle className="h-5 w-5 text-green-500" />
+            )}
+          </div>
+        </div>
+
+        {/* Task Navigation Buttons */}
+        <div className="flex items-center justify-between">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleTaskSelect(Math.max(1, currentTaskId - 1))}
+            disabled={currentTaskId === 1}
+          >
+            ← Previous Task
+          </Button>
+          
+          <div className="flex items-center gap-2">
+            <Badge variant="outline">Task #{currentTask.id}</Badge>
+            <Badge className={
+              currentTask.difficulty === 'Easy' ? 'bg-green-100 text-green-800' :
+              currentTask.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+              'bg-red-100 text-red-800'
+            }>
+              {currentTask.difficulty}
+            </Badge>
+            <Badge variant="secondary">{currentTask.category}</Badge>
+            {isTaskCompleted && (
+              <Badge className="bg-green-500 text-white">
+                ✓ Completed
               </Badge>
-              <Badge variant="secondary">{currentTask.category}</Badge>
-              {isTaskCompleted && (
-                <Badge className="bg-green-500 text-white">
-                  ✓ Completed
-                </Badge>
-              )}
-            </div>
-
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handleTaskSelect(Math.min(practiceTasks.length, currentTaskId + 1))}
-              disabled={currentTaskId === practiceTasks.length}
-            >
-              Next Task →
-            </Button>
+            )}
           </div>
-        </CardContent>
-      </Card>
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleTaskSelect(Math.min(practiceTasks.length, currentTaskId + 1))}
+            disabled={currentTaskId === practiceTasks.length}
+          >
+            Next Task →
+          </Button>
+        </div>
+      </div>
 
       {allTasksCompleted && (
         <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-primary/10">
