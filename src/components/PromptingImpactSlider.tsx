@@ -138,7 +138,7 @@ const PromptingImpactSlider: React.FC<PromptingImpactSliderProps> = ({
               {formatCurrency(animatedAdjusted)}
             </div>
             <div className="text-xs text-muted-foreground mt-1">
-              typical range {formatCurrency(rangeMin)} – {formatCurrency(rangeMax)}
+              You will increase your salary by +{(upliftPct * 100).toFixed(1)}%
             </div>
           </div>
         </div>
