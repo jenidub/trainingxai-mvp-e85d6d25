@@ -21,6 +21,7 @@ export type Database = {
           gpt_name: string
           gpt_type: string
           id: string
+          thread_id: string | null
           title: string | null
           updated_at: string
           user_id: string
@@ -31,6 +32,7 @@ export type Database = {
           gpt_name: string
           gpt_type: string
           id?: string
+          thread_id?: string | null
           title?: string | null
           updated_at?: string
           user_id: string
@@ -41,6 +43,7 @@ export type Database = {
           gpt_name?: string
           gpt_type?: string
           id?: string
+          thread_id?: string | null
           title?: string | null
           updated_at?: string
           user_id?: string
@@ -49,6 +52,7 @@ export type Database = {
       }
       custom_gpts: {
         Row: {
+          assistant_id: string | null
           created_at: string
           description: string | null
           id: string
@@ -58,6 +62,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          assistant_id?: string | null
           created_at?: string
           description?: string | null
           id?: string
@@ -67,6 +72,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          assistant_id?: string | null
           created_at?: string
           description?: string | null
           id?: string

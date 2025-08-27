@@ -25,6 +25,7 @@ interface ChatSession {
   gpt_name: string;
   title: string;
   created_at: string;
+  thread_id?: string;
 }
 
 interface ChatInterfaceProps {
@@ -173,33 +174,26 @@ export const ChatInterface = ({ selectedGPT, onInterfaceChange }: ChatInterfaceP
 
   const getAIResponse = async (userMessage: string, session: ChatSession): Promise<string> => {
     try {
-      // Get custom instructions if it's a custom GPT
-      let customInstructions = '';
+      // Get custom GPT data if needed
+      let assistantId = null;
       if (session.gpt_type === 'custom') {
         const { data: customGPT } = await supabase
           .from('custom_gpts')
-          .select('instructions')
+          .select('assistant_id')
           .eq('id', session.gpt_id)
           .single();
         
-        customInstructions = customGPT?.instructions || '';
+        assistantId = customGPT?.assistant_id || null;
       }
 
-      // Get recent conversation history for context
-      const conversationHistory = messages.slice(-10).map(msg => ({
-        role: msg.role,
-        content: msg.content
-      }));
-
-      // Call the chat completion edge function
+      // Call the chat completion edge function (now using Assistants API)
       const { data, error } = await supabase.functions.invoke('chat-completion', {
         body: {
           message: userMessage,
           gptName: session.gpt_name,
           gptType: session.gpt_type,
-          gptId: session.gpt_id,
-          customInstructions,
-          conversationHistory
+          assistantId: assistantId,
+          threadId: session.thread_id
         }
       });
 
@@ -210,6 +204,17 @@ export const ChatInterface = ({ selectedGPT, onInterfaceChange }: ChatInterfaceP
 
       if (!data.success) {
         throw new Error(data.error || 'AI response failed');
+      }
+
+      // Update session with thread_id if it was created
+      if (data.thread_id && !session.thread_id) {
+        await supabase
+          .from('chat_sessions')
+          .update({ thread_id: data.thread_id })
+          .eq('id', session.id);
+        
+        // Update local session state
+        setCurrentSession(prev => prev ? { ...prev, thread_id: data.thread_id } : null);
       }
 
       return data.response;

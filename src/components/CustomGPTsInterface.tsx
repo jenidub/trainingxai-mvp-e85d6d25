@@ -28,6 +28,7 @@ interface CustomGPT {
   description: string | null;
   instructions: string;
   created_at: string;
+  assistant_id?: string | null;
 }
 
 interface CustomGPTsInterfaceProps {
@@ -89,6 +90,25 @@ export const CustomGPTsInterface = ({ onGPTSelect, isDemo = false, onUpgrade }: 
     setLoading(true);
     try {
       if (editing) {
+        // Update existing custom GPT
+        const existingGPT = customGPTs.find(gpt => gpt.id === editing);
+        
+        // Update the OpenAI assistant if it exists
+        if (existingGPT?.assistant_id) {
+          const { data: assistantData, error: assistantError } = await supabase.functions.invoke('update-assistant', {
+            body: {
+              assistantId: existingGPT.assistant_id,
+              name: formData.name,
+              instructions: formData.instructions,
+            }
+          });
+
+          if (assistantError) {
+            console.error('Error updating assistant:', assistantError);
+            // Continue with database update even if assistant update fails
+          }
+        }
+
         const { error } = await supabase
           .from('custom_gpts')
           .update({
@@ -105,6 +125,23 @@ export const CustomGPTsInterface = ({ onGPTSelect, isDemo = false, onUpgrade }: 
           description: "Custom GPT updated successfully",
         });
       } else {
+        // Create new custom GPT with OpenAI Assistant
+        const { data: assistantData, error: assistantError } = await supabase.functions.invoke('create-assistant', {
+          body: {
+            name: formData.name,
+            instructions: formData.instructions,
+          }
+        });
+
+        if (assistantError) {
+          console.error('Error creating assistant:', assistantError);
+          toast({
+            title: "Warning",
+            description: "GPT created but assistant integration failed. You can still use this GPT with basic functionality.",
+            variant: "destructive",
+          });
+        }
+
         const { error } = await supabase
           .from('custom_gpts')
           .insert({
@@ -112,12 +149,15 @@ export const CustomGPTsInterface = ({ onGPTSelect, isDemo = false, onUpgrade }: 
             name: formData.name,
             description: formData.description || null,
             instructions: formData.instructions,
+            assistant_id: assistantData?.success ? assistantData.assistant_id : null,
           });
 
         if (error) throw error;
         toast({
           title: "Success",
-          description: "Custom GPT created successfully",
+          description: assistantData?.success 
+            ? "Custom GPT created with AI learning capabilities!" 
+            : "Custom GPT created successfully",
         });
       }
 
