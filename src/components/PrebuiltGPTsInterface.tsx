@@ -96,7 +96,7 @@ const prebuiltGPTs: PrebuiltGPT[] = [
     category: 'Creative',
     rating: 4.4,
     usageCount: 320,
-    isPremium: true
+    isPremium: false
   },
   {
     id: 'music-agent',
