@@ -52,16 +52,6 @@ const aiPlatforms: AIPlatform[] = [
     usageCount: 1850
   },
   {
-    id: 'notebooklm',
-    name: 'Notebook LM',
-    description: 'Google\'s AI-powered note-taking and research assistant for knowledge work.',
-    icon: BookOpen,
-    category: 'Agentic AI',
-    url: 'https://notebooklm.google.com',
-    rating: 4.6,
-    usageCount: 1200
-  },
-  {
     id: 'gamma',
     name: 'Gamma',
     description: 'AI-powered presentation and document creation platform for visual storytelling.',
@@ -70,6 +60,16 @@ const aiPlatforms: AIPlatform[] = [
     url: 'https://gamma.app',
     rating: 4.5,
     usageCount: 950
+  },
+  {
+    id: 'notebooklm',
+    name: 'Notebook LM',
+    description: 'Google\'s AI-powered note-taking and research assistant for knowledge work.',
+    icon: BookOpen,
+    category: 'Agentic AI',
+    url: 'https://notebooklm.google.com',
+    rating: 4.6,
+    usageCount: 1200
   }
 ];
 
