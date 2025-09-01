@@ -251,8 +251,8 @@ export const Sidebar = ({ onGPTSelect, selectedGPT, onInterfaceChange, activeInt
                 <Bot className="h-5 w-5 text-primary" />
               </div>
               <div className="flex-1">
-                <h3 className="font-medium text-sm">Prebuilt GPTs</h3>
-                <p className="text-xs text-muted-foreground">Practice prompting skills</p>
+                <h3 className="font-medium text-sm">AI Toolbox</h3>
+                <p className="text-xs text-muted-foreground">Practice prompting on top AI platforms</p>
               </div>
               <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-smooth" />
             </div>
