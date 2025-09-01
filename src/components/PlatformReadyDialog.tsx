@@ -54,6 +54,13 @@ const platformTips: Record<string, string[]> = {
     "Request specific formats (tables, code blocks, etc.)",
     "Provide feedback for improvements"
   ],
+  "claude-ai": [
+    "Use clear, direct language",
+    "Break complex requests into steps",
+    "Ask for explanations of Claude's reasoning",
+    "Request specific formats (tables, code blocks, etc.)",
+    "Provide feedback for improvements"
+  ],
   notebooklm: [
     "Upload your documents first, then ask specific questions about the content",
     "Use natural language queries to explore connections between different sources",
@@ -73,10 +80,13 @@ const platformTips: Record<string, string[]> = {
 export const PlatformReadyDialog = ({ platform, open, onOpenChange }: PlatformReadyDialogProps) => {
   if (!platform) return null;
 
-  const tips = platformTips[platform.id] || [];
+  // Debug: log the platform ID to see what it actually is
+  console.log('Platform ID:', platform.id, 'Platform Name:', platform.name);
+  
+  const tips = platformTips[platform.id] || platformTips[platform.id.toLowerCase()] || [];
 
   const handleDownloadGuide = () => {
-    if (platform.id === 'claude') {
+    if (platform.id === 'claude' || platform.id === 'claude-ai') {
       const link = document.createElement('a');
       link.href = 'https://docs.google.com/document/d/1JFnYCgQQKAlw69aZ0HVVpmjSU63Z6ucpXI0-8Pzosy8/edit?usp=sharing';
       link.target = '_blank';
