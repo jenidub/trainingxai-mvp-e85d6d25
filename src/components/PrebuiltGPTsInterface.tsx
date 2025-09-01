@@ -5,6 +5,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { 
   Bot, 
   Search, 
@@ -18,7 +24,8 @@ import {
   GraduationCap,
   Globe,
   Zap,
-  Crown
+  Crown,
+  ChevronDown
 } from 'lucide-react';
 
 interface PrebuiltGPT {
@@ -131,7 +138,7 @@ interface PrebuiltGPTsInterfaceProps {
 export const PrebuiltGPTsInterface = ({ onGPTSelect, isDemo = false, onUpgrade }: PrebuiltGPTsInterfaceProps) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [sortBy, setSortBy] = useState<'popular' | 'rating' | 'name'>('popular');
+  const [sortBy, setSortBy] = useState<'usage' | 'rating' | 'name' | 'category' | 'price'>('usage');
   const [showPremium, setShowPremium] = useState(false);
 
   const filteredGPTs = prebuiltGPTs
@@ -148,7 +155,13 @@ export const PrebuiltGPTsInterface = ({ onGPTSelect, isDemo = false, onUpgrade }
           return (b.rating || 0) - (a.rating || 0);
         case 'name':
           return a.name.localeCompare(b.name);
-        default: // popular
+        case 'category':
+          return a.category.localeCompare(b.category);
+        case 'price':
+          // Sort by premium status: free items first, then premium
+          if (a.isPremium === b.isPremium) return 0;
+          return a.isPremium ? 1 : -1;
+        default: // usage
           return (b.usageCount || 0) - (a.usageCount || 0);
       }
     });
@@ -191,10 +204,32 @@ export const PrebuiltGPTsInterface = ({ onGPTSelect, isDemo = false, onUpgrade }
             />
           </div>
           <div className="flex items-center gap-4">
-            <Button variant="outline" className="gap-2">
-              <Filter className="h-4 w-4" />
-              Sort by: {sortBy === 'popular' ? 'Usage' : sortBy === 'rating' ? 'Rating' : 'Name'}
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="gap-2">
+                  <Filter className="h-4 w-4" />
+                  Sort by: {sortBy === 'usage' ? 'Usage' : sortBy === 'rating' ? 'Rating' : sortBy === 'category' ? 'Category' : sortBy === 'price' ? 'Price' : 'Alphabetical'}
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => setSortBy('usage')}>
+                  Usage
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSortBy('name')}>
+                  Alphabetical
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSortBy('category')}>
+                  Category
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSortBy('rating')}>
+                  Rating
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSortBy('price')}>
+                  Price
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <div className="flex items-center space-x-2">
               <Switch
                 id="premium-mode"
