@@ -45,7 +45,7 @@ const prebuiltGPTs: PrebuiltGPT[] = [
   {
     id: 'spiral-study-buddy',
     name: 'Spiral the Study Buddy',
-    description: 'Interactive help with school & soft skills. Perfect for students of all ages.',
+    description: 'Comprehensive K-12 homework helper across all subjects. Math, science, English, history & more - tailored by grade level.',
     icon: GraduationCap,
     category: 'Education',
     popular: true,
