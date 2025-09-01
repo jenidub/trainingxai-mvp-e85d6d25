@@ -19,81 +19,48 @@ import {
   BookOpen,
   Presentation,
   Zap,
-  ChevronDown
+  ChevronDown,
+  Loader2
 } from 'lucide-react';
 import { PlatformReadyDialog } from './PlatformReadyDialog';
+import { usePlatforms } from '@/hooks/usePlatforms';
+
+// Icon mapping
+const iconMap: Record<string, any> = {
+  Bot,
+  Brain,
+  BookOpen,
+  Presentation
+};
 
 interface AIPlatform {
   id: string;
   name: string;
   description: string;
-  icon: any;
   category: string;
   url: string;
-  popular?: boolean;
-  rating?: number;
-  usageCount?: number;
+  icon_name: string;
+  popular: boolean;
+  averageRating: number;
+  usageCount: number;
 }
-
-const aiPlatforms: AIPlatform[] = [
-  {
-    id: 'claude',
-    name: 'Claude AI',
-    description: 'Anthropic\'s AI assistant focused on helpful, harmless, and honest interactions.',
-    icon: Brain,
-    category: 'Generative AI',
-    url: 'https://claude.ai',
-    popular: true,
-    rating: 4.7,
-    usageCount: 1850
-  },
-  {
-    id: 'chatgpt',
-    name: 'ChatGPT',
-    description: 'OpenAI\'s conversational AI for natural language processing and creative tasks.',
-    icon: Bot,
-    category: 'Generative AI',
-    url: 'https://chat.openai.com',
-    popular: true,
-    rating: 4.8,
-    usageCount: 2400
-  },
-  {
-    id: 'gamma',
-    name: 'Gamma',
-    description: 'AI-powered presentation and document creation platform for visual storytelling.',
-    icon: Presentation,
-    category: 'Generative AI',
-    url: 'https://gamma.app',
-    rating: 4.5,
-    usageCount: 950
-  },
-  {
-    id: 'notebooklm',
-    name: 'Notebook LM',
-    description: 'Google\'s AI-powered note-taking and research assistant for knowledge work.',
-    icon: BookOpen,
-    category: 'Agentic AI',
-    url: 'https://notebooklm.google.com',
-    rating: 4.6,
-    usageCount: 1200
-  }
-];
-
-const categories = ['All', 'Generative AI', 'Agentic AI'];
 
 interface AIPlatformsInterfaceProps {
   isDemo?: boolean;
 }
 
 export const AIPlatformsInterface = ({ isDemo = false }: AIPlatformsInterfaceProps) => {
+  const { platforms, loading, error, trackPlatformUsage } = usePlatforms();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortBy, setSortBy] = useState<'usage' | 'rating' | 'name' | 'category'>('usage');
   const [selectedPlatform, setSelectedPlatform] = useState<AIPlatform | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const filteredPlatforms = aiPlatforms
+  // Get categories from actual platform data
+  const categories = ['All', ...Array.from(new Set(platforms.map(p => p.category)))];
+
+  const filteredPlatforms = platforms
     .filter(platform => {
       const matchesSearch = platform.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           platform.description.toLowerCase().includes(searchTerm.toLowerCase());
@@ -103,7 +70,7 @@ export const AIPlatformsInterface = ({ isDemo = false }: AIPlatformsInterfacePro
     .sort((a, b) => {
       switch (sortBy) {
         case 'rating':
-          return (b.rating || 0) - (a.rating || 0);
+          return (b.averageRating || 0) - (a.averageRating || 0);
         case 'name':
           return a.name.localeCompare(b.name);
         case 'category':
@@ -113,10 +80,36 @@ export const AIPlatformsInterface = ({ isDemo = false }: AIPlatformsInterfacePro
       }
     });
 
-  const handlePlatformClick = (platform: AIPlatform) => {
+  const handlePlatformClick = async (platform: AIPlatform) => {
+    // Track usage
+    await trackPlatformUsage(platform.id);
+    
     setSelectedPlatform(platform);
     setDialogOpen(true);
   };
+
+  if (loading) {
+    return (
+      <div className="p-6 flex items-center justify-center min-h-[400px]">
+        <div className="flex items-center gap-2 text-muted-foreground">
+          <Loader2 className="h-5 w-5 animate-spin" />
+          <span>Loading platforms...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-6">
+        <div className="text-center py-12">
+          <Bot className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+          <h3 className="font-semibold mb-2">Error loading platforms</h3>
+          <p className="text-muted-foreground">{error}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 space-y-6">
@@ -189,7 +182,7 @@ export const AIPlatformsInterface = ({ isDemo = false }: AIPlatformsInterfacePro
       {/* Platform Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredPlatforms.map((platform) => {
-          const IconComponent = platform.icon;
+          const IconComponent = iconMap[platform.icon_name] || Bot;
           return (
             <Card 
               key={platform.id} 
@@ -223,10 +216,10 @@ export const AIPlatformsInterface = ({ isDemo = false }: AIPlatformsInterfacePro
               <CardContent className="pt-0">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    {platform.rating && (
+                    {platform.averageRating > 0 && (
                       <div className="flex items-center gap-1">
                         <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                        <span className="text-sm font-medium">{platform.rating}</span>
+                        <span className="text-sm font-medium">{platform.averageRating}</span>
                       </div>
                     )}
                   </div>

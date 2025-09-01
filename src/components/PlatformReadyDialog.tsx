@@ -25,9 +25,12 @@ interface AIPlatform {
   id: string;
   name: string;
   description: string;
-  icon: React.ComponentType<{ className?: string }>;
   category: string;
   url: string;
+  icon_name?: string;
+  popular?: boolean;
+  rating?: number;
+  usageCount?: number;
 }
 
 interface PlatformReadyDialogProps {
@@ -88,7 +91,7 @@ export const PlatformReadyDialog = ({ platform, open, onOpenChange }: PlatformRe
         <DialogHeader className="pb-4">
           <div className="flex items-center gap-3 mb-2">
             <div className="p-2 rounded-lg bg-primary/10">
-              <platform.icon className="h-6 w-6 text-primary" />
+              <Sparkles className="h-6 w-6 text-primary" />
             </div>
             <div>
               <DialogTitle className="text-2xl">
