@@ -41,7 +41,7 @@ const PlatformLogo = ({ platform }: { platform: AIPlatform }) => {
           const target = e.target as HTMLImageElement;
           target.style.display = 'none';
           target.parentElement!.innerHTML = `
-            <div class="h-5 w-5 bg-primary/20 rounded flex items-center justify-center text-xs font-semibold text-primary">
+            <div class="h-5 w-5 bg-primary/20 rounded flex items-center justify-center text-[10px] font-bold text-primary leading-none">
               ${platform.name.charAt(0)}
             </div>
           `;
