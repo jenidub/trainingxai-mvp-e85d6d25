@@ -4,6 +4,12 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { 
   Bot, 
   Search, 
@@ -12,7 +18,8 @@ import {
   Brain,
   BookOpen,
   Presentation,
-  Zap
+  Zap,
+  ChevronDown
 } from 'lucide-react';
 import { PlatformReadyDialog } from './PlatformReadyDialog';
 
@@ -82,7 +89,7 @@ interface AIPlatformsInterfaceProps {
 export const AIPlatformsInterface = ({ isDemo = false }: AIPlatformsInterfaceProps) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [sortBy, setSortBy] = useState<'popular' | 'rating' | 'name'>('popular');
+  const [sortBy, setSortBy] = useState<'usage' | 'rating' | 'name' | 'category'>('usage');
   const [selectedPlatform, setSelectedPlatform] = useState<AIPlatform | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -99,7 +106,9 @@ export const AIPlatformsInterface = ({ isDemo = false }: AIPlatformsInterfacePro
           return (b.rating || 0) - (a.rating || 0);
         case 'name':
           return a.name.localeCompare(b.name);
-        default: // popular
+        case 'category':
+          return a.category.localeCompare(b.category);
+        default: // usage
           return (b.usageCount || 0) - (a.usageCount || 0);
       }
     });
@@ -135,10 +144,29 @@ export const AIPlatformsInterface = ({ isDemo = false }: AIPlatformsInterfacePro
             />
           </div>
           <div className="flex items-center gap-4">
-            <Button variant="outline" className="gap-2">
-              <Filter className="h-4 w-4" />
-              Sort by: {sortBy === 'popular' ? 'Usage' : sortBy === 'rating' ? 'Rating' : 'Name'}
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="gap-2">
+                  <Filter className="h-4 w-4" />
+                  Sort by: {sortBy === 'usage' ? 'Usage' : sortBy === 'rating' ? 'Rating' : sortBy === 'category' ? 'Category' : 'Name'}
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => setSortBy('usage')}>
+                  Usage
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSortBy('name')}>
+                  Alphabetical
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSortBy('category')}>
+                  Category
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSortBy('rating')}>
+                  Rating
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
 
