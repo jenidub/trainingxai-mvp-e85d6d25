@@ -91,7 +91,7 @@ export const PlatformReadyDialog = ({ platform, open, onOpenChange }: PlatformRe
     const tipsKey = getTipsKey(platform.name);
     if (tipsKey === 'claude') {
       const link = document.createElement('a');
-      link.href = 'https://docs.google.com/document/d/1JFnYCgQQKAlw69aZ0HVVpmjSU63Z6ucpXI0-8Pzosy8/edit?usp=sharing';
+      link.href = 'https://docs.google.com/document/d/1JFnYCgQQKAlw69aZ0HVVpmjSU63Z6ucpXI0-8Pzosy8/copy?usp=sharing';
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
       document.body.appendChild(link);
@@ -146,8 +146,7 @@ export const PlatformReadyDialog = ({ platform, open, onOpenChange }: PlatformRe
               <div className="space-y-3">
                 {tips.map((tip, index) => (
                   <div key={index} className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center text-xs font-medium text-primary">
-                      {index + 1}
+                    <div className="flex-shrink-0 w-2 h-2 bg-primary rounded-full mt-2">
                     </div>
                     <p className="text-sm text-muted-foreground leading-relaxed">
                       {tip}
