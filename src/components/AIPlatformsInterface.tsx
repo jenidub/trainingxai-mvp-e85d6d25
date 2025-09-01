@@ -45,7 +45,7 @@ const aiPlatforms: AIPlatform[] = [
     name: 'Claude AI',
     description: 'Anthropic\'s AI assistant focused on helpful, harmless, and honest interactions.',
     icon: Brain,
-    category: 'Agentic AI',
+    category: 'Generative AI',
     url: 'https://claude.ai',
     popular: true,
     rating: 4.7,
