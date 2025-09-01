@@ -37,8 +37,8 @@ import { CustomGPTManager } from './CustomGPTManager';
 interface SidebarProps {
   onGPTSelect: (gpt: { id: string; name: string; type: 'prebuilt' | 'custom' }) => void;
   selectedGPT?: { id: string; name: string; type: 'prebuilt' | 'custom' } | null;
-  onInterfaceChange: (interfaceType: 'chat' | 'prebuilt' | 'custom' | 'training' | 'dashboard') => void;
-  activeInterface: 'chat' | 'prebuilt' | 'custom' | 'training' | 'dashboard';
+  onInterfaceChange: (interfaceType: 'chat' | 'prebuilt' | 'custom' | 'training' | 'dashboard' | 'platforms') => void;
+  activeInterface: 'chat' | 'prebuilt' | 'custom' | 'training' | 'dashboard' | 'platforms';
   isDemo?: boolean;
 }
 
@@ -266,7 +266,10 @@ export const Sidebar = ({ onGPTSelect, selectedGPT, onInterfaceChange, activeInt
           <h2 className="text-lg font-semibold text-foreground">AI Toolbox</h2>
           
           <Card 
-            className="p-3 border-2 hover:border-primary/40 transition-smooth cursor-pointer group border-primary/20"
+            className={`p-3 border-2 hover:border-primary/40 transition-smooth cursor-pointer group ${
+              activeInterface === 'platforms' ? 'border-primary bg-primary/5' : 'border-primary/20'
+            }`}
+            onClick={() => onInterfaceChange('platforms')}
           >
             <div className="flex items-center gap-2">
               <div className="p-1.5 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth">

@@ -6,6 +6,7 @@ import { PrebuiltGPTsInterface } from './PrebuiltGPTsInterface';
 import { CustomGPTsInterface } from './CustomGPTsInterface';
 import { TrainingModeInterface } from './TrainingModeInterface';
 import { DashboardInterface } from './DashboardInterface';
+import { AIPlatformsInterface } from './AIPlatformsInterface';
 
 interface LayoutProps {
   children?: ReactNode;
@@ -13,14 +14,14 @@ interface LayoutProps {
 
 export const Layout = ({ children }: LayoutProps) => {
   const [selectedGPT, setSelectedGPT] = useState<{ id: string; name: string; type: 'prebuilt' | 'custom' } | null>(null);
-  const [activeInterface, setActiveInterface] = useState<'chat' | 'prebuilt' | 'custom' | 'training' | 'dashboard'>('chat');
+  const [activeInterface, setActiveInterface] = useState<'chat' | 'prebuilt' | 'custom' | 'training' | 'dashboard' | 'platforms'>('chat');
 
   const handleGPTSelect = (gpt: { id: string; name: string; type: 'prebuilt' | 'custom' }) => {
     setSelectedGPT(gpt);
     setActiveInterface('chat');
   };
 
-  const handleInterfaceChange = (interfaceType: 'chat' | 'prebuilt' | 'custom' | 'training' | 'dashboard') => {
+  const handleInterfaceChange = (interfaceType: 'chat' | 'prebuilt' | 'custom' | 'training' | 'dashboard' | 'platforms') => {
     setActiveInterface(interfaceType);
     // Clear selected GPT when navigating away from chat OR when explicitly going to chat (home)
     if (interfaceType !== 'chat' || interfaceType === 'chat') {
@@ -46,6 +47,8 @@ export const Layout = ({ children }: LayoutProps) => {
         return <TrainingModeInterface />;
       case 'dashboard':
         return <DashboardInterface />;
+      case 'platforms':
+        return <AIPlatformsInterface />;
       default:
         return <ChatInterface selectedGPT={selectedGPT} onInterfaceChange={handleInterfaceChange} />;
     }
