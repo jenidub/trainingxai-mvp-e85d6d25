@@ -79,6 +79,7 @@ export const PlatformReadyDialog = ({ platform, open, onOpenChange }: PlatformRe
       'Claude AI': 'claude',
       'ChatGPT': 'chatgpt',
       'NotebookLM': 'notebooklm',
+      'Notebook LM': 'notebooklm', // Handle database variation
       'Gamma': 'gamma'
     };
     return nameMap[platformName] || platformName.toLowerCase();
