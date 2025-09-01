@@ -34,7 +34,7 @@ const aiPlatforms: AIPlatform[] = [
     name: 'ChatGPT',
     description: 'OpenAI\'s conversational AI for natural language processing and creative tasks.',
     icon: Bot,
-    category: 'Conversational AI',
+    category: 'Generative AI',
     url: 'https://chat.openai.com',
     popular: true,
     rating: 4.8,
@@ -45,7 +45,7 @@ const aiPlatforms: AIPlatform[] = [
     name: 'Claude AI',
     description: 'Anthropic\'s AI assistant focused on helpful, harmless, and honest interactions.',
     icon: Brain,
-    category: 'AI Assistant',
+    category: 'Agentic AI',
     url: 'https://claude.ai',
     popular: true,
     rating: 4.7,
@@ -56,7 +56,7 @@ const aiPlatforms: AIPlatform[] = [
     name: 'Notebook LM',
     description: 'Google\'s AI-powered note-taking and research assistant for knowledge work.',
     icon: BookOpen,
-    category: 'Research AI',
+    category: 'Agentic AI',
     url: 'https://notebooklm.google.com',
     rating: 4.6,
     usageCount: 1200
@@ -66,14 +66,14 @@ const aiPlatforms: AIPlatform[] = [
     name: 'Gamma',
     description: 'AI-powered presentation and document creation platform for visual storytelling.',
     icon: Presentation,
-    category: 'Creative AI',
+    category: 'Generative AI',
     url: 'https://gamma.app',
     rating: 4.5,
     usageCount: 950
   }
 ];
 
-const categories = ['All', 'Conversational AI', 'AI Assistant', 'Research AI', 'Creative AI'];
+const categories = ['All', 'Generative AI', 'Agentic AI'];
 
 interface AIPlatformsInterfaceProps {
   isDemo?: boolean;
