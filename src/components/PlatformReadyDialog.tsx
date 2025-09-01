@@ -48,11 +48,11 @@ const platformTips: Record<string, string[]> = {
     "Use examples in your prompts to guide the desired output format and style"
   ],
   claude: [
-    "Claude excels with detailed, structured prompts that include clear objectives",
-    "Use markdown formatting in your prompts for better organization and clarity",
-    "Leverage Claude's strong reasoning by asking for step-by-step explanations",
-    "Be explicit about safety considerations and ethical boundaries in sensitive topics",
-    "Take advantage of Claude's long context window for complex, multi-part tasks"
+    "Use clear, direct language",
+    "Break complex requests into steps",
+    "Ask for explanations of Claude's reasoning",
+    "Request specific formats (tables, code blocks, etc.)",
+    "Provide feedback for improvements"
   ],
   notebooklm: [
     "Upload your documents first, then ask specific questions about the content",
