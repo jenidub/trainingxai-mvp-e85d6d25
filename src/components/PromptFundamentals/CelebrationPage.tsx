@@ -33,9 +33,9 @@ export const CelebrationPage: React.FC<CelebrationPageProps> = ({
   const nextSteps = [
     {
       icon: BookOpen,
-      title: "Practice with Prebuilt GPTs",
+      title: "Practice with Platform GPTs",
       description: "Explore our curated GPTs for study, writing, business, and more.",
-      buttonText: "Try a Prebuilt GPT",
+      buttonText: "Try a Platform GPT",
       url: prebuiltGptsUrl,
       color: "from-blue-500 to-purple-600"
     },
@@ -91,7 +91,7 @@ export const CelebrationPage: React.FC<CelebrationPageProps> = ({
           <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-primary/10">
             <CardContent className="p-8">
               <p className="text-lg text-muted-foreground leading-relaxed">
-                The next step is to continue your learning — try one of our prebuilt GPTs or dive right in and start creating your own custom AI agent.
+                The next step is to continue your learning — try one of our platform GPTs or dive right in and start creating your own custom AI agent.
               </p>
             </CardContent>
           </Card>

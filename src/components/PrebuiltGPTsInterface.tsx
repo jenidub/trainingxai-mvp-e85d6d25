@@ -184,7 +184,7 @@ export const PrebuiltGPTsInterface = ({ onGPTSelect, isDemo = false, onUpgrade }
       <div className="space-y-2">
         <div className="flex items-center gap-2">
           <Bot className="h-6 w-6 text-primary" />
-          <h1 className="text-2xl font-bold">Prebuilt GPTs</h1>
+          <h1 className="text-2xl font-bold">Platform GPTs</h1>
         </div>
          <p className="text-muted-foreground">
           Practice prompting skills with our specialized AI assistants. Three agents included with membership, premium options available.

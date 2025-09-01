@@ -97,7 +97,7 @@ export const DemoChatInterface = ({ selectedGPT, onInterfaceChange, onUpgrade }:
                 <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth w-fit mb-3">
                   <Bot className="h-5 w-5 text-primary" />
                 </div>
-                <h3 className="font-semibold mb-2">Prebuilt GPTs</h3>
+                <h3 className="font-semibold mb-2">Platform GPTs</h3>
                 <p className="text-sm text-muted-foreground">Expert AI assistants for coding, learning, and creativity</p>
                 <div className="absolute top-2 right-2">
                   <Badge variant="secondary" className="text-xs">

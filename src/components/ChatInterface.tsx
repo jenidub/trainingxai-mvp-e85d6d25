@@ -246,7 +246,7 @@ export const ChatInterface = ({ selectedGPT, onInterfaceChange }: ChatInterfaceP
                 We Take the 'I Don't Know' Out of AI
               </p>
               <p className="text-lg text-muted-foreground mb-6">
-                Your AI-powered coding and training environment. Practice with prebuilt GPTs or create your own custom AI assistants.
+                Your AI-powered coding and training environment. Practice with platform GPTs or create your own custom AI assistants.
               </p>
             </div>
 
@@ -258,7 +258,7 @@ export const ChatInterface = ({ selectedGPT, onInterfaceChange }: ChatInterfaceP
                 <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth w-fit mb-3">
                   <Bot className="h-5 w-5 text-primary" />
                 </div>
-                <h3 className="font-semibold mb-2">Prebuilt GPTs</h3>
+                <h3 className="font-semibold mb-2">Platform GPTs</h3>
                 <p className="text-sm text-muted-foreground">Expert AI assistants for coding, learning, and creativity</p>
               </Card>
 
