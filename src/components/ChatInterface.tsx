@@ -327,12 +327,13 @@ export const ChatInterface = ({ selectedGPT, onInterfaceChange }: ChatInterfaceP
           <div className="flex items-center gap-3">
             {/* Back Button */}
             <Button
-              variant="ghost"
+              variant="outline"
               size="sm"
               onClick={() => onInterfaceChange?.('prebuilt')}
-              className="text-muted-foreground hover:text-foreground"
+              className="px-3 py-1.5 rounded-full bg-background hover:bg-muted border-border text-muted-foreground hover:text-foreground transition-colors"
             >
-              <ArrowLeft className="h-4 w-4" />
+              <ArrowLeft className="h-4 w-4 mr-1.5" />
+              <span className="text-sm font-medium">Back to GPTs</span>
             </Button>
             
             <div className="p-2 rounded-lg bg-primary/10">
