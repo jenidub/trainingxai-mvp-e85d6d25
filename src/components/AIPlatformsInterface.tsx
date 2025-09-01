@@ -15,22 +15,40 @@ import {
   Search, 
   Filter, 
   Star, 
-  Brain,
-  BookOpen,
-  Presentation,
   Zap,
   ChevronDown,
   Loader2
 } from 'lucide-react';
 import { PlatformReadyDialog } from './PlatformReadyDialog';
 import { usePlatforms } from '@/hooks/usePlatforms';
+import { supabase } from '@/integrations/supabase/client';
 
-// Icon mapping
-const iconMap: Record<string, any> = {
-  Bot,
-  Brain,
-  BookOpen,
-  Presentation
+// Platform logo component
+const PlatformLogo = ({ platform }: { platform: AIPlatform }) => {
+  const getLogoUrl = (platformName: string) => {
+    const logoPath = `${platformName.toLowerCase().replace(/\s+/g, '-')}-logo.png`;
+    return supabase.storage.from('platform-logos').getPublicUrl(logoPath).data.publicUrl;
+  };
+
+  return (
+    <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth">
+      <img 
+        src={getLogoUrl(platform.name)} 
+        alt={`${platform.name} logo`}
+        className="h-5 w-5 object-contain"
+        onError={(e) => {
+          // Fallback to a placeholder with platform initial
+          const target = e.target as HTMLImageElement;
+          target.style.display = 'none';
+          target.parentElement!.innerHTML = `
+            <div class="h-5 w-5 bg-primary/20 rounded flex items-center justify-center text-xs font-semibold text-primary">
+              ${platform.name.charAt(0)}
+            </div>
+          `;
+        }}
+      />
+    </div>
+  );
 };
 
 interface AIPlatform {
@@ -182,7 +200,6 @@ export const AIPlatformsInterface = ({ isDemo = false }: AIPlatformsInterfacePro
       {/* Platform Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredPlatforms.map((platform) => {
-          const IconComponent = iconMap[platform.icon_name] || Bot;
           return (
             <Card 
               key={platform.id} 
@@ -191,9 +208,7 @@ export const AIPlatformsInterface = ({ isDemo = false }: AIPlatformsInterfacePro
             >
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between mb-2">
-                  <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth">
-                    <IconComponent className="h-5 w-5 text-primary" />
-                  </div>
+                  <PlatformLogo platform={platform} />
                   <div className="flex gap-1">
                     {platform.popular && (
                       <Badge variant="default" className="gap-1 h-5">
