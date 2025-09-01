@@ -148,7 +148,7 @@ export const PlatformReadyDialog = ({ platform, open, onOpenChange }: PlatformRe
                   <div key={index} className="flex items-start gap-3">
                     <div className="flex-shrink-0 w-2 h-2 bg-primary rounded-full mt-2">
                     </div>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
+                    <p className="text-base text-muted-foreground leading-relaxed">
                       {tip}
                     </p>
                   </div>
