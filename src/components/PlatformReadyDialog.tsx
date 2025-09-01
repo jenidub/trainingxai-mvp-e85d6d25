@@ -76,8 +76,17 @@ export const PlatformReadyDialog = ({ platform, open, onOpenChange }: PlatformRe
   const tips = platformTips[platform.id] || [];
 
   const handleDownloadGuide = () => {
-    // Placeholder for PDF download functionality
-    console.log(`Downloading guide for ${platform.name}`);
+    if (platform.id === 'claude') {
+      const link = document.createElement('a');
+      link.href = 'https://docs.google.com/document/d/1JFnYCgQQKAlw69aZ0HVVpmjSU63Z6ucpXI0-8Pzosy8/edit?usp=sharing';
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      console.log(`Downloading guide for ${platform.name}`);
+    }
   };
 
   const handleOpenPlatform = () => {
