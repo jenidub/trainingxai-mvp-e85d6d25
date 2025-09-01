@@ -30,17 +30,6 @@ interface AIPlatform {
 
 const aiPlatforms: AIPlatform[] = [
   {
-    id: 'chatgpt',
-    name: 'ChatGPT',
-    description: 'OpenAI\'s conversational AI for natural language processing and creative tasks.',
-    icon: Bot,
-    category: 'Generative AI',
-    url: 'https://chat.openai.com',
-    popular: true,
-    rating: 4.8,
-    usageCount: 2400
-  },
-  {
     id: 'claude',
     name: 'Claude AI',
     description: 'Anthropic\'s AI assistant focused on helpful, harmless, and honest interactions.',
@@ -50,6 +39,17 @@ const aiPlatforms: AIPlatform[] = [
     popular: true,
     rating: 4.7,
     usageCount: 1850
+  },
+  {
+    id: 'chatgpt',
+    name: 'ChatGPT',
+    description: 'OpenAI\'s conversational AI for natural language processing and creative tasks.',
+    icon: Bot,
+    category: 'Generative AI',
+    url: 'https://chat.openai.com',
+    popular: true,
+    rating: 4.8,
+    usageCount: 2400
   },
   {
     id: 'gamma',
