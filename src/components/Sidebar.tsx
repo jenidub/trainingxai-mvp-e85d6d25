@@ -259,6 +259,28 @@ export const Sidebar = ({ onGPTSelect, selectedGPT, onInterfaceChange, activeInt
           </Card>
         </div>
 
+        <Separator />
+
+        {/* AI Toolbox Section */}
+        <div className="space-y-3">
+          <h2 className="text-lg font-semibold text-foreground">AI Toolbox</h2>
+          
+          <Card 
+            className="p-3 border-2 hover:border-primary/40 transition-smooth cursor-pointer group border-primary/20"
+          >
+            <div className="flex items-center gap-2">
+              <div className="p-1.5 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-smooth">
+                <Zap className="h-5 w-5 text-primary" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-medium text-sm">Prompting Practice Zone</h3>
+                <p className="text-xs text-muted-foreground">Prompt on top platforms</p>
+              </div>
+              <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-smooth" />
+            </div>
+          </Card>
+        </div>
+
       </div>
     </aside>
   );
