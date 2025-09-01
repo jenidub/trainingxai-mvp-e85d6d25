@@ -3,7 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Send, Bot, User, Sparkles, Code, FileText, Image } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Send, Bot, User, Sparkles, Code, FileText, Image, Type } from 'lucide-react';
 import NotebookLMPractice from './NotebookLMPractice';
 import PromptingImpactSlider from './PromptingImpactSlider';
 import { useAuth } from '@/contexts/AuthContext';
@@ -42,8 +43,16 @@ export const ChatInterface = ({ selectedGPT, onInterfaceChange }: ChatInterfaceP
   const [messages, setMessages] = useState<Message[]>([]);
   const [currentSession, setCurrentSession] = useState<ChatSession | null>(null);
   const [loading, setLoading] = useState(false);
+  const [textSize, setTextSize] = useState(() => {
+    return localStorage.getItem('chat-text-size') || 'text-sm';
+  });
   const { user } = useAuth();
   const { toast } = useToast();
+
+  // Save text size preference to localStorage
+  useEffect(() => {
+    localStorage.setItem('chat-text-size', textSize);
+  }, [textSize]);
 
   // Load messages when session changes
   useEffect(() => {
@@ -314,15 +323,33 @@ export const ChatInterface = ({ selectedGPT, onInterfaceChange }: ChatInterfaceP
     <div className="flex flex-col h-[calc(100vh-8rem)]">
       {/* Chat Header */}
       <div className="border-b border-border p-4 bg-card/50">
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-primary/10">
-            <Bot className="h-5 w-5 text-primary" />
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-primary/10">
+              <Bot className="h-5 w-5 text-primary" />
+            </div>
+            <div>
+              <h2 className="font-semibold">{selectedGPT.name}</h2>
+              <p className="text-sm text-muted-foreground">
+                {currentSession ? 'Ready to chat' : 'Starting conversation...'}
+              </p>
+            </div>
           </div>
-          <div>
-            <h2 className="font-semibold">{selectedGPT.name}</h2>
-            <p className="text-sm text-muted-foreground">
-              {currentSession ? 'Ready to chat' : 'Starting conversation...'}
-            </p>
+          
+          {/* Text Size Selector */}
+          <div className="flex items-center gap-2">
+            <Type className="h-4 w-4 text-muted-foreground" />
+            <Select value={textSize} onValueChange={setTextSize}>
+              <SelectTrigger className="w-32">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="text-xs">Small</SelectItem>
+                <SelectItem value="text-sm">Medium</SelectItem>
+                <SelectItem value="text-base">Large</SelectItem>
+                <SelectItem value="text-lg">Extra Large</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
       </div>
@@ -344,7 +371,7 @@ export const ChatInterface = ({ selectedGPT, onInterfaceChange }: ChatInterfaceP
                 ? 'bg-primary text-primary-foreground' 
                 : 'bg-card'
             }`}>
-              <p className="text-sm">{msg.content}</p>
+              <p className={textSize}>{msg.content}</p>
               <p className="text-xs opacity-70 mt-2">
                 {new Date(msg.created_at).toLocaleTimeString()}
               </p>
@@ -366,7 +393,7 @@ export const ChatInterface = ({ selectedGPT, onInterfaceChange }: ChatInterfaceP
                 <div className="animate-pulse">●</div>
                 <div className="animate-pulse delay-100">●</div>
                 <div className="animate-pulse delay-200">●</div>
-                <span className="text-sm text-muted-foreground ml-2">Thinking...</span>
+                <span className={`${textSize} text-muted-foreground ml-2`}>Thinking...</span>
               </div>
             </Card>
           </div>
