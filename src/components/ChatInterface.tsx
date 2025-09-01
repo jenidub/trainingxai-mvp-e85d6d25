@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Send, Bot, User, Sparkles, Code, FileText, Image, Type } from 'lucide-react';
+import { Send, Bot, User, Sparkles, Code, FileText, Image, Type, ArrowLeft } from 'lucide-react';
 import NotebookLMPractice from './NotebookLMPractice';
 import PromptingImpactSlider from './PromptingImpactSlider';
 import { useAuth } from '@/contexts/AuthContext';
@@ -325,6 +325,16 @@ export const ChatInterface = ({ selectedGPT, onInterfaceChange }: ChatInterfaceP
       <div className="border-b border-border p-4 bg-card/50">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
+            {/* Back Button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => onInterfaceChange?.('prebuilt')}
+              className="text-muted-foreground hover:text-foreground"
+            >
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
+            
             <div className="p-2 rounded-lg bg-primary/10">
               <Bot className="h-5 w-5 text-primary" />
             </div>
