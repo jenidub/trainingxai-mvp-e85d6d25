@@ -66,7 +66,7 @@ const prebuiltGPTs: PrebuiltGPT[] = [
   {
     id: 'finance-agent',
     name: 'Finance Agent',
-    description: 'Budget management & financial literacy coach. Learn to manage money effectively.',
+    description: 'Complete financial literacy coach covering budgeting, debt, credit, investing, home buying & 6 more key money topics.',
     icon: DollarSign,
     category: 'Finance',
     rating: 4.5,
