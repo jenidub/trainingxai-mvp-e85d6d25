@@ -47,6 +47,7 @@ const aiPlatforms: AIPlatform[] = [
     icon: Brain,
     category: 'AI Assistant',
     url: 'https://claude.ai',
+    popular: true,
     rating: 4.7,
     usageCount: 1850
   },
@@ -57,7 +58,6 @@ const aiPlatforms: AIPlatform[] = [
     icon: BookOpen,
     category: 'Research AI',
     url: 'https://notebooklm.google.com',
-    popular: true,
     rating: 4.6,
     usageCount: 1200
   },

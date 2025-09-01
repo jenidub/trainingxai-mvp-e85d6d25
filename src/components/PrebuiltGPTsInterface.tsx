@@ -75,6 +75,7 @@ const prebuiltGPTs: PrebuiltGPT[] = [
     category: 'General',
     rating: 4.8,
     usageCount: 1200,
+    popular: true,
     isPremium: true
   },
   {
@@ -83,7 +84,6 @@ const prebuiltGPTs: PrebuiltGPT[] = [
     description: 'Level up your skills in NotebookLM with interactive tutorials and practice sessions.',
     icon: BookOpen,
     category: 'Practice',
-    popular: true,
     rating: 4.7,
     usageCount: 650,
     isPremium: true
