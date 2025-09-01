@@ -73,12 +73,23 @@ const platformTips: Record<string, string[]> = {
 export const PlatformReadyDialog = ({ platform, open, onOpenChange }: PlatformReadyDialogProps) => {
   if (!platform) return null;
 
-  console.log('Platform ID:', platform.id, 'Platform Name:', platform.name);
-  console.log('Available tips keys:', Object.keys(platformTips));
-  const tips = platformTips[platform.id] || [];
+  // Map platform names to tip keys
+  const getTipsKey = (platformName: string): string => {
+    const nameMap: Record<string, string> = {
+      'Claude AI': 'claude',
+      'ChatGPT': 'chatgpt',
+      'NotebookLM': 'notebooklm',
+      'Gamma': 'gamma'
+    };
+    return nameMap[platformName] || platformName.toLowerCase();
+  };
+
+  const tipsKey = getTipsKey(platform.name);
+  const tips = platformTips[tipsKey] || [];
 
   const handleDownloadGuide = () => {
-    if (platform.id === 'claude') {
+    const tipsKey = getTipsKey(platform.name);
+    if (tipsKey === 'claude') {
       const link = document.createElement('a');
       link.href = 'https://docs.google.com/document/d/1JFnYCgQQKAlw69aZ0HVVpmjSU63Z6ucpXI0-8Pzosy8/edit?usp=sharing';
       link.target = '_blank';
