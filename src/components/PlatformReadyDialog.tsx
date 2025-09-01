@@ -73,6 +73,8 @@ const platformTips: Record<string, string[]> = {
 export const PlatformReadyDialog = ({ platform, open, onOpenChange }: PlatformReadyDialogProps) => {
   if (!platform) return null;
 
+  console.log('Platform ID:', platform.id, 'Platform Name:', platform.name);
+  console.log('Available tips keys:', Object.keys(platformTips));
   const tips = platformTips[platform.id] || [];
 
   const handleDownloadGuide = () => {
