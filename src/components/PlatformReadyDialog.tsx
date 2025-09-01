@@ -48,18 +48,11 @@ const platformTips: Record<string, string[]> = {
     "Use examples in your prompts to guide the desired output format and style"
   ],
   claude: [
-    "Use clear, direct language",
-    "Break complex requests into steps",
-    "Ask for explanations of Claude's reasoning",
-    "Request specific formats (tables, code blocks, etc.)",
-    "Provide feedback for improvements"
-  ],
-  "claude-ai": [
-    "Use clear, direct language",
-    "Break complex requests into steps",
-    "Ask for explanations of Claude's reasoning",
-    "Request specific formats (tables, code blocks, etc.)",
-    "Provide feedback for improvements"
+    "Claude excels with detailed, structured prompts that include clear objectives",
+    "Use markdown formatting in your prompts for better organization and clarity",
+    "Leverage Claude's strong reasoning by asking for step-by-step explanations",
+    "Be explicit about safety considerations and ethical boundaries in sensitive topics",
+    "Take advantage of Claude's long context window for complex, multi-part tasks"
   ],
   notebooklm: [
     "Upload your documents first, then ask specific questions about the content",
@@ -80,13 +73,10 @@ const platformTips: Record<string, string[]> = {
 export const PlatformReadyDialog = ({ platform, open, onOpenChange }: PlatformReadyDialogProps) => {
   if (!platform) return null;
 
-  // Debug: log the platform ID to see what it actually is
-  console.log('Platform ID:', platform.id, 'Platform Name:', platform.name);
-  
-  const tips = platformTips[platform.id] || platformTips[platform.id.toLowerCase()] || [];
+  const tips = platformTips[platform.id] || [];
 
   const handleDownloadGuide = () => {
-    if (platform.id === 'claude' || platform.id === 'claude-ai') {
+    if (platform.id === 'claude') {
       const link = document.createElement('a');
       link.href = 'https://docs.google.com/document/d/1JFnYCgQQKAlw69aZ0HVVpmjSU63Z6ucpXI0-8Pzosy8/edit?usp=sharing';
       link.target = '_blank';
