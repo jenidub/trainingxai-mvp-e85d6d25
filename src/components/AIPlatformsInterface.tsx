@@ -117,7 +117,7 @@ export const AIPlatformsInterface = ({ isDemo = false }: AIPlatformsInterfacePro
       <div className="space-y-2">
         <div className="flex items-center gap-2">
           <Bot className="h-6 w-6 text-primary" />
-          <h1 className="text-2xl font-bold">AI Platform Practice</h1>
+          <h1 className="text-2xl font-bold">Prompting Practice Zone</h1>
         </div>
         <p className="text-muted-foreground">
           Put your newfound prompting skills to use on today's top AI platforms
