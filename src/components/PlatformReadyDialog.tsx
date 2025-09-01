@@ -81,7 +81,14 @@ export const PlatformReadyDialog = ({ platform, open, onOpenChange }: PlatformRe
   };
 
   const handleOpenPlatform = () => {
-    window.open(platform.url, '_blank');
+    // Use a more reliable method to open external URLs
+    const link = document.createElement('a');
+    link.href = platform.url;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
     onOpenChange(false);
   };
 
