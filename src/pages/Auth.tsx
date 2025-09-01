@@ -124,7 +124,7 @@ export default function Auth() {
             <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-brand-accent bg-clip-text text-transparent">
               Prompt to Success
             </h1>
-            <p className="text-xs text-muted-foreground -mt-1">AI Training Platform</p>
+            <p className="text-xs text-muted-foreground -mt-1 italic">Powered by Training X</p>
           </div>
         </div>
 
