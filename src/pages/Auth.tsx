@@ -121,7 +121,7 @@ export default function Auth() {
             <Sparkles className="h-6 w-6 text-white" />
           </div>
           <div>
-            <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-brand-accent bg-clip-text text-transparent">
+            <h1 className="text-xl font-bold text-primary">
               Prompt to Success
             </h1>
             <p className="text-xs text-muted-foreground -mt-1 italic">Powered by Training X</p>
