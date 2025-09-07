@@ -124,14 +124,14 @@ export default function Auth() {
             <h1 className="text-xl font-bold text-primary">
               Prompt to Success
             </h1>
-            <p className="text-xs text-muted-foreground -mt-1 italic">Powered by Training X</p>
+            <p className="text-sm text-foreground/70 -mt-1 italic font-medium">Powered by Training X</p>
           </div>
         </div>
 
         <Card className="border-border/50 shadow-xl">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl font-bold">Welcome</CardTitle>
-            <CardDescription>
+            <CardDescription className="text-foreground/80 font-medium">
               Sign in to your account or create a new one to start training with AI
             </CardDescription>
           </CardHeader>
@@ -239,14 +239,14 @@ export default function Auth() {
                 <Eye className="h-4 w-4 mr-2" />
                 Try Demo Mode
               </Button>
-              <p className="text-xs text-muted-foreground text-center mt-2">
+              <p className="text-sm text-foreground/70 text-center mt-2 font-medium">
                 Explore the platform without creating an account
               </p>
             </div>
           </CardContent>
         </Card>
 
-        <p className="text-center text-sm text-muted-foreground mt-6">
+        <p className="text-center text-sm text-foreground/70 mt-6 font-medium">
           By continuing, you agree to our Terms of Service and Privacy Policy
         </p>
       </div>
